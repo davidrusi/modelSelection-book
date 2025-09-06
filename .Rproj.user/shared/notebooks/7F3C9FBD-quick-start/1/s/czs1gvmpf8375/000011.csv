@@ -1,0 +1,2 @@
+"0","dfbin <- transform(df, ybin = (y > 0)) |>"
+"0","  dplyr::select(!y) #drop variable y"

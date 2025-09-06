@@ -1,0 +1,8 @@
+"0","p <- 4; n <- 50"
+"0","x <- matrix(rnorm(n * p), nrow=n)"
+"0","beta <- matrix(c(rep(0, 2), rep(0.5, p-2)), ncol=1)"
+"0","y <- x %*% beta + rnorm(n)"
+"0","df <- data.frame(y, x)"
+"0","ms.unif <- modelSelection(y ~ -1 + ., data=df, priorDelta = modelunifprior(), verbose=FALSE)"
+"0","ms.bbin <- modelSelection(y ~ -1 + ., data=df, priorDelta = modelbbprior(), verbose=FALSE)"
+"0","ms.comp <- modelSelection(y ~ -1 + ., data=df, priorDelta = modelcomplexprior(), verbose=FALSE)"

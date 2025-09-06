@@ -1,0 +1,4 @@
+"0","priorDelta <- modelunifprior()"
+"0","priorCoef <- normalidprior(taustd=1)"
+"0","ms <- modelSelection(y ~ 1, data=df, priorCoef=priorCoef, priorDelta=priorDelta, center=FALSE, verbose=FALSE)"
+"0","postProb(ms)"

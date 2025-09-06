@@ -1,0 +1,372 @@
+# Background on Bayesian model selection and averaging {#background-bms}
+
+We use the term Bayesian model selection (BMS) for the prototypical setting where one considers multiple hypotheses or models and wishes to obtain posterior model probabilities for each model.
+For example, in regression each model may be associated to what covariates are included in the regression equation (i.e. have non-zero coefficients), in graphical models each model may be associated to what edges are present, and in mixtures each model may correspond to a number of mixture components (clusters).
+
+Section \@ref(bms-simple-example) illustrates the basic BMS notions by testing whether a Gaussian mean is zero.
+Section \@ref(bms-framework) discusses the general BMS framework.
+Sections \@ref(bms-simple-example)-\@ref(bms-framework) are intended for readers who are unfamiliar with BMS.
+Sections \@ref(bms-modelprior) and \@ref(bms-coefprior) discuss slightly more nuanced details on how to set prior distributions, some reasonable defaults and how to induce sparsity in high dimensional problems using either sparse model priors or non-local parameter priors.
+Finally, Section \@ref(bms-computation) outlines some key ideas behind computational aspects of BMS.
+
+
+## A simplest example  {#bms-simple-example}
+
+
+::: {.example #normalmean}
+
+Let $y_i \sim N(\mu, \sigma^2)$ independently for $i=1,\ldots,n$ and consider the two models (or hypotheses)
+\begin{align*}
+&\mu = 0 \\
+&\mu \neq 0.
+\end{align*}
+As explained in Section \@ref(bms-framework), in this book we denote models by $\gamma$. In this case we use $\gamma=0$ to denote the null model $\mu=0$ and $\gamma=1$ to denote the alternative model $\mu \neq 0$.
+
+The goal is to obtain the posterior probability of the alternative $P(\mu \neq 0 \mid \by)$, or equivalently $P(\gamma=1 \mid \by)$, where $\by= (y_1,\ldots,y_n)$ are the observed data. We may also want to obtain a BMA estimate $E(\mu \mid \by)=$
+$$E(\mu \mid \gamma=0, \by) P(\gamma=0 \mid \by) + E(\mu \mid \gamma=1, \by) P(\gamma=1 \mid \by)= E(\mu \mid \gamma=1, \by) P(\gamma=1 \mid \by),$$
+since $E(\mu \mid \gamma=0, \by)=0$, and a 0.95 posterior interval for $\mu$, that is an interval $[u_1,u_2]$ such that $P(\mu \in [u_1,u_2] \mid \by)= 0.95$.
+
+To perform a Bayesian analysis, one must specify a prior distribution on everything that is unknown. In our context:
+
+1. We don't know which model is the correct one. We hence need to specify prior model probabilities, e.g. $P(\gamma=0)$ and $P(\gamma=1)$ in this example.
+
+2. Even if we knew the model, we don't know the value of its parameters. We hence need to specify a prior on the parameters of each model. In this example, we must set prior densities $p(\sigma^2 \mid \gamma=0)$ and $p(\mu, \sigma^2 \mid \gamma=1)$.
+
+In simple settings with two models it is customary to set a uniform model prior. That is, equal prior model probabilities $P(\gamma=0)= P(\gamma=1)= 1/2$, unless one has strong reasons for doing otherwise (e.g. data from a related past experiment). 
+In Section \@ref(bms-modelprior) we discuss how to set the model prior in more advanced settings.
+
+For the prior on parameters, both models feature the error variance. A popular choice is setting an inverse gamma prior $\sigma^2 \sim IG(a/2,l/2)$ under both models, for some given $a,l>0$. Typically posterior probabilities are robust to the choice of $(a,l)$, provided they're small values (by default, `modelSelection` sets $a=l=0.01$). 
+To complete the parameter prior under the alternative model we must set a prior on $\mu$ given $\sigma^2$. A popular choice is $p(\mu \mid \sigma^2, \gamma=1)= N(\mu; 0, g \sigma^2)$, for some given $g>0$. Posterior probabilities are sensitive to $g$, but a common default (unit information prior) is $g=1$ and results are typically fairly robust as long as $g$ is not too different from this default.
+In Section \@ref(bms-priorvar) we extend the example to consider a wide range of $g$ values.
+See also Section \@ref(bms-coefprior) for some discussion on parameter priors in more advanced examples.
+
+:::
+
+Let us work out Example \@ref(exm:normalmean) in R. We simulate a dataset where $\mu=0$, set a uniform model prior and a Gaussian prior on $\mu$ with `normalidprior` setting the default $g=1$ (corresponding to argument `taustd`). 
+Importantly, we set the argument `center=FALSE` because otherwise `modelSelection` centers $\by$ by subtracting its sample mean and, while this is conventional in regression where there is little interest in the intercept, in this example it would be inappropriate (the centered $\by$ has mean 0 by definition!).
+We obtain a high posterior probability $P(\gamma = 0 \mid \by)$, hence there isn't Bayesian evidence that $\mu \neq 0$. 
+We remark that for a sample size of $n=100$ and a single parameter being tested ($\mu$), one might expect to get more conclusive evidence in favor of the null. This issue can be addressed by setting a non-local prior on $\mu$, please see Section \@ref(bms-coefprior).
+We use `coef` to obtain the BMA estimates and 0.95 intervals for $\mu$ (row `Intercept` in the output below) and $\sigma^2$ (row `phi`).
+For comparison, a t-test also doesn't lead to rejecting the null model.
+
+```{r}
+set.seed(1234)
+n <- 100
+y <- rnorm(n)
+df <- data.frame(y=y)
+```
+
+
+```{r}
+priorDelta <- modelunifprior()
+priorCoef <- normalidprior(taustd=1)
+ms <- modelSelection(y ~ 1, data=df, priorCoef=priorCoef, priorDelta=priorDelta, center=FALSE, verbose=FALSE)
+postProb(ms)
+coef(ms)
+```
+
+```{r}
+t.test(y)
+```
+
+We next plot how the posterior probability and the t-test P-value change when the sample mean ranges from $0, 0.05, 0.1, \ldots, 0.5$. 
+Figure \@ref(fig:normalmean-pp) shows the results.
+As the sample mean of $\by$ grows, we obtain overwhelming evidence for $\mu \neq 0$.
+Note that the Bayesian framework is more conservative, in that one obtains a P-value < 0.05 for smaller before one obtains $p(M_2 \mid \by) > 0.95$. This conservative character of Bayes factors is well-known, and it is one of the reasons why BMS induces sparsity in high-dimensional problems. One may obtain even more conservative results by setting certain model and parameter priors, as discussed in the next sections.
+
+```{r}
+y0 <- y - mean(y)
+mu <- seq(0, .5, by=.05)
+pp.yplus <- pval.yplus <- double(length(mu))
+for (i in 1:length(mu)) {
+  dfplus <- transform(df, yplus= y0 + mu[i])
+  ms <- modelSelection(yplus ~ 1, data=dfplus, priorCoef=priorCoef, priorDelta=priorDelta, center=FALSE, verbose=FALSE)
+  pp.yplus[i] <- coef(ms)['(Intercept)', 'margpp']
+  pval.yplus[i] <- t.test(dfplus$yplus)$p.value
+}
+```
+
+```{r normalmean-pp, fig.cap='(ref:cap-normalmean-pp)'}
+plot(mu, pp.yplus, ylab='Posterior probability', xlab='Sample mean', ylim=c(0,1), type='l')
+lines(mu, pval.yplus, col='blue')
+abline(h= c(0.05, 0.95), lty=2, col=c('blue','black'))
+legend('topleft', c("Posterior probability", "P-value"), lty=1, col=c("black","blue"))
+```
+
+(ref:cap-normalmean-pp) Normal mean example (n=100). Posterior probability $P(\mu \neq 0 \mid \by)$ and t-test P-value as a function of the sample mean. The dotted lines indicate standard 0.95 and 0.05 thresholds for posterior probabilities and P-values respectively.
+
+
+
+## General framework {#bms-framework}
+
+Consider a fully general setting where one considers a set of models $\Gamma$.
+We denote individual models by $\gamma \in \Gamma$, and the parameters of that model by $\btheta_\gamma$.
+This is without loss of generality, if one has $K$ arbitrary models then one could simply set $\gamma \in \{1, \ldots, K\}$, and the parameters could be an infinite-dimensional object such as a density function.
+
+In regression settings it is convenient to relate $\gamma$ to the non-zero parameters, as done in Example \@ref(exm:normalmean), where we had $\gamma= \mbox{I}(\mu \neq 0)$ and $\mbox{I}()$ is the indicator function.
+
+
+::: {.example #regression}
+
+Consider a linear regression
+\begin{align*}
+y_i = \sum_{j=1}^p \beta_j x_{ij} + \epsilon_i
+\end{align*}
+where $\epsilon_i \sim N(0, \sigma^2)$ independently across $i=1,\ldots,n$.
+Suppose that we wish to consider the $2^p$ models arising from excluding/including each of the $p$ covariates.
+To this end, let $\gamma_j= \mbox{I}(\beta_j \neq 0)$ be an inclusion indicator for variable $j=1,\ldots,p$. Then we can denote an arbitrary model by $\bgamma= (\gamma_1, \ldots,\gamma_p)$, the model space is $\Gamma= \{0,1\}^p$, and $\btheta_\gamma= (\bbeta_\gamma, \sigma^2)$, where $\bbeta_\gamma= \{ \beta_j : \gamma_j = 1 \}$ are the non-zero regression parameters under $\bgamma$.
+In such settings we use bold face notation $\bgamma$ to stress that it is a vector.
+
+:::
+
+Given a prior model probability $p(\gamma)$ and a prior on parameters $p(\btheta_\gamma \mid \gamma)$ for every $\gamma$, Bayes formula gives posterior model probabilities
+\begin{align}
+p(\gamma \mid \by)= \frac{p(\by \mid \gamma) p(\gamma)}{\sum_{\gamma'} p(\by \mid \gamma') p(\gamma')}
+(\#eq:bms-pp)
+\end{align}
+where $p(\gamma)$ is the prior probability of model $\gamma$ and 
+\begin{align}
+p(\by \mid \gamma)= \int p(\by \mid \btheta_\gamma, \gamma) p(\btheta_\gamma \mid \gamma) d\btheta_\gamma
+(\#eq:bms-marglhood)
+\end{align}
+is the so-called **integrated (or marginal) likelihood**.
+In \@ref(eq:bms-marglhood), $p(\by \mid \btheta_\gamma, \gamma)$ is the likelihood function for model $\gamma$.
+For simplicity, Equation \@ref(eq:bms-marglhood) assumes the standard setting where $\btheta_\gamma$ follows a continuous distribution, but it can be directly extended to cases where $\btheta_\gamma$ is discrete (then the integral becomes a sum) or a mixture of discrete and continuous distribution (then it's an integral with respect to a suitable dominating measure).
+
+Intuitively,\@ref(eq:bms-marglhood) says that if model $\gamma$ has a large prior probability $p(\gamma)$ and a large average value of its likelihood function (with respect to the specified prior), then it has high posterior probability $p(\gamma \mid \by)$.
+
+A related quantity are the so-called **Bayes factors** between models any pair of models $\gamma$ and $\gamma'$,
+\begin{align}
+B_{\gamma \gamma'}= \frac{p(\by \mid \gamma)}{p(\by \mid \gamma')}.
+(\#eq:bms-bf)
+\end{align}
+Posterior model probabilities in \@ref(eq:bms-pp) are one-to-one functions of Bayes factors and prior model probability ratios, namely
+\begin{align*}
+&p(\gamma \mid \by)= \left( 1 + \sum_{\gamma' \neq \gamma} B_{\gamma' \gamma} \frac{p(\gamma')}{p(\gamma)}   \right)^{-1}
+\\
+&\frac{p(\gamma \mid \by)}{p(\gamma' \mid \by)}= B_{\gamma \gamma'} \frac{p(\gamma)}{p(\gamma')}.
+\end{align*}
+
+
+
+## Prior on models {#bms-modelprior}
+
+In simple problems like Example \@ref(exm:normalmean) where one considers only a few models, it is customary to assign equal prior probabilities 
+\begin{align}
+p(\bgamma)=  1 / |\Gamma|.
+(\#eq:bms-modelunifprior)
+\end{align}
+We refer to \@ref(eq:bms-modelunifprior) as a **uniform model prior**.
+This prior is not recommended for problems with a moderate to large number of parameters.
+To see why, consider Example \@ref(exm:regression).
+If one sets \@ref(eq:bms-modelunifprior), then it is easy to see that the implied prior distribution on the model size $\sum_{j=1}^p \gamma_j \sim \mbox{Bin}(p,1/2)$. This prior concentrates heavily on mid-size models including roughly $p/2$ covariates, and in particular it assigns very low prior probability to models including a few covariates. That is, the prior does not induce sparsity.
+
+We discuss three other model priors that are popular in the regression context where $\bgamma= (\gamma_1,\ldots,\gamma_p)$.
+We denote by $|\bgamma|_0= \sum_{j=1}^p \gamma_j$ the model size, i.e. the number of non-zero regression parameters in $\bgamma$.
+
+1. Binomial prior, possibly combined with empirical Bayes [@rognon:2025empirical].
+
+2. Beta-Binomial prior [@scott:2010].
+
+3. Complexity prior [@castillo:2015].
+
+We found the Beta-Binomial prior to be a very good default in practice, attaining a good balance between false positive control and preserving power to detect non-zero coefficients. This is the default prior in `modelSelection` and, unless you have good reasons for doing otherwise, we suggest that you use this.
+For readers who are more familiar with the frequentist literature, the Beta-Binomial prior inspired the popular Extended BIC (EBIC) criterion [@chen:2008]. Roughly speaking, the model with highest posterior probability under the Beta-Binomial prior is asymptotically equivalent to the model with best EBIC.
+
+We next discuss these prior in some detail. First-time readers may wish to skip these sections.
+
+
+### Binomial prior
+
+Let $\gamma_j \sim \mbox{Bern}(n, \pi_j)$ independently for $j=1,\ldots,p$.
+By default `modelSelection` sets $\pi_1= \ldots = \pi_p= \pi$, and then the prior on the model size is
+\begin{align}
+p(\bgamma) &= \prod_{j=1}^p \pi^{|\bgamma|_0} (1 - \pi)^{p - |\bgamma|_0}
+\\
+|\bgamma|_0 &\sim \mbox{Bin}(n,\pi).
+(\#eq:bms-binomprior)
+\end{align}
+
+Setting small $\pi$ encourages sparse solutions, but the question is what value of $\pi$ should be chosen.
+A common default is to set $\pi= c/p$ for some constant $c>0$, so that prior expected model size $E(|\bgamma|_0)= c$ regardless of $c$. Unless one has a rough idea on how many variables may have an effect, it's unclear what $c$ should be chosen.
+
+A possible strategy, implemented in function `modelSelection_eBayes`, is to set $\pi$ using empirical Bayes. Briefly, one sets
+\begin{align*}
+\hat{\pi}= \arg\max_{\pi} p(\by \mid \pi) p(\pi)
+\end{align*}
+where $p(\pi)$ is a minimally-informative prior on $\pi$ (basically, preventing extreme values like $\pi=0$ and $\pi=1$), and $p(\by \mid \pi)= \sum_{\gamma} p(y \mid \bgamma) p(\bgamma \mid \pi)$ the marginal likelihood.
+The idea is to learn how much sparsity is appropriate to impose to the data at hand, as an alternative to discriminately assuming strongly sparse priors.
+For example, see @giannone:2021 for a discussion that sparse priors may often be inappropriate in the Social Sciences.
+We refer the reader to Section \@ref(eBayes) for a more detailed discussion on empirical Bayes.
+
+
+### Beta-Binomial prior
+
+@scott:2010 argued for setting a uniform prior $\pi \sim U(0,1)$ and $\gamma_j \sim \mbox{Bern}(\pi)$ independently across $j=1,\ldots,p$.
+These define $p(\pi)$ and $p(\bgamma \mid \pi)$, which imply the following marginal prior
+\begin{align}
+p(\bgamma) \propto \frac{1}{{p \choose |\bgamma|_0}}
+(\#eq:bms-bbprior)
+\end{align}
+It is a well-known result that then the model size follows a Beta-Binomial distribution, that is $|\bgamma|_0 \sim \mbox{Beta-Binomial}(p,1,1)$ (this holds basically by definition of the Beta-Binomial distribution).
+We hence refer to \@ref(eq:bms-bbprior) as **Beta-Binomial** prior.
+In fact, the Beta-Binomial$(p,1,1)$ is simply a discrete uniform distribution in $0,1,\ldots,p$.
+
+A perhaps simpler way to think about the Beta-Binomial prior is that one sets a uniform prior on the model size $|\bgamma|_0$ (in stark contrast with the Binomial imposed by \@ref(eq:bms-binomprior)), and that all models of a given size have the same probability.
+
+
+### Complexity prior
+
+@castillo:2015 showed that one may obtain optimal minimax parameter estimation rates in linear regression by setting a very sparse model prior, which they referred to as **Complexity prior**. As a side remark, for their results to hold, one should also set a prior on parameters than has Laplace tails or thicker, which in particular rules out using Gaussian priors. For model selection purposes (as opposed to estimation), using Gaussian priors on parameters leads to good rates [@rossell:2022], and they're much more convenient computationally, in particular in regression where they give closed-form marginal likelihoods in \@ref(eq:bms-marglhood)).
+Hence `modelSelection` focuses on using Gaussian priors on parameters.
+
+The main idea of a Complexity prior is that the implied prior on the model size $P(|\bgamma|_0= l)$ decreases essentially exponentially with $l$.
+Specifically, here we define $\bgamma \sim \mbox{Complexity}(c)$ for some given $c > 0$ (and by default, we take $c=1$), whenever
+\begin{align}
+p(\bgamma) \propto \frac{1}{p^{c l} {p \choose |\bgamma|_0}}
+\Longrightarrow
+P(|\bgamma|_0= l) \propto \frac{1}{p^{c l}}.
+(\#eq:bms-complexprior)
+\end{align}
+
+
+### A simple example
+
+Consider a regression example with $p=2$ covariates, leading to the four models shown in Table \@ref(tab:tabmodelprior). The uniform model prior assigns 1/4 probability to each, implying a prior probabilities 1/4, 1/2 and 1/4 to model sizes 0, 1 and 2 respectively.
+The Beta-Binomial prior assigns 1/3 to each model size. Since there are 2 models of size $|\bgamma|_0=1$, each receives probability $(1/3) (1/2)= 1/6$.
+The Complexity prior results in a much sparser model prior, which works great when the data-generating truth is truly sparse or the sample size $n$ is large enough, otherwise it may suffer from lower power of detecting truly non-zero parameters.
+
+
+```{r, echo=FALSE}
+p <- 2
+models <- expand.grid(lapply(1:p, function(z) c(0,1)))
+names(models) <- paste("gamma", 1:ncol(models), sep='')
+priorp.unif <- rep(1/nrow(models), nrow(models))
+l <- rowSums(models)
+priorp.bb <- 1 / (choose(p, l) * (p+1))
+priorsize.complex <- 1 / exp(0:p)
+priorsize.complex <- priorsize.complex / sum(priorsize.complex)
+priorp.complex <- priorsize.complex[l+1] / choose(p, l)
+tab <- cbind(models, priorp.unif, priorp.bb, priorp.complex)
+```
+
+```{r tabmodelprior, echo=FALSE, tab.cap='aaa'}
+knitr::kable(
+  tab, booktabs = TRUE,
+  col.names= c(names(models)[1:p],'Uniform','Beta-Binomial','Complexity(1)'),
+  caption = paste('Model prior probabilities in a regression example with p=',p,' covariates',sep='')
+)
+```
+
+Let us illustrate these issues in a simple simulation.
+
+```{r}
+p <- 4; n <- 50
+x <- matrix(rnorm(n * p), nrow=n)
+beta <- matrix(c(rep(0, 2), rep(0.5, p-2)), ncol=1)
+y <- x %*% beta + rnorm(n)
+df <- data.frame(y, x)
+ms.unif <- modelSelection(y ~ -1 + ., data=df, priorDelta = modelunifprior(), verbose=FALSE)
+ms.bbin <- modelSelection(y ~ -1 + ., data=df, priorDelta = modelbbprior(), verbose=FALSE)
+ms.comp <- modelSelection(y ~ -1 + ., data=df, priorDelta = modelcomplexprior(), verbose=FALSE)
+```
+
+```{r}
+coef(ms.unif)
+coef(ms.bbin)
+coef(ms.comp)
+```
+
+
+
+
+
+## Prior on coefficients {#bms-coefprior}
+
+### Local priors {#bms-localprior}
+
+### Non-local priors {#bms-nlp}
+
+### Sensitivity to prior variance {#bms-priorvar}
+
+We return to Example \@ref(exm:normalmean),
+and assess the robustness of the results for the original data as one varies the value of the prior dispersion $g$.
+This is interesting because much literature has been devoted to the so-called Jeffreys-Lindley-Bartlett paradox [@lindley:1957]. Briefly, as $g \to \infty$ the posterior probability $P(\mu=0 \mid \by)$ converges to 1, which a number of authors viewed as problematic.
+We contend that this is not so: if one views $g$ as a tuning parameter, then $g= \infty$ is an extreme value and it's therefore unsurprising that one obtains extreme results. For example, an infinite LASSO penalty also leads to $\hat{\mu}=0$, yet this doesn't stop anyone from using LASSO. The question is whether one can set tuning parameters to values that lead to good behavior, and there's abundant theoretical and empirical evidence that $g=1$ does so.
+
+Here we consider the range $g \in [0.1, 10]$, i.e. some of these prior variances are very different from the default $g=1$.
+We do the exercise with the dataset `y` simulated in Example \@ref(exm:normalmean), where truly $\mu=0$, and also with another dataset `y1` where truly $\mu=1$.
+
+```{r}
+df1 <- data.frame(y1= rnorm(n, mean=0.5))
+gseq <- seq(0.001, 10^5, length=200)
+pp0.gseq <- pp1.gseq <- double(length(gseq))
+for (i in 1:length(gseq)) {
+  priorCoef <- normalidprior(taustd=gseq[i])
+  ms <- modelSelection(y ~ 1, data=df, priorCoef=priorCoef, priorDelta=priorDelta, center=FALSE, verbose=FALSE)  
+  pp0.gseq[i] <- coef(ms)['(Intercept)', 'margpp']
+  ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=priorCoef, priorDelta=priorDelta, center=FALSE, verbose=FALSE)  
+  pp1.gseq[i] <- coef(ms1)['(Intercept)', 'margpp']
+}
+```
+
+```{r normalmean-gseq, fig.cap='(ref:cap-normalmean-gseq)', fig.show='hold', out.width='50%'}
+plot(gseq, pp0.gseq, xlab='g', ylab='Posterior probability', ylim=c(0,1), type='l')
+plot(gseq, pp1.gseq, xlab='g', ylab='Posterior probability', ylim=c(0,1), type='l')
+```
+
+(ref:cap-normalmean-gseq) Posterior probability $P(\mu \neq 0 \mid \by)$ vs. prior dispersion $g$ in the Gaussian mean example (n=100). Left: truly $\mu=0$. Right: truly $\mu=0.5$.
+
+Figure \@ref(fig:normalmean-gseq) shows the results.
+Although $P(\mu \neq 0 \mid \by)$ decreases as $g$ grows, when truly $\mu=0$ the changes are rather small and when truly $\mu=0.5$ the changes cannot be appreciated. Overall, the conclusions are unaffected by $g$.
+Note that as $g \to 0$ we have $P(\mu \neq 0 \mid \by)$ approaching 0.5, this is reasonable because for $g=0$ the $N(0, g \sigma^2)$ prior under the alternative ($\gamma=1$) states that $\mu=0$, i.e. the null and alternative hypotheses are equivalent and both receive the same posterior probability.
+This effect can only be appreciated when truly $\mu = 0$, when truly $\mu=0.5$ we would need to consider much smaller $g$. 
+Just for fun, below we consider an absurdly small $g=0.001$ and an absurdly large $g=10^6$, and even then we obtain some evidence for $P(\mu \ne 0 \mid \by)$.
+
+```{r}
+ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=normalidprior(taustd=0.001), priorDelta=priorDelta, center=FALSE, verbose=FALSE)
+coef(ms1)
+
+ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=normalidprior(taustd=10^6), priorDelta=priorDelta, center=FALSE, verbose=FALSE)
+coef(ms1)
+```
+
+
+
+
+## Computation  {#bms-computation}
+
+### Approximating marginal likelihoods
+
+The marginal likelihood in \@ref(eq:bms-marglhood) has a closed-form expression in some instances, mainly regression with Gaussian errors (e.g., linear regression, non-linear additive regression) with conjugate parameter priors.
+Recall that the marginal likelihood for model $\bgamma$ is
+\begin{align*}
+p(\by \mid \gamma)= \int p(\by \mid \btheta_\gamma, \gamma) p(\btheta_\gamma \mid \gamma) d\btheta_\gamma.
+\end{align*}
+
+Outside these special cases, a numerical approximation is required.
+The `modelSelection` function implements some such approximations, and their use can be specified with the argument `method`.
+If `method` is not specified, `modelSelection` selects a sensible default.
+
+A popular strategy in the context of model selection is to use Laplace approximations: they are fairly computationally efficient, and also highly accurate as $n$ grows [@kass:1990].
+To use Laplace approximations, set `method=='Laplace'`.
+
+Laplace approximations require finding the posterior mode (or alternatively, the MLE) $\hat{\btheta}_\gamma$ and the hessian of the log-posterior density at $\hat{\btheta}_\gamma$. Both these quantities can be found quickly for models that feature a few parameters, but the calculations get cumbersome when:
+
+- One considers many models, i.e. one must repeat the optimization exercise many times
+
+- Some models that feature many parameters have high posterior probability, and hence they're visited often by an MCMC model search algorithm
+
+- The sample size $n$ is large, so evaluating gradients (or hessians) to obtain $\hat{\btheta}_\gamma$ gets costly.
+
+An alternative is to use approximate Laplace approximations (ALA) [@rossell:2021], which are available by using `method=='ALA'`.
+Briefly, ALA approximates $\hat{\btheta}_\gamma$ by taking a single Newton-Raphson step from an initial estimate $\hat{\btheta}_\gamma^{(0)}$. By default $\hat{\btheta}_\gamma^{(0)}= 0$ is taken, see @rossell:2021 for a study of the theoretical properties of this choice. Alternatively, in `modelSelection` one may provide other 
+$\hat{\btheta}_\gamma^{(0)}$ with the argument `initpar`.
+
+
+### Model search
+
+`modelSelection` uses an MCMC model search, based on classical Gibbs sampling.
+`modelSelectionGGM` also implements newer birth-death-swap  [@yangyun:2016] and locally informed thresholded (LIT) algorithms [@zhou_quan:2022]. The latter are theoretically appealing in that they have been shown to be scalable to high dimensions under relatively stringent sparsity constraints. In practice simple Gibbs sampling works remarkably well, in our experience it usually attains a similar numerical accuracy when it's run for the same clock time as birth-death-swap and LIT. 
+
+

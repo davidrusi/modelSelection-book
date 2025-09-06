@@ -1,0 +1,4 @@
+"0","fit.gam <- modelSelection(y ~ ., data=df,"
+"0","                     smooth = ~ X1 + X2 + X3,"
+"0","                     priorCoef=priorCoef,"
+"0","                     priorDelta=priorDelta, verbose=FALSE)"

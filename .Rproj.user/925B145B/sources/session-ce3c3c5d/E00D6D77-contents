@@ -1,0 +1,50 @@
+---
+title: "Model selection with the modelSelection package"
+author: "David Rossell"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib]
+biblio-style: apalike
+link-citations: yes
+description: "An introduction to model selection illustrated with the modelSelection R package."
+output:
+  bookdown::gitbook:
+    citation_package: natbib
+    css: style.css
+    pandoc_args: ["--lua-filter=macros.lua"]
+  bookdown::pdf_book:
+    citation_package: natbib
+    includes:
+      in_header: preamble.tex
+  bookdown::epub_book:
+    pandoc_args: ["--lua-filter=macros.lua"]
+---
+
+
+
+# Preface {-}
+
+This book shows how to use the modelSelection package
+for sparse inference, mainly Bayesian model selection (BMS) and averaging (BMA), for a number of popular models listed below. It also implements L0 criteria like the AIC, BIC, EBIC, or other general information criteria.
+The package's C++ implementation is not optimal, but it's designed to be minimally scalable in sparse high-dimensional settings (large $p$).
+A lot of work went into coding and maintaining the package, if you use it please cite at least one of the papers indicated below.
+
+For a quick start guide, see Section \@ref(quick-start). The main models handled by the package are:
+
+- Generalized linear models: linear, logistic and Poisson regression. BMS, BMA and L0 criteria [@johnson:2012; @rossell:2017; @rossell:2021].
+
+- Linear regression with non-normal residuals [@rossell:2018b], including asymmetric Normal, Laplace and asymmetric Laplace residuals.
+
+- Accelerated Failure Time models for right-censored survival data [@rossell:2021b].
+
+- Bayesian inference for Gaussian graphical models
+
+- Bayesian for Gaussian mixture models [@fuquene:2019].
+
+On the Bayesian side, ```modelSelection``` is the main package implementing **non-local priors** (NLPs) but other popular priors are also implemented, e.g. Zellner's and Normal shrinkage priors in regression, or Gaussian spike-and-slab priors in graphical models.
+NLPs are briefly reviewed in this book, see @johnson:2010 and @johnson:2012 for their model selection properties,
+@rossell:2017 for parameter estimation,
+and @rossell:2021 for computational approximations to marginal likelihoods.
+
+

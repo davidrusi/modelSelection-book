@@ -1,0 +1,27 @@
+{
+    "id": "557EAD87",
+    "path": "~/github/modelSelection-bookdown/quick-start.Rmd",
+    "project_path": "quick-start.Rmd",
+    "type": "r_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1756800758610.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "114,47",
+        "scrollLine": "0",
+        "docOutlineVisible": "1"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1757075464,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1757075464784,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,1 @@
+"0","plot(mu, pp.yplus, ylab='Posterior probability', xlab='Sample mean', ylim=c(0,1), type='l')"

@@ -1,0 +1,4 @@
+"0","set.seed(1234)"
+"0","n <- 100"
+"0","y <- rnorm(n)"
+"0","df <- data.frame(y=y)"
