@@ -1,0 +1,12 @@
+# Background on L0 criteria {#background-l0}
+
+To be added.
+
+## Basics
+
+
+## MCMC for model search
+
+
+
+

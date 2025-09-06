@@ -1,0 +1,35 @@
+\usepackage{booktabs}
+\usepackage{amsthm}
+\usepackage{bm}
+\makeatletter
+\def\thm@space@setup{%
+  \thm@preskip=8pt plus 2pt minus 4pt
+  \thm@postskip=\thm@preskip
+}
+\makeatother
+
+
+% Math Macros
+\newcommand{\bbeta}{\mathbf{\beta}}
+\newcommand{\bgamma}{\mathbf{\gamma}}
+\newcommand{\btheta}{\mathbf{\theta}}
+
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\by}{\mathbf{y}}
+\newcommand{\bz}{\mathbf{z}}
+
+
+% Example environment
+\usepackage{tcolorbox}
+\newtcolorbox{examplebox}{
+  colback=white,
+  colframe=black,
+  boxrule=0.8pt,
+  arc=4pt,
+  outer arc=4pt,
+  boxsep=5pt
+}
+\usepackage{etoolbox}
+% Make ::: example ... ::: render as examplebox
+\AtBeginEnvironment{example}{\begin{examplebox}}
+\AtEndEnvironment{example}{\end{examplebox}}

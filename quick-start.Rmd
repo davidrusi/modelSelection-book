@@ -1,0 +1,144 @@
+# Quick start {#quick-start}
+
+The main functions for regression-type models are `modelSelection` and `bestBIC` (along with companions like `bestEBIC`, `bestAIC` and `bestIC`).
+Details are in subsequent sections. Below we illustrate how to obtain:
+
+- Information criteria for all models (including those from MCMC exploration)
+- Posterior model probabilities
+- Marginal posterior inclusion probabilities  
+- BMA point estimates and posterior intervals
+
+See `modelSelectionGGM` for Gaussian graphical models and `bfnormmix` for Gaussian mixture models.
+
+## Linear regression
+
+We simulate linear regression data 
+$$
+y_i = \sum_{j=1}^p x_{ij} \theta_j + \epsilon_i,
+$$
+for $p=3$ covariates and $i=1,\ldots,100$ individuals.
+We set regression coefficients $\theta_1= 1$, $\theta_2= 1$, $\theta_3=0$ and $\epsilon_i \sim N(0,1)$, and the random number seed for reproducibility.
+It is good practice to store the outcome and covariates into a data frame, as we do below.
+
+```{r quickstart-simdata, message=FALSE}
+library(mombf)
+set.seed(1234)
+x <- matrix(rnorm(100*3), nrow=100, ncol=3)
+theta <- matrix(c(1,1,0), ncol=1)
+y <- x %*% theta + rnorm(100)
+df <- data.frame(y, x)
+```
+
+### L0 criteria
+
+`bestBIC` obtains the BIC for all models. 
+As usual in R we can use formulas like `y ~ X1 + X2 + X3` (provided the variables are stored in a data frame), or simply `y ~ .` to consider all the variables in the data (other than `y`) as covariates.
+An intercept is added automatically, giving a total of 4 variables and $2^4=16$ possible models (the intercept can be removed by adding -1 to the formula, as usual). `bestBIC` enumerates these 16 models and finds the model with best (lowest) BIC (when there are many covariates, MCMC is used to explore the model space).
+For our simulated data the selected model matches the data-generating truth, which only features the first two covariates.
+
+```{r quickstart-bestbic}
+fit.bic <- bestBIC(y ~ ., data=df)
+print(fit.bic)
+```
+
+We list the BIC for the top 5 models (index 1 corresponds to the intercept, 2 to `x[,1]` and so on). We can also use standard functions like `summary` and `coef` to view the MLE for the best model, and `predict` to obtain predictions for new data.
+
+```{r}
+fit.bic$models[1:5,]
+```
+
+
+
+```{r}
+summary(fit.bic)
+```
+
+
+```{r}
+coef(fit.bic)
+```
+
+### Bayesian model selection
+
+A limitation of L0 criteria is that they ignore the uncertainty in the selected model, i.e. we're not completely sure that it's the correct one.
+We use BMS to assess that uncertainty, in a Bayesian sense.
+BMS requires setting a prior distribution on the models and on the parameters for each model.
+For now, we run `modelSelection` with default priors (Beta-Binomial prior on the models, pMOM prior with default prior precision on the coefficients).
+
+
+```{r quickstart-bma}
+priorCoef <- momprior()
+priorDelta <- modelbbprior()
+fit.bms <- modelSelection(y ~ ., data=df,
+                     priorCoef=priorCoef, 
+                     priorDelta=priorDelta)
+```
+
+`postProb` shows posterior model probabilities (sorted decreasingly), and `coef` gives BMA point estimates, 0.95 posterior intervals, and marginal posterior inclusion probabilities $P(\theta_j \neq 0 \mid y)$.
+Below, `phi` refers to the error variance $\sigma^2$ (which is included with probability 1).
+In our example, BMS selects the right covariates and assigns high posterior probability to that solution, as one would ideally wish.
+
+```{r}
+coef(fit.bms)
+```
+
+```{r}
+postProb(fit.bms)[1:5,]
+```
+
+Finally, we can use `predict` to obtain point predictions and 0.95 posterior predictive intervals.
+
+```{r}
+ypred <- predict(fit.bms)
+head(ypred)
+```
+
+## Logistic regression
+
+For binary outcomes, we simply specify `family='binomial'` (and for Poisson we specify `family='poisson'`).
+We first create a binary version of our simulated outcome.
+
+```{r}
+dfbin <- transform(df, ybin = (y > 0)) |>
+  dplyr::select(!y) #drop variable y
+```
+
+We next use `bestBIC` and `modelSelection` as before. The selected model is still the correct one, but the  posterior probability for (wrongly) including `x[,3]` is higher than in the linear regression data. This is intuitively expected, binary outcomes carry less information than Gaussian ones, so there is more uncertainty on the chosen model.
+
+```{r quickstart-logreg-bic}
+fit2.bic <- bestBIC(ybin ~ ., family='binomial', data=dfbin)
+print(fit2.bic)
+```
+
+
+```{r quickstart2}
+fit2.bms <- modelSelection(ybin ~ ., data=dfbin,
+                     priorCoef=priorCoef,
+                     priorDelta=priorDelta,
+                     family='binomial')
+coef(fit2.bms)
+```
+
+## Non-Linear effects via Generalized Additive Models (GAMs)
+
+Non-linear effects can be modeled via cubic splines using the `smooth` argument (the default is 9 knots, producing 5 columns in design matrix for each non-linear covariate).
+When using the smooth argument we cannot use the `~ .` notation for including all covarites, rather we must list those for which we wish to include a non-linear effect (see the example below).
+The effect of each covariate is decomposed as a linear part plus a deviation from linearity (which is forced to be orthogonal to the linear term). This is useful to identify covariates for which a linear effect is sufficient, and covariates for which there are non-linearities.
+`modelSelection` considers 3 possibilities for each covariate: excluding it entirely, including only the linear effect, and including both linear and non-linear terms. For further details on this decomposition, see [@rossell:2021b].
+
+The linear effect coefficients are displayed using the original variable names, and the non-linear coefficients with an `.s` appended. Here we have 5 columns coding for the non-linear effect, labelled as `.s1` though `.s5`. 
+In our example, there is strong evidence for (correctly) including the linear effect of `X1` and `X2`, excluding their non-linear effects, and exclusing `X3` entirely.
+
+
+```{r quickstart-gam}
+fit.gam <- modelSelection(y ~ ., data=df,
+                     smooth = ~ X1 + X2 + X3,
+                     priorCoef=priorCoef,
+                     priorDelta=priorDelta, verbose=FALSE)
+```
+
+
+```{r}
+coef(fit.gam)
+```
+

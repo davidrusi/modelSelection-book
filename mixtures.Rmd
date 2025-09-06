@@ -1,0 +1,7 @@
+# Gaussian mixture models {#mixtures}
+
+To be added.
+
+
+
+

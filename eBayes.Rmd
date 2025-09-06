@@ -1,0 +1,6 @@
+# Empirical Bayes for transfer learning {#eBayes}
+
+To be added.
+
+
+

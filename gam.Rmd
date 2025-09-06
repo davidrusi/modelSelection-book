@@ -1,0 +1,6 @@
+# Generalized additive models {#gam}
+
+To be added.
+
+
+

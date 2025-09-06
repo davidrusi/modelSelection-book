@@ -1,0 +1,12 @@
+book_filename: "modelSelection-book"
+rmd_files: ["index.Rmd",
+  "quick-start.Rmd",
+  "background-bms.Rmd",
+  "background-l0.Rmd",
+  "glm.Rmd",
+  "gam.Rmd",
+  "eBayes.Rmd",
+  "survival.Rmd",
+  "ggm.Rmd",
+  "mixtures.Rmd"]
+delete_merged_file: true
