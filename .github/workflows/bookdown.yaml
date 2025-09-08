@@ -5,11 +5,13 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: write 
+  contents: write  # Required for GitHub Pages deployment
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    env:
+      R_LIBS_USER: ${{ runner.workspaces }}/R/${{ github.run_id }}  # isolated cache per run
 
     steps:
       - name: Checkout repository
@@ -34,18 +36,39 @@ jobs:
       - name: Install system dependencies
         run: sudo apt-get update -y && sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
-      - name: Install R packages and dependencies
+      - name: Install CRAN & Bioconductor packages if missing or outdated
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          Rscript --vanilla -e 'install.packages("remotes", repos="https://cloud.r-project.org")'
-          Rscript --vanilla -e 'install.packages("bookdown", repos="https://cloud.r-project.org")'
-          Rscript --vanilla -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org")'
-          Rscript --vanilla -e 'BiocManager::install("sparseMatrixStats", ask=FALSE, update=FALSE)'
-          Rscript --vanilla -e 'remotes::install_github("davidrusi/modelSelection", dependencies = TRUE, upgrade = "never", auth_token = Sys.getenv("GITHUB_TOKEN"))'
+          Rscript --vanilla -e '
+          # --- CRAN packages ---
+          cran_pkgs <- c("remotes","bookdown")
+          available_cran <- available.packages(repos="https://cloud.r-project.org")
+          for (pkg in cran_pkgs) {
+            installed <- tryCatch(packageVersion(pkg), error=function(e) NA)
+            available <- available_cran[pkg, "Version"]
+            if (is.na(installed) || installed < available) {
+              install.packages(pkg, repos="https://cloud.r-project.org")
+            }
+          }
 
-      - name: Build site
-        run: Rscript --vanilla -e 'bookdown::render_book("index.Rmd", output_format = "bookdown::gitbook")'
+          # --- Bioconductor packages ---
+          if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org")
+          bioc_pkgs <- c("sparseMatrixStats")
+          for (pkg in bioc_pkgs) {
+            installed <- tryCatch(packageVersion(pkg), error=function(e) NA)
+            available <- BiocManager::available(pkg)[pkg]
+            if (is.na(installed) || installed < available) {
+              BiocManager::install(pkg, ask=FALSE, update=FALSE)
+            }
+          }
+
+          # --- Always install GitHub package modelSelection ---
+          remotes::install_github("davidrusi/modelSelection", dependencies=TRUE, upgrade="never", auth_token=Sys.getenv("GITHUB_TOKEN"))
+          '
+
+      - name: Build site (HTML only)
+        run: Rscript --vanilla -e 'bookdown::render_book("index.Rmd", output_format="bookdown::gitbook")'
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
