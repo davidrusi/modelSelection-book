@@ -32,12 +32,14 @@ jobs:
         run: sudo apt-get update -y && sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
       - name: Install R packages and dependencies
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           Rscript --vanilla -e 'install.packages("remotes", repos="https://cloud.r-project.org")'
           Rscript --vanilla -e 'install.packages("bookdown", repos="https://cloud.r-project.org")'
           Rscript --vanilla -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org")'
           Rscript --vanilla -e 'BiocManager::install("sparseMatrixStats", ask=FALSE, update=FALSE)'
-          Rscript --vanilla -e 'remotes::install_github("davidrusi/modelSelection", dependencies = TRUE, upgrade = "never")'
+          Rscript --vanilla -e 'remotes::install_github("davidrusi/modelSelection", dependencies = TRUE, upgrade = "never", auth_token = Sys.getenv("GITHUB_TOKEN"))'
 
       - name: Build site
         run: Rscript --vanilla -e 'bookdown::render_book("index.Rmd", output_format = "all")'
