@@ -1,5 +1,5 @@
 ---
-title: "Model selection with the modelSelection package"
+title: "High-dimensional model choice. A hands-on take"
 author: "David Rossell"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -7,7 +7,8 @@ documentclass: book
 bibliography: [book.bib]
 biblio-style: apalike
 link-citations: yes
-description: "An introduction to model selection illustrated with the modelSelection R package."
+description: "High-dimensional model selection with the modelSelection R package"
+cover-image: "bookcover_titled.png"
 output:
   bookdown::gitbook:
     citation_package: natbib
@@ -22,8 +23,13 @@ output:
 ---
 
 
-
 # Preface {-}
+
+
+```{r, cover, fig.show='hold', echo=FALSE, out.width='50%'}
+if(knitr::is_html_output()){
+  knitr::include_graphics("bookcover_titled.png")}
+```
 
 This book shows how to use the modelSelection package
 for sparse inference, mainly Bayesian model selection (BMS) and averaging (BMA), for a number of popular models listed below. It also implements L0 criteria like the AIC, BIC, EBIC, or other general information criteria.
