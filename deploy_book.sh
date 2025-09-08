@@ -1,27 +1,37 @@
 #!/bin/bash
 set -e
 
-# Save current branch
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 echo "Current branch: $CURRENT_BRANCH"
 
 BRANCH="gh-pages"
 BUILD_DIR="_book"
 
-# Switch to gh-pages
-git fetch origin $BRANCH || git checkout --orphan $BRANCH
-git checkout $BRANCH
+# Remove any existing gh-pages worktree
+if git worktree list | grep -q "$BRANCH"; then
+    EXISTING_PATH=$(git worktree list | grep "$BRANCH" | awk '{print $1}')
+    echo "Removing existing worktree at $EXISTING_PATH"
+    git worktree remove "$EXISTING_PATH"
+fi
 
-# Copy compiled book files
-cp -r ../${BUILD_DIR}/* .
+# Create a new temporary directory for worktree
+TMP_DIR=$(mktemp -d)
+echo "Adding worktree in $TMP_DIR"
+git worktree add $TMP_DIR $BRANCH
 
-# Commit and push
+# Copy compiled book files into worktree
+cp -r $BUILD_DIR/* $TMP_DIR/
+
+# Commit and force push
+pushd $TMP_DIR
 git add .
 git commit -m "Update bookdown site $(date +'%Y-%m-%d %H:%M:%S')" || echo "Nothing to commit"
-git push origin $BRANCH
+git push origin $BRANCH --force
+popd
 
-# Return to the original branch
+# Remove temporary worktree
+git worktree remove $TMP_DIR
+
+# Return to original branch
 git checkout $CURRENT_BRANCH
-echo "Returned to branch: $CURRENT_BRANCH"
-
-echo "Deployment complete!"
+echo "Deployment complete! Back on branch: $CURRENT_BRANCH"
