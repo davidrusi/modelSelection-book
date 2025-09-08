@@ -5,13 +5,15 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: write  # Required for GitHub Pages deployment
+  contents: write   # Required for GitHub Pages deployment
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     env:
-      R_LIBS_USER: ~/Rlibs
+      CRAN_LIBS: ~/Rlibs/cran
+      BIOC_LIBS: ~/Rlibs/bioc
+      R_LIBS_USER: ~/Rlibs  # Combine them for R
 
     steps:
       - name: Checkout repository
@@ -25,54 +27,92 @@ jobs:
       - name: Set up pandoc
         uses: r-lib/actions/setup-pandoc@v2
 
-      - name: Cache R packages
+      # --- Cache CRAN packages ---
+      - name: Cache CRAN packages
         uses: actions/cache@v3
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ hashFiles('.github/workflows/bookdown.yaml') }}
+          path: ${{ env.CRAN_LIBS }}
+          key: ${{ runner.os }}-cran-${{ hashFiles('.github/workflows/bookdown.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-r-
+            ${{ runner.os }}-cran-
 
+      # --- Cache Bioconductor packages ---
+      - name: Cache Bioconductor packages
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.BIOC_LIBS }}
+          key: ${{ runner.os }}-bioc-${{ hashFiles('.github/workflows/bookdown.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-bioc-
+
+      # --- Cache TinyTeX for future PDF builds ---
+      - name: Cache TinyTeX
+        uses: actions/cache@v3
+        with:
+          path: ~/.TinyTeX
+          key: ${{ runner.os }}-tinytex-v1
+          restore-keys: |
+            ${{ runner.os }}-tinytex-
+
+      # --- Install system dependencies ---
       - name: Install system dependencies
         run: sudo apt-get update -y && sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
-      - name: Install CRAN & Bioconductor packages if missing or outdated
+      # --- Install R packages (version-aware, fixed checks) ---
+      - name: Install R packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           Rscript --vanilla -e '
           # --- CRAN packages ---
+          dir.create(Sys.getenv("CRAN_LIBS"), showWarnings=FALSE, recursive=TRUE)
+          .libPaths(c(Sys.getenv("CRAN_LIBS"), .libPaths()))
           cran_pkgs <- c("remotes","bookdown")
           available_cran <- available.packages(repos="https://cloud.r-project.org")
           for (pkg in cran_pkgs) {
             installed <- tryCatch(packageVersion(pkg), error=function(e) NA)
-            available <- available_cran[pkg, "Version"]
-            if (is.na(installed) || installed < available) {
-              install.packages(pkg, repos="https://cloud.r-project.org")
+            available <- if (pkg %in% rownames(available_cran)) available_cran[pkg,"Version"] else NA
+            if (is.na(installed) || (!is.na(available) && installed < available)) {
+              install.packages(pkg, repos="https://cloud.r-project.org", lib=Sys.getenv("CRAN_LIBS"))
             }
           }
 
           # --- Bioconductor packages ---
+          dir.create(Sys.getenv("BIOC_LIBS"), showWarnings=FALSE, recursive=TRUE)
+          .libPaths(c(Sys.getenv("BIOC_LIBS"), .libPaths()))
           if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org")
           bioc_pkgs <- c("sparseMatrixStats")
           for (pkg in bioc_pkgs) {
             installed <- tryCatch(packageVersion(pkg), error=function(e) NA)
             available <- BiocManager::available(pkg)[pkg]
-            if (is.na(installed) || installed < available) {
-              BiocManager::install(pkg, ask=FALSE, update=FALSE)
+            if (is.na(installed) || (!is.na(available) && installed < available)) {
+              BiocManager::install(pkg, ask=FALSE, update=FALSE, lib=Sys.getenv("BIOC_LIBS"))
             }
           }
 
+          # --- TinyTeX install (for future PDF) ---
+          if (!requireNamespace("tinytex", quietly=TRUE)) install.packages("tinytex", repos="https://cloud.r-project.org")
+          if (!tinytex:::is_tinytex()) tinytex::install_tinytex()
+
           # --- Always install GitHub package modelSelection ---
-          remotes::install_github("davidrusi/modelSelection", dependencies=TRUE, upgrade="never", auth_token=Sys.getenv("GITHUB_TOKEN"))
+          remotes::install_github(
+            "davidrusi/modelSelection",
+            dependencies=TRUE,
+            upgrade="never",
+            auth_token = Sys.getenv("GITHUB_TOKEN")
+          )
           '
 
+      # --- Build HTML bookdown site ---
       - name: Build site (HTML only)
         run: Rscript --vanilla -e 'bookdown::render_book("index.Rmd", output_format="bookdown::gitbook")'
 
+      # --- Deploy to GitHub Pages ---
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_book
           publish_branch: gh-pages
+
+
