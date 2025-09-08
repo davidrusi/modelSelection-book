@@ -11,7 +11,7 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     env:
-      R_LIBS_USER: ${{ runner.workspaces }}/R/${{ github.run_id }}  # isolated cache per run
+      R_LIBS_USER: ~/Rlibs
 
     steps:
       - name: Checkout repository
