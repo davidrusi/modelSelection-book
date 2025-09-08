@@ -42,7 +42,7 @@ jobs:
           Rscript --vanilla -e 'remotes::install_github("davidrusi/modelSelection", dependencies = TRUE, upgrade = "never", auth_token = Sys.getenv("GITHUB_TOKEN"))'
 
       - name: Build site
-        run: Rscript --vanilla -e 'bookdown::render_book("index.Rmd", output_format = "all")'
+        run: Rscript --vanilla -e 'bookdown::render_book("index.Rmd", output_format = "bookdown::gitbook")'
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
