@@ -33,9 +33,9 @@ jobs:
 
       - name: Install R packages and dependencies
         run: |
-          Rscript --vanilla -e 'install.packages("remotes")'
-          Rscript --vanilla -e 'install.packages("bookdown")'
-          Rscript --vanilla -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager")'
+          Rscript --vanilla -e 'install.packages("remotes", repos="https://cloud.r-project.org")'
+          Rscript --vanilla -e 'install.packages("bookdown", repos="https://cloud.r-project.org")'
+          Rscript --vanilla -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org")'
           Rscript --vanilla -e 'BiocManager::install("sparseMatrixStats", ask=FALSE, update=FALSE)'
           Rscript --vanilla -e 'remotes::install_github("davidrusi/modelSelection", dependencies = TRUE, upgrade = "never")'
 
