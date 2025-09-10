@@ -4,26 +4,26 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Model selection with the modelSelection package</title>
-  <meta name="description" content="An introduction to model selection illustrated with the modelSelection R package." />
+  <title>High-dimensional model choice. A hands-on take</title>
+  <meta name="description" content="High-dimensional model selection with the modelSelection R package" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Model selection with the modelSelection package" />
+  <meta property="og:title" content="High-dimensional model choice. A hands-on take" />
   <meta property="og:type" content="book" />
-  
-  <meta property="og:description" content="An introduction to model selection illustrated with the modelSelection R package." />
+  <meta property="og:image" content="/bookcover_titled.png" />
+  <meta property="og:description" content="High-dimensional model selection with the modelSelection R package" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Model selection with the modelSelection package" />
+  <meta name="twitter:title" content="High-dimensional model choice. A hands-on take" />
   
-  <meta name="twitter:description" content="An introduction to model selection illustrated with the modelSelection R package." />
-  
+  <meta name="twitter:description" content="High-dimensional model selection with the modelSelection R package" />
+  <meta name="twitter:image" content="/bookcover_titled.png" />
 
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-09-06" />
+<meta name="date" content="2025-09-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,6 +52,10 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
@@ -175,23 +179,24 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="background-bms.html"><a href="background-bms.html#bms-simple-example"><i class="fa fa-check"></i><b>2.1</b> A simplest example</a></li>
 <li class="chapter" data-level="2.2" data-path="background-bms.html"><a href="background-bms.html#bms-framework"><i class="fa fa-check"></i><b>2.2</b> General framework</a></li>
-<li class="chapter" data-level="2.3" data-path="background-bms.html"><a href="background-bms.html#bms-modelprior"><i class="fa fa-check"></i><b>2.3</b> Prior on models</a>
+<li class="chapter" data-level="2.3" data-path="background-bms.html"><a href="background-bms.html#bma"><i class="fa fa-check"></i><b>2.3</b> Bayesian model averaging</a></li>
+<li class="chapter" data-level="2.4" data-path="background-bms.html"><a href="background-bms.html#bms-modelprior"><i class="fa fa-check"></i><b>2.4</b> Prior on models</a>
 <ul>
-<li class="chapter" data-level="2.3.1" data-path="background-bms.html"><a href="background-bms.html#binomial-prior"><i class="fa fa-check"></i><b>2.3.1</b> Binomial prior</a></li>
-<li class="chapter" data-level="2.3.2" data-path="background-bms.html"><a href="background-bms.html#beta-binomial-prior"><i class="fa fa-check"></i><b>2.3.2</b> Beta-Binomial prior</a></li>
-<li class="chapter" data-level="2.3.3" data-path="background-bms.html"><a href="background-bms.html#complexity-prior"><i class="fa fa-check"></i><b>2.3.3</b> Complexity prior</a></li>
-<li class="chapter" data-level="2.3.4" data-path="background-bms.html"><a href="background-bms.html#a-simple-example"><i class="fa fa-check"></i><b>2.3.4</b> A simple example</a></li>
+<li class="chapter" data-level="2.4.1" data-path="background-bms.html"><a href="background-bms.html#binomial-prior"><i class="fa fa-check"></i><b>2.4.1</b> Binomial prior</a></li>
+<li class="chapter" data-level="2.4.2" data-path="background-bms.html"><a href="background-bms.html#beta-binomial-prior"><i class="fa fa-check"></i><b>2.4.2</b> Beta-Binomial prior</a></li>
+<li class="chapter" data-level="2.4.3" data-path="background-bms.html"><a href="background-bms.html#complexity-prior"><i class="fa fa-check"></i><b>2.4.3</b> Complexity prior</a></li>
+<li class="chapter" data-level="2.4.4" data-path="background-bms.html"><a href="background-bms.html#a-simple-example"><i class="fa fa-check"></i><b>2.4.4</b> A simple example</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="background-bms.html"><a href="background-bms.html#bms-coefprior"><i class="fa fa-check"></i><b>2.4</b> Prior on coefficients</a>
+<li class="chapter" data-level="2.5" data-path="background-bms.html"><a href="background-bms.html#bms-coefprior"><i class="fa fa-check"></i><b>2.5</b> Prior on coefficients</a>
 <ul>
-<li class="chapter" data-level="2.4.1" data-path="background-bms.html"><a href="background-bms.html#bms-localprior"><i class="fa fa-check"></i><b>2.4.1</b> Local priors</a></li>
-<li class="chapter" data-level="2.4.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.4.2</b> Non-local priors</a></li>
-<li class="chapter" data-level="2.4.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.4.3</b> Sensitivity to prior variance</a></li>
+<li class="chapter" data-level="2.5.1" data-path="background-bms.html"><a href="background-bms.html#bms-localprior"><i class="fa fa-check"></i><b>2.5.1</b> Local priors</a></li>
+<li class="chapter" data-level="2.5.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.5.2</b> Non-local priors</a></li>
+<li class="chapter" data-level="2.5.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.5.3</b> Sensitivity to prior variance</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="background-bms.html"><a href="background-bms.html#bms-computation"><i class="fa fa-check"></i><b>2.5</b> Computation</a>
+<li class="chapter" data-level="2.6" data-path="background-bms.html"><a href="background-bms.html#bms-computation"><i class="fa fa-check"></i><b>2.6</b> Computation</a>
 <ul>
-<li class="chapter" data-level="2.5.1" data-path="background-bms.html"><a href="background-bms.html#approximating-marginal-likelihoods"><i class="fa fa-check"></i><b>2.5.1</b> Approximating marginal likelihoods</a></li>
-<li class="chapter" data-level="2.5.2" data-path="background-bms.html"><a href="background-bms.html#model-search"><i class="fa fa-check"></i><b>2.5.2</b> Model search</a></li>
+<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#approximating-marginal-likelihoods"><i class="fa fa-check"></i><b>2.6.1</b> Approximating marginal likelihoods</a></li>
+<li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#model-search"><i class="fa fa-check"></i><b>2.6.2</b> Model search</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>3</b> Background on L0 criteria</a>
@@ -214,7 +219,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Model selection with the modelSelection package</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">High-dimensional model choice. A hands-on take</a>
           </h1>
         </div>
 
@@ -223,17 +228,20 @@ div.csl-indent {
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">Model selection with the modelSelection package</h1>
+<h1 class="title">High-dimensional model choice. A hands-on take</h1>
 <p class="author"><em>David Rossell</em></p>
-<p class="date"><em>2025-09-06</em></p>
+<p class="date"><em>2025-09-10</em></p>
 </div>
 <div id="preface" class="section level1 unnumbered hasAnchor">
 <h1>Preface<a href="index.html#preface" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This book shows how to use the modelSelection package
-for sparse inference, mainly Bayesian model selection (BMS) and averaging (BMA), for a number of popular models listed below. It also implements L0 criteria like the AIC, BIC, EBIC, or other general information criteria.
-The package’s C++ implementation is not optimal, but it’s designed to be minimally scalable in sparse high-dimensional settings (large <span class="math inline">\(p\)</span>).
+<p><img src="bookcover_titled.png" width="50%" /></p>
+<p>The motivation for writing this book was dual: provide supporting material for undergraduate and graduate students to whom I introduce fundamental notions behind high-dimensional model selection,
+and serve as documentation for the R package <code>modelSelection</code> (previously called <code>mombf</code>) which I have been developing over the years.
+With these two goals in mind, the book evolved into a hands-on guide to model selection.</p>
+<p>The book focuses on sparse inference, mainly Bayesian model selection (BMS) and averaging (BMA), for a number of popular models listed below. It also implements L0 criteria like the AIC, BIC or EBIC (as well as more general information criteria).
+The R package’s C++ implementation is not optimal, but it’s designed to be minimally scalable in sparse high-dimensional settings (large <span class="math inline">\(p\)</span>).
 A lot of work went into coding and maintaining the package, if you use it please cite at least one of the papers indicated below.</p>
-<p>For a quick start guide, see Section <a href="quick-start.html#quick-start">1</a>. The main models handled by the package are:</p>
+<p>For a quick start guide with <code>modelSelection</code>, see Section <a href="quick-start.html#quick-start">1</a>. The main models handled by the package are:</p>
 <ul>
 <li><p>Generalized linear models: linear, logistic and Poisson regression. BMS, BMA and L0 criteria <span class="citation">(<a href="#ref-johnson:2012">Johnson and Rossell 2012</a>; <a href="#ref-rossell:2017">D. Rossell and Telesca 2017</a>; <a href="#ref-rossell:2021">D. Rossell, Abril, and Bhattacharya 2021</a>)</span>.</p></li>
 <li><p>Linear regression with non-normal residuals <span class="citation">(<a href="#ref-rossell:2018b">D. Rossell and Rubio 2018</a>)</span>, including asymmetric Normal, Laplace and asymmetric Laplace residuals.</p></li>

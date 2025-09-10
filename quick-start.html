@@ -4,26 +4,26 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>1 Quick start | Model selection with the modelSelection package</title>
-  <meta name="description" content="An introduction to model selection illustrated with the modelSelection R package." />
+  <title>1 Quick start | High-dimensional model choice. A hands-on take</title>
+  <meta name="description" content="High-dimensional model selection with the modelSelection R package" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="1 Quick start | Model selection with the modelSelection package" />
+  <meta property="og:title" content="1 Quick start | High-dimensional model choice. A hands-on take" />
   <meta property="og:type" content="book" />
-  
-  <meta property="og:description" content="An introduction to model selection illustrated with the modelSelection R package." />
+  <meta property="og:image" content="/bookcover_titled.png" />
+  <meta property="og:description" content="High-dimensional model selection with the modelSelection R package" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="1 Quick start | Model selection with the modelSelection package" />
+  <meta name="twitter:title" content="1 Quick start | High-dimensional model choice. A hands-on take" />
   
-  <meta name="twitter:description" content="An introduction to model selection illustrated with the modelSelection R package." />
-  
+  <meta name="twitter:description" content="High-dimensional model selection with the modelSelection R package" />
+  <meta name="twitter:image" content="/bookcover_titled.png" />
 
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-09-06" />
+<meta name="date" content="2025-09-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,6 +52,10 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
@@ -175,23 +179,24 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="background-bms.html"><a href="background-bms.html#bms-simple-example"><i class="fa fa-check"></i><b>2.1</b> A simplest example</a></li>
 <li class="chapter" data-level="2.2" data-path="background-bms.html"><a href="background-bms.html#bms-framework"><i class="fa fa-check"></i><b>2.2</b> General framework</a></li>
-<li class="chapter" data-level="2.3" data-path="background-bms.html"><a href="background-bms.html#bms-modelprior"><i class="fa fa-check"></i><b>2.3</b> Prior on models</a>
+<li class="chapter" data-level="2.3" data-path="background-bms.html"><a href="background-bms.html#bma"><i class="fa fa-check"></i><b>2.3</b> Bayesian model averaging</a></li>
+<li class="chapter" data-level="2.4" data-path="background-bms.html"><a href="background-bms.html#bms-modelprior"><i class="fa fa-check"></i><b>2.4</b> Prior on models</a>
 <ul>
-<li class="chapter" data-level="2.3.1" data-path="background-bms.html"><a href="background-bms.html#binomial-prior"><i class="fa fa-check"></i><b>2.3.1</b> Binomial prior</a></li>
-<li class="chapter" data-level="2.3.2" data-path="background-bms.html"><a href="background-bms.html#beta-binomial-prior"><i class="fa fa-check"></i><b>2.3.2</b> Beta-Binomial prior</a></li>
-<li class="chapter" data-level="2.3.3" data-path="background-bms.html"><a href="background-bms.html#complexity-prior"><i class="fa fa-check"></i><b>2.3.3</b> Complexity prior</a></li>
-<li class="chapter" data-level="2.3.4" data-path="background-bms.html"><a href="background-bms.html#a-simple-example"><i class="fa fa-check"></i><b>2.3.4</b> A simple example</a></li>
+<li class="chapter" data-level="2.4.1" data-path="background-bms.html"><a href="background-bms.html#binomial-prior"><i class="fa fa-check"></i><b>2.4.1</b> Binomial prior</a></li>
+<li class="chapter" data-level="2.4.2" data-path="background-bms.html"><a href="background-bms.html#beta-binomial-prior"><i class="fa fa-check"></i><b>2.4.2</b> Beta-Binomial prior</a></li>
+<li class="chapter" data-level="2.4.3" data-path="background-bms.html"><a href="background-bms.html#complexity-prior"><i class="fa fa-check"></i><b>2.4.3</b> Complexity prior</a></li>
+<li class="chapter" data-level="2.4.4" data-path="background-bms.html"><a href="background-bms.html#a-simple-example"><i class="fa fa-check"></i><b>2.4.4</b> A simple example</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="background-bms.html"><a href="background-bms.html#bms-coefprior"><i class="fa fa-check"></i><b>2.4</b> Prior on coefficients</a>
+<li class="chapter" data-level="2.5" data-path="background-bms.html"><a href="background-bms.html#bms-coefprior"><i class="fa fa-check"></i><b>2.5</b> Prior on coefficients</a>
 <ul>
-<li class="chapter" data-level="2.4.1" data-path="background-bms.html"><a href="background-bms.html#bms-localprior"><i class="fa fa-check"></i><b>2.4.1</b> Local priors</a></li>
-<li class="chapter" data-level="2.4.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.4.2</b> Non-local priors</a></li>
-<li class="chapter" data-level="2.4.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.4.3</b> Sensitivity to prior variance</a></li>
+<li class="chapter" data-level="2.5.1" data-path="background-bms.html"><a href="background-bms.html#bms-localprior"><i class="fa fa-check"></i><b>2.5.1</b> Local priors</a></li>
+<li class="chapter" data-level="2.5.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.5.2</b> Non-local priors</a></li>
+<li class="chapter" data-level="2.5.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.5.3</b> Sensitivity to prior variance</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="background-bms.html"><a href="background-bms.html#bms-computation"><i class="fa fa-check"></i><b>2.5</b> Computation</a>
+<li class="chapter" data-level="2.6" data-path="background-bms.html"><a href="background-bms.html#bms-computation"><i class="fa fa-check"></i><b>2.6</b> Computation</a>
 <ul>
-<li class="chapter" data-level="2.5.1" data-path="background-bms.html"><a href="background-bms.html#approximating-marginal-likelihoods"><i class="fa fa-check"></i><b>2.5.1</b> Approximating marginal likelihoods</a></li>
-<li class="chapter" data-level="2.5.2" data-path="background-bms.html"><a href="background-bms.html#model-search"><i class="fa fa-check"></i><b>2.5.2</b> Model search</a></li>
+<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#approximating-marginal-likelihoods"><i class="fa fa-check"></i><b>2.6.1</b> Approximating marginal likelihoods</a></li>
+<li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#model-search"><i class="fa fa-check"></i><b>2.6.2</b> Model search</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>3</b> Background on L0 criteria</a>
@@ -214,7 +219,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Model selection with the modelSelection package</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">High-dimensional model choice. A hands-on take</a>
           </h1>
         </div>
 
@@ -243,7 +248,7 @@ y_i = \sum_{j=1}^p x_{ij} \theta_j + \epsilon_i,
 for <span class="math inline">\(p=3\)</span> covariates and <span class="math inline">\(i=1,\ldots,100\)</span> individuals.
 We set regression coefficients <span class="math inline">\(\theta_1= 1\)</span>, <span class="math inline">\(\theta_2= 1\)</span>, <span class="math inline">\(\theta_3=0\)</span> and <span class="math inline">\(\epsilon_i \sim N(0,1)\)</span>, and the random number seed for reproducibility.
 It is good practice to store the outcome and covariates into a data frame, as we do below.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="quick-start.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(mombf)</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="quick-start.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(modelSelection)</span>
 <span id="cb1-2"><a href="quick-start.html#cb1-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb1-3"><a href="quick-start.html#cb1-3" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">100</span><span class="sc">*</span><span class="dv">3</span>), <span class="at">nrow=</span><span class="dv">100</span>, <span class="at">ncol=</span><span class="dv">3</span>)</span>
 <span id="cb1-4"><a href="quick-start.html#cb1-4" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>), <span class="at">ncol=</span><span class="dv">1</span>)</span>
@@ -257,7 +262,7 @@ An intercept is added automatically, giving a total of 4 variables and <span cla
 For our simulated data the selected model matches the data-generating truth, which only features the first two covariates.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="quick-start.html#cb2-1" tabindex="-1"></a>fit.bic <span class="ot">&lt;-</span> <span class="fu">bestBIC</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df)</span></code></pre></div>
 <pre><code>## Enumerating models...
-##  Computing posterior probabilities
+##  Summarizing the output
 ## 0%6%12%18%25%31%37%43%50%56%62%68%75%81%87%93% Done</code></pre>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="quick-start.html#cb4-1" tabindex="-1"></a><span class="fu">print</span>(fit.bic)</span></code></pre></div>
 <pre><code>## icfit object
@@ -311,7 +316,7 @@ For now, we run <code>modelSelection</code> with default priors (Beta-Binomial p
 <span id="cb12-4"><a href="quick-start.html#cb12-4" tabindex="-1"></a>                     <span class="at">priorCoef=</span>priorCoef, </span>
 <span id="cb12-5"><a href="quick-start.html#cb12-5" tabindex="-1"></a>                     <span class="at">priorDelta=</span>priorDelta)</span></code></pre></div>
 <pre><code>## Enumerating models...
-##  Computing posterior probabilities
+##  Summarizing the output
 ## 0%6%12%18%25%31%37%43%50%56%62%68%75%81%87%93% Done</code></pre>
 <p><code>postProb</code> shows posterior model probabilities (sorted decreasingly), and <code>coef</code> gives BMA point estimates, 0.95 posterior intervals, and marginal posterior inclusion probabilities <span class="math inline">\(P(\theta_j \neq 0 \mid y)\)</span>.
 Below, <code>phi</code> refers to the error variance <span class="math inline">\(\sigma^2\)</span> (which is included with probability 1).
@@ -351,7 +356,7 @@ We first create a binary version of our simulated outcome.</p>
 <p>We next use <code>bestBIC</code> and <code>modelSelection</code> as before. The selected model is still the correct one, but the posterior probability for (wrongly) including <code>x[,3]</code> is higher than in the linear regression data. This is intuitively expected, binary outcomes carry less information than Gaussian ones, so there is more uncertainty on the chosen model.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="quick-start.html#cb21-1" tabindex="-1"></a>fit2.bic <span class="ot">&lt;-</span> <span class="fu">bestBIC</span>(ybin <span class="sc">~</span> ., <span class="at">family=</span><span class="st">&#39;binomial&#39;</span>, <span class="at">data=</span>dfbin)</span></code></pre></div>
 <pre><code>## Enumerating models...
-##  Computing posterior probabilities
+##  Summarizing the output
 ## 0%6%12%18%25%31%37%43%50%56%62%68%75%81%87%93% Done</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="quick-start.html#cb23-1" tabindex="-1"></a><span class="fu">print</span>(fit2.bic)</span></code></pre></div>
 <pre><code>## icfit object
@@ -365,7 +370,7 @@ We first create a binary version of our simulated outcome.</p>
 <span id="cb25-3"><a href="quick-start.html#cb25-3" tabindex="-1"></a>                     <span class="at">priorDelta=</span>priorDelta,</span>
 <span id="cb25-4"><a href="quick-start.html#cb25-4" tabindex="-1"></a>                     <span class="at">family=</span><span class="st">&#39;binomial&#39;</span>)</span></code></pre></div>
 <pre><code>## Enumerating models...
-##  Computing posterior probabilities
+##  Summarizing the output
 ## 0%6%12%18%25%31%37%43%50%56%62%68%75%81%87%93% Done</code></pre>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="quick-start.html#cb27-1" tabindex="-1"></a><span class="fu">coef</span>(fit2.bms)</span></code></pre></div>
 <pre><code>## Warning in hasPostSampling(object): Exact posterior sampling not implemented,

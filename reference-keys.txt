@@ -4,6 +4,8 @@ exm:regression
 eq:bms-pp
 eq:bms-marglhood
 eq:bms-bf
+eq:bma-postint
+exm:regression-bma
 eq:bms-modelunifprior
 eq:bms-binomprior
 eq:bms-bbprior
@@ -19,6 +21,7 @@ non-linear-effects-via-generalized-additive-models-gams
 background-bms
 bms-simple-example
 bms-framework
+bma
 bms-modelprior
 binomial-prior
 beta-binomial-prior
@@ -40,3 +43,4 @@ eBayes
 survival
 ggm
 mixtures
+bma-prediction
