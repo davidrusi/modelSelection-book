@@ -31,12 +31,15 @@ if(knitr::is_html_output()){
   knitr::include_graphics("bookcover_titled.png")}
 ```
 
-This book shows how to use the modelSelection package
-for sparse inference, mainly Bayesian model selection (BMS) and averaging (BMA), for a number of popular models listed below. It also implements L0 criteria like the AIC, BIC, EBIC, or other general information criteria.
-The package's C++ implementation is not optimal, but it's designed to be minimally scalable in sparse high-dimensional settings (large $p$).
+The motivation for writing this book was dual: provide supporting material for undergraduate and graduate students to whom I introduce fundamental notions behind high-dimensional model selection,
+and serve as documentation for the R package `modelSelection` (previously called `mombf`) which I have been developing over the years.
+With these two goals in mind, the book evolved into a hands-on guide to model selection.
+
+The book focuses on sparse inference, mainly Bayesian model selection (BMS) and averaging (BMA), for a number of popular models listed below. It also implements L0 criteria like the AIC, BIC or EBIC (as well as more general information criteria).
+The R package's C++ implementation is not optimal, but it's designed to be minimally scalable in sparse high-dimensional settings (large $p$).
 A lot of work went into coding and maintaining the package, if you use it please cite at least one of the papers indicated below.
 
-For a quick start guide, see Section \@ref(quick-start). The main models handled by the package are:
+For a quick start guide with `modelSelection`, see Section \@ref(quick-start). The main models handled by the package are:
 
 - Generalized linear models: linear, logistic and Poisson regression. BMS, BMA and L0 criteria [@johnson:2012; @rossell:2017; @rossell:2021].
 

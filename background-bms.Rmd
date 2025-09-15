@@ -1,11 +1,14 @@
-# Background on Bayesian model selection and averaging {#background-bms}
+# Bayesian model selection and averaging {#background-bms}
 
+This chapter provides an introduction to the foundations of Bayesian model selection and averaging, providing simple illustrations throughout and practical thoughts.
 We use the term Bayesian model selection (BMS) for the prototypical setting where one considers multiple hypotheses or models and wishes to obtain posterior model probabilities for each model.
 For example, in regression each model may be associated to what covariates are included in the regression equation (i.e. have non-zero coefficients), in graphical models each model may be associated to what edges are present, and in mixtures each model may correspond to a number of mixture components (clusters).
 
 Section \@ref(bms-simple-example) illustrates the basic BMS notions by testing whether a Gaussian mean is zero.
-Section \@ref(bms-framework) discusses the general BMS framework.
-Sections \@ref(bms-simple-example)-\@ref(bms-framework) are intended for readers who are unfamiliar with BMS.
+Section \@ref(bms-framework) discusses the general BMS framework,
+Section \@ref(bma) discusses BMA for parameter estimation (point estimates, posterior intervals). 
+Sections \@ref(bms-simple-example)-\@ref(bma) are intended for readers who are unfamiliar with BMS and BMA.
+Section \@ref(bma-prediction) discusses practical issues to consider if one uses BMA for forecasting. These issues are important and, despite basic, are not sufficiently well-known in our experience.
 Sections \@ref(bms-modelprior) and \@ref(bms-coefprior) discuss slightly more nuanced details on how to set prior distributions, some reasonable defaults and how to induce sparsity in high dimensional problems using either sparse model priors or non-local parameter priors.
 Finally, Section \@ref(bms-computation) outlines some key ideas behind computational aspects of BMS.
 
@@ -106,6 +109,7 @@ This is without loss of generality, if one has $K$ arbitrary models then one cou
 In regression settings it is convenient to relate $\gamma$ to the non-zero parameters, as done in Example \@ref(exm:normalmean), where we had $\gamma= \mbox{I}(\mu \neq 0)$ and $\mbox{I}()$ is the indicator function.
 
 
+
 ::: {.example #regression}
 
 Consider a linear regression
@@ -116,6 +120,36 @@ where $\epsilon_i \sim N(0, \sigma^2)$ independently across $i=1,\ldots,n$.
 Suppose that we wish to consider the $2^p$ models arising from excluding/including each of the $p$ covariates.
 To this end, let $\gamma_j= \mbox{I}(\beta_j \neq 0)$ be an inclusion indicator for variable $j=1,\ldots,p$. Then we can denote an arbitrary model by $\bgamma= (\gamma_1, \ldots,\gamma_p)$, the model space is $\Gamma= \{0,1\}^p$, and $\btheta_\gamma= (\bbeta_\gamma, \sigma^2)$, where $\bbeta_\gamma= \{ \beta_j : \gamma_j = 1 \}$ are the non-zero regression parameters under $\bgamma$.
 In such settings we use bold face notation $\bgamma$ to stress that it is a vector.
+
+For illustration suppose that $p=2$, giving 4 possible models. A primary output of a BMS procedure are posterior probabilities $p(\bgamma \mid \by)$ for each model $\bgamma$. We defer discussion on how these are computed until after this example, and show what that output might look like.
+
+```{r, echo=FALSE}
+# Create data frame with formulas
+table_data <- data.frame(
+  gamma_1 = c("0", "0", "1", "1"),
+  gamma_2 = c("0", "1", "0", "1"),
+  P_gamma_y = c("0.01", "0.01", "0.39", "0.59")
+)
+
+# Create the table with LaTeX formulas
+kableExtra::kable(table_data, 
+      col.names = c("$\\gamma_1$", "$\\gamma_2$", "$P(\\bgamma \\mid \\by)$"),
+      align = "c",
+      escape = FALSE) |>
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+In this example, the most probable model in light of the data includes both covariates, and its posterior probability is $P(\gamma_1=1, \gamma_2=1 \mid \by)= 0.59$.
+This probability is however not overwhelmingly large, and in particular the model that only includes the first covariate has a non-negligible probability $P(\gamma_1=1, \gamma_2=0 \mid \by)= 0.39$. These probabilities reflect uncertainty (in the Bayesian sense) about model choice.
+
+Another primary output of interest are marginal posterior inclusion probabilities for each covariate, as follows:
+\begin{align*}
+&P(\gamma_1=1 \mid \by)= 0.39 + 0.59= 0.98.
+\\
+&P(\gamma_2=1 \mid \by)= 0.01 + 0.59= 0.6.
+\end{align*}
+These probabilities reflect that there's strong evidence for including the first covariate, whereas the evidence for including the second covariate is substantial but less overwhelming.
+
 
 :::
 
@@ -146,6 +180,129 @@ Posterior model probabilities in \@ref(eq:bms-pp) are one-to-one functions of Ba
 \\
 &\frac{p(\gamma \mid \by)}{p(\gamma' \mid \by)}= B_{\gamma \gamma'} \frac{p(\gamma)}{p(\gamma')}.
 \end{align*}
+
+
+## Bayesian model averaging {#bma}
+
+As we just discussed, BMS quantifies uncertainty in model choice via posterior model probabilities.
+Bayesian model averaging (BMA) is a conceptually simple and natural way to account for this uncertainty when one wishes to estimate parameters or some other quantity that's shared by multiple models, and to provide posterior intervals for said parameters.
+
+A canonical example is reporting inference on a regression parameter $\beta_j$. We have considered many models $\bgamma \in \Gamma$, where recall that $\Gamma$ is the set of models. For each model $\bgamma$ we have a posterior distribution $p(\beta_j \mid \bgamma, \by)$ and an associated posterior mean $E(\beta_j \mid \bgamma, \by)$.
+The BMA point estimate follows from the law of total expectation
+\begin{align*}
+E(\beta_j \mid \by)= \sum_{\bgamma \in \Gamma} E(\beta_j \mid \bgamma, \by) p(\bgamma \mid \by).
+\end{align*}
+
+Similarly, if one wishes for an interval $[l,u]$ that has 0.95 posterior probability, we have that
+\begin{align}
+P(\beta_j \in [l,u] \mid \by)= \sum_{\bgamma \in \Gamma} P(\beta_j \in [l,u] \mid \bgamma, \by) p(\bgamma \mid \by).
+(\#eq:bma-postint)
+\end{align}
+
+The interval defined in \@ref(eq:bma-postint) is typically hard to obtain analytically, but straightforward to approximate via MCMC (see Section \@ref(bms-computation)).
+
+
+::: {.example #regression-bma}
+
+Consider the $p=2$ regression in Example \@ref(exm:regression).
+Suppose that additionally to the posterior probability of each model, we also have the following posterior means of the parameters.
+
+```{r, echo=FALSE}
+# Create data frame with formulas
+table_data <- data.frame(
+  gamma_1 = c("0", "0", "1", "1"),
+  gamma_2 = c("0", "1", "0", "1"),
+  P_gamma_y = c("0.01", "0.01", "0.39", "0.59"),
+  E_beta_1 = c("0", "0", "0.8", "0.4"),
+  E_beta_2 = c("0", "0.5", "0", "0.25"),
+  E_sigma = c("1.5", "1.2", "1.2", "1")
+)
+
+# Create the table with LaTeX formulas
+kableExtra::kable(table_data, 
+      col.names = c("$\\gamma_1$", "$\\gamma_2$", "$P(\\bgamma \\mid \\by)$", "$E(\\beta_1 \\mid \\bgamma, \\by)$", "$E(\\beta_2 \\mid \\bgamma, \\by)$", "$E(\\sigma^2 \\mid \\bgamma, \\by)$"),
+      align = "c",
+      escape = FALSE) |>
+  kableExtra::kable_styling(full_width = FALSE)
+
+
+```
+
+Then we obtain that
+
+\begin{align*}
+&E(\beta_1 \mid \by)= 0.39 \times 0.8 + 0.59 \times 0.4 = 0.548.
+\\
+&E(\beta_2 \mid \by)= 0.01 \times 0.5 + 0.59 \times 0.25= 0.1525.
+\\
+&E(\sigma \mid \by)= 1.5 \times 0.01 + 1.2 \times 0.4 + 1 \times 0.59= 1.085.
+\end{align*}
+
+Critically for high-dimensional problems, the estimates $E(\beta_j \mid \by)$ are shrunk towards 0 relative to the estimate obtained under the full model. This occurs because $E(\beta_j \mid \bgamma, \by)=0$ for any model excluding the covariate (i.e., with $\gamma_j=0$). For example, under the full model the point estimate for $\beta_2$ is 0.25, but the BMA estimate is only 0.1525.
+
+:::
+
+
+## Prediction problems {#bma-prediction}
+
+Another possible use of BMA is for prediction problems, but here we must urge some caution. Suppose that we wish to predict $y_{n+1}$, the outcome of a yet unseen individual, whose corresponding covariate is $\bx_{n+1}$. BMA gives
+\begin{align*}
+E(y_{n+1} \mid \by)= \sum_{\bgamma \in \Gamma} E(y_{n+1} \mid \bgamma, \by) p(\bgamma \mid \by)=
+\sum_{\bgamma \in \Gamma} \bx_{n+1} E(\bbeta \mid \bgamma, \by) p(\bgamma \mid \by)
+= \bx_{n+1} E(\bbeta \mid \by).
+\end{align*}
+The reason why we urge caution is that BMA predictions are often less accurate than those provided by state-of-the-art regularization methods. Intuitively, the reason is that BMA is based on the BMS posterior probabilities, and that the latter are not geared towards prediction. Posterior model probabilities are rather conservative: unless there's sufficiently strong evidence (e.g. the sample size is not large enough), posterior probabilities such as $P(\beta_j \neq 0 \mid \by)$ can be small, even if the parameter is truly non-zero. This conservativeness is in fact desirable to control false positive findings (as one wishes for in hypothesis testing problems) and one of the keys of the success of BMS in high-dimensional problems, but it can hurt in prediction-oriented tasks.
+
+This being said, there are situations where BMA can be very competitive in terms of estimation accuracy. These are typically very high-dimensional settings featuring many parameters, where the conservativeness of BMA leads to a particularly effective parameter estimation shrinkage.
+
+Importantly, in forecasting problems one does not need to decide a priori what method is best for a particular dataset at hand. One can simply assess out-of-sample accuracy using standard methods like cross-validation or train-test data split.
+Our words of caution simply mean that one should not be surprised if BMA is less competitive in terms of accuracy that other methods. 
+And also that it is common to display said a lower forecasting accuracy yet an excellent performance for statistical inference on parameters, particularly on false positive control. In contrast, methods achieving a higher predictive accuracy often incur into a (moderate) number of false positives.
+
+
+As an illustration, we show the results of colon cancer gene expression dataset analyzed in @rossell:2017.
+In that example there are $n=262$ patients and the goal is to predict the expression of a gene called TGFB that plays a key role in colon cancer progression,
+using the expression of some other $p=10,172$ genes.
+
+To illustrate the forecasting issues of BMA, suppose that only the first 20 genes were observed. 
+If one estimates the 20 regression parameters via ordinary least-squares,
+the squared correlation between leave-one-out cross-validated predictions and the outcome was $R^2=0.46$. 
+For BMA under default priors (unit information prior on parameters, Beta-Binomial on models) it was $R^2=0.39$, i.e. its predictive accuracy was lower.
+
+The performance of BMA improved when considering a subset $p=172$ covariates (which were identified from a previous mice experiment), and was excellent when considering all $p=10,172$ covariates.
+The table below reproduces the results reported in @rossell:2017.
+For $p=172$, BMA (default pMOM parameter prior and Beta-Binomial model prior) attained a much higher cross-validated $R^2$ than MLE, 0.566 vs. 0.374.
+That is, the out-of-sample BMA predictions explained 56.6\% of the variance in the outcome, and MLE only 37.4\%. 
+Remarkably, the highest posterior probability model encountered through the MCMC only contained 4 covariates.
+For comparison the table also shows 3 penalized likelihood methods:
+the LASSO [@tibshirani:1996], adaptive LASSO [@zou:2006] and SCAD [@fan:2001].
+The accuracy of these meethods was similar to BMA, albeit they selected a larger number of covariates (number of point estimates $\hat{\beta}_j \neq 0$).
+For the truly high-dimensional scenario where $p=10,172$, BMA attained the highest $R^2$ and its highest posterior probability model contained only 6 covariates.
+
+
+```{r, echo=FALSE}
+# Create the combined data
+results <- data.frame(
+  Method = c("MLE", "BMA (MOM prior, BetaBin)", "LASSO-CV", "Adaptive LASSO-CV", "SCAD-CV"),
+  Covariates_p172 = c(172, 4, 42, 24, 29),
+  R2_p172 = c(0.374, 0.566, 0.586, 0.569, 0.565),
+  Covariates_p10172 = c("-", 6, 159, 10, 81),
+  R2_p10172 = c("-", 0.617, 0.570, 0.536, 0.535),
+  CPU_Time = c("-", "1m 52s", "24s", "2m 49s", "17s")
+)
+
+# Create the table
+kableExtra::kable(results, format = "html", col.names = c("Method", "Selected", "$R^2$", "Selected", "$R^2$", "CPU Time"),
+      align = "lccccr") |>
+  kableExtra::kable_styling(full_width = FALSE, bootstrap_options = "striped") |>
+  kableExtra::add_header_above(c(" " = 1, "$p=172$" = 2, "$p=10,172$" = 3))
+```
+
+The table also indicates the clock time for each method in an Ubuntu laptop (for BMA it was based on 1,000 Gibbs iterations, i.e. $1000 \times p$ model updates).
+In this example the BMA analysis run in a very short time, comparable to that of the penalized likelihood methods. The key for this computational efficiency is that the posterior model probabilities focused on small models (as mentioned, the estimated posterior mode had 6), which render the MCMC computations highly efficient. In less sparse settings where the posterior focuses on larger models, the run times can be significantly larger than for penalized likelihood methods. See Section \@ref(bms-computation) for further discussion of computational issues.
+
+
+
 
 
 
