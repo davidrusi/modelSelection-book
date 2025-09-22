@@ -6,3 +6,18 @@ div.example {
   margin: 1em 0;
   background-color: white;
 }
+
+.solution-panel {
+  background-color: #f8ffff;
+  border: 1px solid #a3c3c3;
+  border-radius: 5px;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.solution-panel-header {
+  font-weight: bold;
+  color: #0e566c;
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+}

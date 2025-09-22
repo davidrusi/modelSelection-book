@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-09-10" />
+<meta name="date" content="2025-09-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -59,8 +59,9 @@
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -70,7 +71,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -175,34 +176,41 @@ div.csl-indent {
 <li class="chapter" data-level="1.2" data-path="quick-start.html"><a href="quick-start.html#logistic-regression"><i class="fa fa-check"></i><b>1.2</b> Logistic regression</a></li>
 <li class="chapter" data-level="1.3" data-path="quick-start.html"><a href="quick-start.html#non-linear-effects-via-generalized-additive-models-gams"><i class="fa fa-check"></i><b>1.3</b> Non-Linear effects via Generalized Additive Models (GAMs)</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="background-bms.html"><a href="background-bms.html"><i class="fa fa-check"></i><b>2</b> Background on Bayesian model selection and averaging</a>
+<li class="chapter" data-level="2" data-path="background-bms.html"><a href="background-bms.html"><i class="fa fa-check"></i><b>2</b> Bayesian model selection and averaging</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="background-bms.html"><a href="background-bms.html#bms-simple-example"><i class="fa fa-check"></i><b>2.1</b> A simplest example</a></li>
 <li class="chapter" data-level="2.2" data-path="background-bms.html"><a href="background-bms.html#bms-framework"><i class="fa fa-check"></i><b>2.2</b> General framework</a></li>
 <li class="chapter" data-level="2.3" data-path="background-bms.html"><a href="background-bms.html#bma"><i class="fa fa-check"></i><b>2.3</b> Bayesian model averaging</a></li>
-<li class="chapter" data-level="2.4" data-path="background-bms.html"><a href="background-bms.html#bms-modelprior"><i class="fa fa-check"></i><b>2.4</b> Prior on models</a>
+<li class="chapter" data-level="2.4" data-path="background-bms.html"><a href="background-bms.html#bma-prediction"><i class="fa fa-check"></i><b>2.4</b> Prediction problems</a></li>
+<li class="chapter" data-level="2.5" data-path="background-bms.html"><a href="background-bms.html#bms-modelprior"><i class="fa fa-check"></i><b>2.5</b> Prior on models</a>
 <ul>
-<li class="chapter" data-level="2.4.1" data-path="background-bms.html"><a href="background-bms.html#binomial-prior"><i class="fa fa-check"></i><b>2.4.1</b> Binomial prior</a></li>
-<li class="chapter" data-level="2.4.2" data-path="background-bms.html"><a href="background-bms.html#beta-binomial-prior"><i class="fa fa-check"></i><b>2.4.2</b> Beta-Binomial prior</a></li>
-<li class="chapter" data-level="2.4.3" data-path="background-bms.html"><a href="background-bms.html#complexity-prior"><i class="fa fa-check"></i><b>2.4.3</b> Complexity prior</a></li>
-<li class="chapter" data-level="2.4.4" data-path="background-bms.html"><a href="background-bms.html#a-simple-example"><i class="fa fa-check"></i><b>2.4.4</b> A simple example</a></li>
+<li class="chapter" data-level="2.5.1" data-path="background-bms.html"><a href="background-bms.html#binomial-prior"><i class="fa fa-check"></i><b>2.5.1</b> Binomial prior</a></li>
+<li class="chapter" data-level="2.5.2" data-path="background-bms.html"><a href="background-bms.html#beta-binomial-prior"><i class="fa fa-check"></i><b>2.5.2</b> Beta-Binomial prior</a></li>
+<li class="chapter" data-level="2.5.3" data-path="background-bms.html"><a href="background-bms.html#complexity-prior"><i class="fa fa-check"></i><b>2.5.3</b> Complexity prior</a></li>
+<li class="chapter" data-level="2.5.4" data-path="background-bms.html"><a href="background-bms.html#a-simple-example"><i class="fa fa-check"></i><b>2.5.4</b> A simple example</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="background-bms.html"><a href="background-bms.html#bms-coefprior"><i class="fa fa-check"></i><b>2.5</b> Prior on coefficients</a>
+<li class="chapter" data-level="2.6" data-path="background-bms.html"><a href="background-bms.html#bms-coefprior"><i class="fa fa-check"></i><b>2.6</b> Prior on coefficients</a>
 <ul>
-<li class="chapter" data-level="2.5.1" data-path="background-bms.html"><a href="background-bms.html#bms-localprior"><i class="fa fa-check"></i><b>2.5.1</b> Local priors</a></li>
-<li class="chapter" data-level="2.5.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.5.2</b> Non-local priors</a></li>
-<li class="chapter" data-level="2.5.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.5.3</b> Sensitivity to prior variance</a></li>
+<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#bms-localprior"><i class="fa fa-check"></i><b>2.6.1</b> Local priors</a></li>
+<li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.6.2</b> Non-local priors</a></li>
+<li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.6.3</b> Sensitivity to prior variance</a></li>
 </ul></li>
-<li class="chapter" data-level="2.6" data-path="background-bms.html"><a href="background-bms.html#bms-computation"><i class="fa fa-check"></i><b>2.6</b> Computation</a>
+<li class="chapter" data-level="2.7" data-path="background-bms.html"><a href="background-bms.html#bms-computation"><i class="fa fa-check"></i><b>2.7</b> Computation</a>
 <ul>
-<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#approximating-marginal-likelihoods"><i class="fa fa-check"></i><b>2.6.1</b> Approximating marginal likelihoods</a></li>
-<li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#model-search"><i class="fa fa-check"></i><b>2.6.2</b> Model search</a></li>
+<li class="chapter" data-level="2.7.1" data-path="background-bms.html"><a href="background-bms.html#approximating-marginal-likelihoods"><i class="fa fa-check"></i><b>2.7.1</b> Approximating marginal likelihoods</a></li>
+<li class="chapter" data-level="2.7.2" data-path="background-bms.html"><a href="background-bms.html#model-search"><i class="fa fa-check"></i><b>2.7.2</b> Model search</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>3</b> Background on L0 criteria</a>
+<li class="chapter" data-level="3" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>3</b> L0 criteria</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="background-l0.html"><a href="background-l0.html#basics"><i class="fa fa-check"></i><b>3.1</b> Basics</a></li>
-<li class="chapter" data-level="3.2" data-path="background-l0.html"><a href="background-l0.html#mcmc-for-model-search"><i class="fa fa-check"></i><b>3.2</b> MCMC for model search</a></li>
+<li class="chapter" data-level="3.1" data-path="background-l0.html"><a href="background-l0.html#l0-basics"><i class="fa fa-check"></i><b>3.1</b> Basics</a></li>
+<li class="chapter" data-level="3.2" data-path="background-l0.html"><a href="background-l0.html#l0-theory"><i class="fa fa-check"></i><b>3.2</b> Theoretical considerations</a></li>
+<li class="chapter" data-level="3.3" data-path="background-l0.html"><a href="background-l0.html#l0-modelsearch"><i class="fa fa-check"></i><b>3.3</b> Model search</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>3.3.1</b> Optimization methods</a></li>
+<li class="chapter" data-level="3.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>3.3.2</b> MCMC for model search</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="background-l0.html"><a href="background-l0.html#exercises"><i class="fa fa-check"></i><b>3.4</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>4</b> Generalized linear models</a></li>
 <li class="chapter" data-level="5" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>5</b> Generalized additive models</a></li>
@@ -233,16 +241,37 @@ div.csl-indent {
 
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div class="csl-entry">
+Bertsimas, D., A. King, and A. Mazumder. 2016. <span>“Best Subset Selection via a Modern Optimization Lens.”</span> <em>The Annals of Statistics</em> 44 (2): 813–52.
+</div>
+<div class="csl-entry">
+Bertsimas, D., and B. Van Parys. 2020. <span>“Sparse High-Dimensional Regression: Exact Scalable Algorithms and Phase Transitions.”</span> <em>Annals of Statistics</em> 48 (1): 300–323.
+</div>
+<div class="csl-entry">
 Castillo, I., J. Schmidt-Hieber, and A. W. van der Vaart. 2015. <span>“Bayesian Linear Regression with Sparse Priors.”</span> <em>The Annals of Statistics</em> 43 (5): 1986–2018.
 </div>
 <div class="csl-entry">
+Chang, Hyunwoong, and Quan Zhou. 2025. <span>“Dimension-Free Relaxation Times of Informed <span>MCMC</span> Samplers on Discrete Spaces.”</span> <em>Bernoulli</em> (forthcoming): 1–28.
+</div>
+<div class="csl-entry">
 Chen, J., and Z. Chen. 2008. <span>“Extended <span>B</span>ayesian Information Criteria for Model Selection with Large Model Spaces.”</span> <em>Biometrika</em> 95 (3): 759–71.
+</div>
+<div class="csl-entry">
+Cover, Thomas M, and Jan M Van Campenhout. 2007. <span>“On the Possible Orderings in the Measurement Selection Problem.”</span> <em>IEEE Transactions on Systems, Man, and Cybernetics</em> 7 (9): 657–61.
+</div>
+<div class="csl-entry">
+Fan, J., and R. Li. 2001. <span>“Variable Selection via Nonconcave Penalized Likelihood and Its Oracle Properties.”</span> <em>Journal of the American Statistical Association</em> 96: 1348–60.
+</div>
+<div class="csl-entry">
+Foster, D., H. Karloff, and J. Thaler. 2015. <span>“Variable Selection Is Hard.”</span> In <em>Conference on Learning Theory</em>, 696–709.
 </div>
 <div class="csl-entry">
 Fúquene, J., M. F. J. Steel, and D. Rossell. 2019. <span>“On Choosing Mixture Components via Non-Local Priors.”</span> <em>Journal of the Royal Statistical Society B</em> 81 (5): 809–37.
 </div>
 <div class="csl-entry">
 Giannone, Domenico, Michele Lenza, and Giorgio E Primiceri. 2021. <span>“Economic Predictions with Big Data: The Illusion of Sparsity.”</span> <em>Econometrica</em> 89 (5): 2409–37.
+</div>
+<div class="csl-entry">
+Hazimeh, Hussein, Rahul Mazumder, and Tim Nonet. 2023. <span>“L0learn: A Scalable Package for Sparse Learning Using <span>L</span>0 Regularization.”</span> <em>Journal of Machine Learning Research</em> 24 (205): 1–8.
 </div>
 <div class="csl-entry">
 Johnson, V. E., and D. Rossell. 2010. <span>“On the Use of Non-Local Prior Densities for Default <span>B</span>ayesian Hypothesis Tests.”</span> <em>Journal of the Royal Statistical Society B</em> 72: 143–70.
@@ -254,10 +283,28 @@ Johnson, V. E., and D. Rossell. 2010. <span>“On the Use of Non-Local Prior Den
 Kass, R. E., L. Tierney, and J. B. Kadane. 1990. <span>“The Validity of Posterior Expansions Based on <span>L</span>aplace’s Method.”</span> <em>Bayesian and Likelihood Methods in Statistics and Econometrics</em> 7: 473–88.
 </div>
 <div class="csl-entry">
+Kiefer, Jack, and Jacob Wolfowitz. 1952. <span>“Stochastic Estimation of the Maximum of a Regression Function.”</span> <em>The Annals of Mathematical Statistics</em> 23 (3): 462–66.
+</div>
+<div class="csl-entry">
 Lindley, D. V. 1957. <span>“A Statistical Paradox.”</span> <em>Biometrika</em> 44: 187–92.
 </div>
 <div class="csl-entry">
+Linnainmaa, Seppo. 1970. <span>“The Representation of the Cumulative Rounding Error of an Algorithm as a Taylor Expansion of the Local Rounding Errors.”</span> PhD thesis, Master’s Thesis (in Finnish), University of Helsinki.
+</div>
+<div class="csl-entry">
+Natarajan, B. K. 1995. <span>“Sparse Approximate Solutions to Linear Systems.”</span> <em>SIAM Journal on Computing</em> 24 (2): 227–34.
+</div>
+<div class="csl-entry">
+Raskutti, G., M. Wainwright, and B. Yu. 2011. <span>“Minimax Rates of Estimation for High-Dimensional Linear Regression over Balls.”</span> <em>Information Theory, IEEE Transactions on</em> 57 (10): 6976–94.
+</div>
+<div class="csl-entry">
+Robbins, Herbert, and Sutton Monro. 1951. <span>“A Stochastic Approximation Method.”</span> <em>The Annals of Mathematical Statistics</em> 22 (9): 400–407.
+</div>
+<div class="csl-entry">
 Rognon-Vael, Paul, and David Rossell. 2025. <span>“Empirical <span>B</span>ayes for Data Integration.”</span> <em>arXiv</em> 2508.08336: 1–51.
+</div>
+<div class="csl-entry">
+Rosenblatt, Frank. 1958. <span>“The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain.”</span> <em>Psychological Review</em> 65 (6): 386–408.
 </div>
 <div class="csl-entry">
 Rossell, D., O. Abril, and A. Bhattacharya. 2021. <span>“Approximate <span>L</span>aplace Approximations for Scalable Model Selection.”</span> <em>Journal of the Royal Statistical Society B</em> 83 (4): 853–79.
@@ -275,13 +322,34 @@ Rossell, D., and F. J. Rubio. 2018. <span>“Tractable Bayesian Variable Selecti
 Rossell, D., and D. Telesca. 2017. <span>“Non-Local Priors for High-Dimensional Estimation.”</span> <em>Journal of the American Statistical Association</em> 112: 254–65.
 </div>
 <div class="csl-entry">
+Rumelhart, David E, Geoffrey E Hinton, and Ronald J Williams. 1986. <span>“Learning Representations by Back-Propagating Errors.”</span> <em>Nature</em> 323 (6088): 533–36.
+</div>
+<div class="csl-entry">
+Schwarz, G. 1978. <span>“Estimating the Dimension of a Model.”</span> <em>The Annals of Statistics</em> 6: 461–64.
+</div>
+<div class="csl-entry">
 Scott, J. G., and J. O Berger. 2010. <span>“Bayes and Empirical <span>B</span>ayes Multiplicity Adjustment in the Variable Selection Problem.”</span> <em>The Annals of Statistics</em> 38 (5): 2587–2619.
+</div>
+<div class="csl-entry">
+Stone, M. 1977. <span>“An Asymptotic Equivalence of Choice of Model by Cross-Validation and <span>A</span>kaike’s Criterion.”</span> <em>Journal of the Royal Statistical Society B</em> 39: 44–47.
+</div>
+<div class="csl-entry">
+Tibshirani, R. 1996. <span>“Regression Shrinkage and Selection via the <span>L</span>asso.”</span> <em>Journal of the Royal Statistical Society, B</em> 58: 267–88.
+</div>
+<div class="csl-entry">
+Wainwright, Martin J. 2009. <span>“Information-Theoretic Limits on Sparsity Recovery in the High-Dimensional and Noisy Setting.”</span> <em>IEEE Transactions on Information Theory</em> 55 (12): 5728–41.
 </div>
 <div class="csl-entry">
 Yang, Y., M. J. Wainwright, and M. I. Jordan. 2016. <span>“On the Computational Complexity of High-Dimensional <span>B</span>ayesian Variable Selection.”</span> <em>The Annals of Statistics</em> 44 (6): 2497–2532.
 </div>
 <div class="csl-entry">
+Zhang, Y., M. J. Wainwright, and M. I. Jordan. 2014. <span>“Lower Bounds on the Performance of Polynomial-Time Algorithms for Sparse Linear Regression.”</span> <em>JMLR: Workshop and Conference Proceedings</em> 35: 1–28.
+</div>
+<div class="csl-entry">
 Zhou, Quan, Jun Yang, Dootika Vats, Gareth O Roberts, and Jeffrey S Rosenthal. 2022. <span>“Dimension-Free Mixing for High-Dimensional <span>B</span>ayesian Variable Selection.”</span> <em>Journal of the Royal Statistical Society B</em> 84 (5): 1751–84.
+</div>
+<div class="csl-entry">
+Zou, H. 2006. <span>“The Adaptive <span>LASSO</span> and Its Oracle Properties.”</span> <em>Journal of the American Statistical Association</em> 101 (476): 1418–29.
 </div>
 </div>
 </div>
