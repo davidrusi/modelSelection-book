@@ -61,9 +61,9 @@ df <- data.frame(y=y)
 
 
 ```{r}
-priorDelta <- modelunifprior()
+priorModel <- modelunifprior()
 priorCoef <- normalidprior(taustd=1)
-ms <- modelSelection(y ~ 1, data=df, priorCoef=priorCoef, priorDelta=priorDelta, center=FALSE, verbose=FALSE)
+ms <- modelSelection(y ~ 1, data=df, priorCoef=priorCoef, priorModel=priorModel, center=FALSE, verbose=FALSE)
 postProb(ms)
 coef(ms)
 ```
@@ -83,7 +83,7 @@ mu <- seq(0, .5, by=.05)
 pp.yplus <- pval.yplus <- double(length(mu))
 for (i in 1:length(mu)) {
   dfplus <- transform(df, yplus= y0 + mu[i])
-  ms <- modelSelection(yplus ~ 1, data=dfplus, priorCoef=priorCoef, priorDelta=priorDelta, center=FALSE, verbose=FALSE)
+  ms <- modelSelection(yplus ~ 1, data=dfplus, priorCoef=priorCoef, priorModel=priorModel, center=FALSE, verbose=FALSE)
   pp.yplus[i] <- coef(ms)['(Intercept)', 'margpp']
   pval.yplus[i] <- t.test(dfplus$yplus)$p.value
 }
@@ -423,9 +423,9 @@ x <- matrix(rnorm(n * p), nrow=n)
 beta <- matrix(c(rep(0, 2), rep(0.5, p-2)), ncol=1)
 y <- x %*% beta + rnorm(n)
 df <- data.frame(y, x)
-ms.unif <- modelSelection(y ~ -1 + ., data=df, priorDelta = modelunifprior(), verbose=FALSE)
-ms.bbin <- modelSelection(y ~ -1 + ., data=df, priorDelta = modelbbprior(), verbose=FALSE)
-ms.comp <- modelSelection(y ~ -1 + ., data=df, priorDelta = modelcomplexprior(), verbose=FALSE)
+ms.unif <- modelSelection(y ~ -1 + ., data=df, priorModel = modelunifprior(), verbose=FALSE)
+ms.bbin <- modelSelection(y ~ -1 + ., data=df, priorModel = modelbbprior(), verbose=FALSE)
+ms.comp <- modelSelection(y ~ -1 + ., data=df, priorModel = modelcomplexprior(), verbose=FALSE)
 ```
 
 ```{r}
@@ -460,9 +460,9 @@ gseq <- seq(0.001, 10^5, length=200)
 pp0.gseq <- pp1.gseq <- double(length(gseq))
 for (i in 1:length(gseq)) {
   priorCoef <- normalidprior(taustd=gseq[i])
-  ms <- modelSelection(y ~ 1, data=df, priorCoef=priorCoef, priorDelta=priorDelta, center=FALSE, verbose=FALSE)  
+  ms <- modelSelection(y ~ 1, data=df, priorCoef=priorCoef, priorModel=priorModel, center=FALSE, verbose=FALSE)  
   pp0.gseq[i] <- coef(ms)['(Intercept)', 'margpp']
-  ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=priorCoef, priorDelta=priorDelta, center=FALSE, verbose=FALSE)  
+  ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=priorCoef, priorModel=priorModel, center=FALSE, verbose=FALSE)  
   pp1.gseq[i] <- coef(ms1)['(Intercept)', 'margpp']
 }
 ```
@@ -481,10 +481,10 @@ This effect can only be appreciated when truly $\mu = 0$, when truly $\mu=0.5$ w
 Just for fun, below we consider an absurdly small $g=0.001$ and an absurdly large $g=10^6$, and even then we obtain some evidence for $P(\mu \ne 0 \mid \by)$.
 
 ```{r}
-ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=normalidprior(taustd=0.001), priorDelta=priorDelta, center=FALSE, verbose=FALSE)
+ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=normalidprior(taustd=0.001), priorModel=priorModel, center=FALSE, verbose=FALSE)
 coef(ms1)
 
-ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=normalidprior(taustd=10^6), priorDelta=priorDelta, center=FALSE, verbose=FALSE)
+ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=normalidprior(taustd=10^6), priorModel=priorModel, center=FALSE, verbose=FALSE)
 coef(ms1)
 ```
 
