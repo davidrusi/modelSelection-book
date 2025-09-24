@@ -167,6 +167,10 @@ O\left(\frac{|\bgamma^*|_0 \log p}{n} \right).
 $$
 
 This latter bound does not feature $\psi^2<1$ in the denominator, and is hence smaller than the bound for LASSO.
+In separate work, @zhangyuchen:2014 showed that there's a gap between the minimax prediction loss attainable by polynomial-time algorithms and that attainable by $L_0$ criteria.
+
+
+
 In practice and in our experience however, $L_0$ criteria offer little to no advantages over the LASSO and extensions when it comes to prediction, and the same holds true for Bayesian model selection and averaging, unless one is in a truly high-dimensional example requiring a very strong false positive control (for example, see the colon cancer example in Section \@ref(bma-prediction)).
 
 
@@ -312,13 +316,24 @@ To see this issue in a more promounced example, try repeating this exercise but 
 
 
 
-### MCMC for model search {#l0-mcmc}
+### MCMC {#l0-mcmc}
 
-@zhangyuchen:2014 showed that, if certain sparsity assumptions hold, then there exist polynomial-time algorithms to search the model space (more precisely, they prove polynomial bounds on the spectral gaps of a simple Gibbs algorithm, see Section \@ref(l0-mcmc)).
-See also @zhou_quan:2022 and @chang_hyunwoong:2025 for more recent algorithms leading to dimension-free mixing.
+We now discuss how to use the MCMC methods discussed in Section \@ref(bms-mcmc) to find the model that optimizes a given  $L_0$ criterion.
+Let $C_\gamma= - 2 L_\gamma + \lambda \mbox{dim}(\btheta_\gamma)$ be an arbitrary $L_0$ criterion as defined in \@ref(eq:l0-definition).
+The main idea is to define a probability distribution on $\gamma$ as follows
+\begin{align}
+\pi(\gamma)= \frac{e^{-C_\gamma/2}}{\sum_{\gamma' \in \Gamma} e^{-C_{\gamma'}/2}}.
+(\#eq:l0-posterior)
+\end{align}
+Clearly $\pi(\gamma) \in [0,1]$ and $\sum_{\gamma} \pi(\gamma)=1$, defining a probability distribution.
+It is also to see that if a model $\bgamma^*$ minimizes $C_\gamma$ then it also maximizes $\pi(\bgamma)$.
 
+Therefore, one can use MCMC to sample from $\pi(\bgamma)$, and by definition one is more likely to sample $\bgamma^*$ than any other model (upon MCMC convergence, and assuming that $\bgamma^*$ is unique).
 
-To be added: description of using MCMC for information criteria.
+One can replace the numerator in \@ref(eq:l0-posterior) by any positive function that's decreasing in $C_\gamma$ (and adjust the denominator analogously). In particular, the term $C_\gamma/2$ could be replaced by $C_\gamma/c$ for any $c>0$.
+The motivation for \@ref(eq:l0-posterior) is that, when $C_\gamma$ are the BIC or EBIC, then there is an asymptotic connection between $\pi(\bgamma)$ and posterior probabilities obtained from a Bayesian model selection setting.
+For example, this facilitates transferring theoretical guarantees for MCMC algorithms that were obtained in a Bayesian setting to $L_0$ criteria (Section \@ref(bms-mcmc)).
+
 
 
 

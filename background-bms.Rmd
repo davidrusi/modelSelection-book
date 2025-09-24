@@ -11,6 +11,13 @@ Sections \@ref(bms-simple-example)-\@ref(bma) are intended for readers who are u
 Section \@ref(bma-prediction) discusses practical issues to consider if one uses BMA for forecasting. These issues are important and, despite basic, are not sufficiently well-known in our experience.
 Sections \@ref(bms-modelprior) and \@ref(bms-coefprior) discuss slightly more nuanced details on how to set prior distributions, some reasonable defaults and how to induce sparsity in high dimensional problems using either sparse model priors or non-local parameter priors.
 Finally, Section \@ref(bms-computation) outlines some key ideas behind computational aspects of BMS.
+Before proceeding, we load R packages needed by our examples.
+
+```{r, message=FALSE}
+library(modelSelection)
+library(varbvs)
+library(tidyverse)
+```
 
 
 ## A simplest example  {#bms-simple-example}
@@ -493,7 +500,198 @@ coef(ms1)
 
 ## Computation  {#bms-computation}
 
-### Approximating marginal likelihoods
+To summarize what we saw so far, 
+after setting suitable priors on the models and parameters, we obtained two posterior distributions of interest: the posterior distribution on the models $p(\bgamma \mid \by)$ and the BMA posterior on parameters $p(\btheta \mid \by)$, where $\btheta= \{ \btheta_\gamma \}_{\gamma \in \Gamma}$ is the collection of parameters from all models. 
+These are given by
+\begin{align}
+  p(\bgamma \mid \by)&= \frac{p(\by \mid \bgamma)p(\bgamma)}{p(\by)} \propto p(\by \mid \bgamma) p(\bgamma)
+  \nonumber \\
+  p(\btheta \mid \by)&= \sum_{\gamma} p(\btheta \mid \bgamma,\by) p(\bgamma \mid \by).
+\nonumber
+\end{align}
+
+Therefore, one needs to compute
+\begin{align}
+& p(\by \mid \bgamma)= \int p(\by \mid \btheta_\gamma, \bgamma) p(\btheta_\gamma \mid \bgamma) d\btheta_\gamma
+\nonumber \\
+& p(\btheta_\gamma \mid \bgamma, \by)=
+   \frac{p(\by \mid \btheta_\gamma, \bgamma) p(\btheta_\gamma \mid \bgamma)}{p(\by \mid \bgamma)}.
+\nonumber
+\end{align}
+
+Outside simple cases such as linear regression or additive non-linear regression with Gaussian errors (Section \@ref(gam)), neither $p(\by \mid \bgamma)$ nor $p(\btheta_\gamma \mid \bgamma,\by)$ have closed-form.
+A fairly fast and often quite accurate approximation is to use Normal/Laplace approximations, and these are 
+discussed in Section \@ref(bms-marglhood-approx).
+
+The other main challenge is that, even if $p(\by \mid \bgamma)$ can be quickly computed, one may need to explore a prohibitively large model space.
+Markov Chain Monte Carlo (MCMC) methods, discussed in Section \@ref(bms-mcmc)), are the standard tool for this task.
+Another possible strategy is to use variational inference methods adapted to the model selection setting, e.g. as done by @carbonetto:2012 for regression problems.
+The main caveat of variational methods are that they can significantly under-estimate uncertainty, and this is particularly critical for model selection and hypothesis testing problems. We illustrate this issue with two examples, where we compare MCMC to the variational approach of @carbonetto:2012 implemented in package `varbvs`.
+Example \@ref(exm:variational-simulated) shows a simulated data where variational inference underestimates model uncertainty, in that posterior inclusion probabilities are closer to 0 or 1 than for MCMC. Other than that, there is a reasonable agreements between the results from both methods.
+Example \@ref(exm:variational-tgfb) analyzes a colon cancer gene expression dataset from @calon:2012, and there the variational and MCMC solutions differ significantly. In fact, the findings from the latter align better with the expected biology.
+These examples motivate the use of MCMC for model search, as described in Section \@ref(bms-mcmc).
+
+
+
+::: {.example #variational-simulated}
+
+We simulate a dataset with $n=100$, $p=200$ standard Gaussian covariates with pairwise correlations equal to 0.5.
+Only the last 4 regression are truly non-zero.
+
+```{r}
+set.seed(1234)
+n <- 100; p <- 200  
+beta= c(rep(0, p - 4), -2/3, 1/3, 2/3, 1) #true parameters
+S <- diag(length(beta))
+S[upper.tri(S)] <- S[lower.tri(S)] <- 0.5
+x <- mvtnorm::rmvnorm(n=n,sigma=S)
+y <- x %*% beta + rnorm(n)
+df <- data.frame(y, x)
+```
+
+We obtain MCMC estimates of BMA posterior means $E(\beta_j \mid \by)$ and posterior inclusion probabilities $P(\beta_j \neq 0 \mid \by)$ using `modelSelection`, and analogous variational estimates using `varbvs`. For illustration, in both cases we set a Binomial model prior with 0.1 prior inclusion probability, and a Gaussian shrinkage prior on parameters with unit variance.
+
+
+```{r}
+priorvar <- 1
+pc <- normalidprior(priorvar)
+pm <- modelbinomprior(0.1)
+fit_ms <- modelSelection(y=y, x=x, priorCoef=pc, priorModel=pm, niter=1000, verbose=FALSE)
+b <- coef(fit_ms)
+b <- b[!(rownames(b) %in% c('intercept','phi')),]
+```
+
+
+```{r, message=FALSE}
+logodds <- log10(0.1/0.9)
+fit_vb <- varbvs(X=x, Z=NULL, y=y, family= "gaussian", sa=priorvar, logodds=logodds, verbose=FALSE)
+```
+
+```{r}
+df <- data.frame(beta= beta,
+                 postmean_mcmc= b[,'estimate'], 
+                 pip_mcmc= b[,'margpp'],
+                 postmean_vb= fit_vb$beta,
+                 pip_vb= fit_vb$pip)
+```
+
+
+Comparing $P(\beta_j \neq 0 \mid \by)$ between the two methods shows that they both identify the same set of high posterior inclusion probability variables: 3 have posterior inclusion probability > 0.9, and the associated data-generating $\beta_j \neq 0$ for the 3 of them.
+However, the plot below that the variational inclusion probabilities are much closer to 0 for the remaining variables than their MCMC counterparts.
+
+```{r}
+dplyr::filter(df, pip_mcmc > 0.9)
+```
+
+
+
+```{r}
+ggplot(df, aes(x=pip_mcmc, y=pip_vb)) +
+  geom_point() +
+  geom_abline() +
+  labs(x='Posterior inclusion probability (MCMC)',
+       y='Posterior inclusion probability (VB)')
+```
+
+
+We may also compare the BMA posterior means, in this example the variational and MCMC solutions are similar.
+
+```{r}
+ggplot(df, aes(x=postmean_mcmc, y=postmean_vb)) +
+  geom_point() +
+  geom_abline() +
+  labs(x= bquote(E(beta[j] ~ "|" ~ y) (MCMC)),
+       y= bquote(E(beta[j] ~ "|" ~ y) (variational)))
+```
+
+
+:::
+
+
+
+::: {.example #variational-tgfb}
+
+@calon:2012 compared mice where gene TGFB was silenced to mice where it was not, found a list of 172 genes that were associated to TGFB, and showed that TGFB plays a crucial role in colon cancer progression.
+We take their data as subsequently analyzed in @rognon:2025empirical, 
+which contains the expression of TGFB plus $p=1,000$ genes (including the 172 genes from the mouse list) for $n=262$ human patients.
+The goal is to regress TGFB on the other genes, which is of interest given the importance of TGFB in colon cancer progression.
+We also wish to assess whether the 172 genes identified from the mouse study are more likely to be associated to TGFB, as would be expected biologically and as shown in @rognon:2025empirical.
+Both TGFB and the other genes were standardized to zero mean and unit variance.
+
+We load the data and use `modelSelection` for MCMC-based inference and `varbvs` for variational inference.
+In both we use a Gaussian shrinkage prior on parameters with unit variance.
+In `varbvs` we use a Binomial model prior with prior inclusion probabilty 0.1, and for convenience in `modelSelection` we use a Beta-Binomial model prior as it runs faster than the Binomial prior, but our subsequent discussion continues to apply if one uses the Binomial prior as well.
+
+
+```{r}
+x <- read.table("data/tgfb.txt", header=TRUE)
+shortlist <- as.character(read.table("data/tgfb_mouse_shortlist.txt", header=TRUE)[,1])
+y= x[,1]   #TGFB expression (outcome)
+x= x[,-1]  #covariates
+inshort= (colnames(x) %in% shortlist)
+```
+
+
+```{r}
+priorvar <- 1
+pc <- normalidprior(priorvar)
+pm <- modelbbprior()
+fit_ms <- modelSelection(y=y, x=x, priorCoef=pc, priorModel=pm, niter=1000, verbose=FALSE)
+b <- coef(fit_ms)
+b <- b[!(rownames(b) %in% c('intercept','phi')),]
+```
+
+
+```{r}
+logodds <- log10(0.1/0.9)
+fit_vb <- varbvs(X=as.matrix(x), Z=NULL, y=y, family= "gaussian", sa=priorvar, logodds=logodds, verbose=FALSE)
+```
+
+
+```{r}
+df <- data.frame(inshort= inshort,
+                 postmean_mcmc= b[,'estimate'], 
+                 pip_mcmc= b[,'margpp'],
+                 postmean_vb= fit_vb$beta,
+                 pip_vb= fit_vb$pip)
+```
+
+
+The marginal posterior probabilities estimated from both methods differ drastically: the variational estimates are much closer to 0 or 1 than those from MCMC, significantly underestimating model uncertainty.
+The BMA parameter estimates are also very different.
+
+
+```{r two-plots, fig.show='hold', out.width='50%'}
+ggplot(df, aes(x=pip_mcmc, y=pip_vb)) +
+  geom_point() +
+  geom_abline() +
+  labs(x='Posterior inclusion probability (MCMC)',
+       y='Posterior inclusion probability (VB)')
+
+ggplot(df, aes(x=postmean_mcmc, y=postmean_vb)) +
+  geom_point() +
+  geom_abline() +
+  labs(x= bquote(E(beta[j] ~ "|" ~ y) (MCMC)),
+       y= bquote(E(beta[j] ~ "|" ~ y) (variational)))
+```
+
+From purely a Bayesian point of view this shows variational inference may provide a poor approximation to the desired posterior. This is different from saying that the exact Bayesian solution provides better inference than the variational one, in terms of detecting the genes that are truly associated with TGFB.
+As an additional check in this direction, we compare the average posterior inclusion probability between genes that were inside/outside the mouse list. For the MCMC estimates there is a big difference, roughly 0.023/0.007 = 3.3, which aligns with what's expected biologically. For the variational estimates the difference is much smaller.
+
+
+```{r}
+group_by(df, inshort) |>
+  summarize(mean(pip_mcmc), mean(pip_vb))
+```
+
+
+
+
+:::
+
+
+
+### Marginal likelihoods and model-specific posteriors {#bms-marglhood-approx}
 
 The marginal likelihood in \@ref(eq:bms-marglhood) has a closed-form expression in some instances, mainly regression with Gaussian errors (e.g., linear regression, non-linear additive regression) with conjugate parameter priors.
 Recall that the marginal likelihood for model $\bgamma$ is
@@ -503,12 +701,34 @@ p(\by \mid \gamma)= \int p(\by \mid \btheta_\gamma, \gamma) p(\btheta_\gamma \mi
 
 Outside these special cases, a numerical approximation is required.
 The `modelSelection` function implements some such approximations, and their use can be specified with the argument `method`.
+For example, set `method=='Laplace'` to use Laplace approximations, described next.
 If `method` is not specified, `modelSelection` selects a sensible default.
 
-A popular strategy in the context of model selection is to use Laplace approximations: they are fairly computationally efficient, and also highly accurate as $n$ grows [@kass:1990].
-To use Laplace approximations, set `method=='Laplace'`.
+Laplace approximations are fairly computationally efficient, and also highly accurate as $n$ grows [@kass:1990].
+Consider the integral
+\begin{align}
+\int e^{f(\btheta_\gamma)} d\btheta_\gamma 
+\nonumber
+\end{align}
+where $\btheta_\gamma \in \mathbb{R}^{d_\gamma}$ and $d_\gamma= \mbox{dim}(\btheta_\gamma)$ is the number of parameters.
+Let $\hat{\btheta}_\gamma= \arg\max_{\btheta_\gamma} f(\btheta_\gamma)$ and $H_\gamma(\btheta)= - \nabla^2 f(\btheta_\gamma)$.
+The Laplace approximation is
+\begin{align}
+  \int e^{f(\btheta_\gamma)} d\btheta_\gamma
+\approx \int e^{f(\hat{\btheta}_\gamma)} e^{- \frac{1}{2} (\hat{\btheta}_\gamma - \btheta_\gamma)^T H(\hat{\btheta}_\gamma) (\hat{\btheta}_\gamma - \btheta_\gamma)} d\btheta_\gamma
+= \frac{e^{f(\hat{\btheta}_\gamma)} (2 \pi)^{d_\gamma/2}}{|H_\gamma(\hat{\btheta}_\gamma)|^{\frac{1}{2}}}.
+\nonumber
+\end{align}
 
-Laplace approximations require finding the posterior mode (or alternatively, the MLE) $\hat{\btheta}_\gamma$ and the hessian of the log-posterior density at $\hat{\btheta}_\gamma$. Both these quantities can be found quickly for models that feature a few parameters, but the calculations get cumbersome when:
+In our Bayesian model selection context, the Laplace approximation to the marginal likelihood of model $\bgamma$ is
+\begin{align}
+\hat{p}(\by \mid \bgamma)=  \frac{p(\by \mid \hat{\btheta}_\gamma, \bgamma) p(\hat{\btheta}_\gamma) (2 \pi)^{d_\gamma/2}}{|H_\gamma(\hat{\btheta}_\gamma)|^{\frac{1}{2}}}.
+\nonumber
+\end{align}
+
+
+
+Laplace approximations require finding the posterior mode $\hat{\btheta}_\gamma$  (alternatively, the MLE is sometimes used) and the hessian of the log-posterior density at $\hat{\btheta}_\gamma$. Both these quantities can be found quickly for models that feature a few parameters, but the calculations get cumbersome when:
 
 - One considers many models, i.e. one must repeat the optimization exercise many times
 
@@ -521,9 +741,35 @@ Briefly, ALA approximates $\hat{\btheta}_\gamma$ by taking a single Newton-Raphs
 $\hat{\btheta}_\gamma^{(0)}$ with the argument `initpar`.
 
 
-### Model search
+Laplace approximations are based on a simple Taylor expansion of $f(\btheta_\gamma)$ around $\hat{\btheta}_\gamma$. This expansion also gives a Gaussian approximation to $p(\btheta_\gamma \mid \gamma, \by)$. Specifically,
+\begin{align}
+ \hat{p}(\btheta_\gamma \mid \bgamma, \by) \approx N \left(\btheta_\gamma; \hat{\btheta}_\gamma; H^{-1}(\hat{\btheta}_\gamma) \right),
+\nonumber
+\end{align}
+where $\hat{\btheta}_\gamma= \arg\max_{\theta_\gamma} f(\btheta_\gamma)$
 
-`modelSelection` uses an MCMC model search, based on classical Gibbs sampling.
-`modelSelectionGGM` also implements newer birth-death-swap  [@yangyun:2016] and locally informed thresholded (LIT) algorithms [@zhou_quan:2022]. The latter are theoretically appealing in that they have been shown to be scalable to high dimensions under relatively stringent sparsity constraints. In practice simple Gibbs sampling works remarkably well, in our experience it usually attains a similar numerical accuracy when it's run for the same clock time as birth-death-swap and LIT. 
+
+
+### Model search {#bms-mcmc}
+
+Markov Chain Monte Carlo algorithms provide the basic workhorse for Bayesian model selection when one cannot exhaustively enumerate the set of possible models.
+These algorithms have proven surprisingly effective in practice, provided that posterior model probabilities $p(\bgamma \mid \by)$ concentrate on sparse models, and that one can quickly evaluate the marginal likelihood $p(\by \mid \bgamma)$ and prior probability $p(\bgamma)$ for each model $\bgamma$.
+
+As usual in MCMC, the main idea is to approximate the posterior distribution $p(\bgamma \mid \by)$ by obtaining a sufficiently large number of samples from it.
+There are many possible MCMC algorithms.
+A classical strategy in the variable selection setting where $\bgamma=(\gamma_1,\ldots,\gamma_p)$ and $\gamma_j=\mbox{I}(\beta_j \neq 0)$ are variable indicators is to use Gibbs sampling (@madigan:1994, @hoeting:1999), where one updates a single variable indicator $\gamma_j$ at a time.
+These are sometimes referred to as birth-death moves.
+@yangyun:2016 showed that, if certain sparsity assumptions hold, then a birth-death-swap algorithm can search the model space at polynomial cost in $p$ (more precisely, they prove polynomial bounds on the algorithm's spectral gap).
+@zhou_quan:2022 proposed a locally informed thresholded (LIT) algorithm that's theoretically appealing in being scalable to high dimensions, also under suitable sparsity conditions that guarantee sufficient posterior concentration. 
+See also @chang_hyunwoong:2025 for more recent algorithms leading to dimension-free mixing.
+In practice simple Gibbs sampling works remarkably well, in our experience it usually attains a similar numerical accuracy when it's run for the same clock time as birth-death-swap and LIT. 
+
+We describe these algorithms in further detail in Chapter \@ref(glm). Briefly, the algorithms implemented in `modelSelection` are:
+
+- Function `modelSelection` uses an MCMC model search, based on classical Gibbs sampling. Functions such as `bestBIC` implementing model search for $L_0$ criteria also use Gibbs sampling.
+
+- Function `modelSelectionGGM` also implements the birth-death-swap  [@yangyun:2016] and locally informed thresholded (LIT) algorithms [@zhou_quan:2022]. 
+
+
 
 

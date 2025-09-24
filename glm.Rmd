@@ -2,5 +2,12 @@
 
 To be added.
 
+## Approximating the marginal likelihood {#glm-marglhood}
+
+
+## MCMC model search {#glm-mcmc}
+
+## Assessing MCMC convergence {#glm-mcmc-convergence}
+
 
 
