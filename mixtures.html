@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-09-22" />
+<meta name="date" content="2025-09-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -197,8 +197,8 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="background-bms.html"><a href="background-bms.html#bms-computation"><i class="fa fa-check"></i><b>2.7</b> Computation</a>
 <ul>
-<li class="chapter" data-level="2.7.1" data-path="background-bms.html"><a href="background-bms.html#approximating-marginal-likelihoods"><i class="fa fa-check"></i><b>2.7.1</b> Approximating marginal likelihoods</a></li>
-<li class="chapter" data-level="2.7.2" data-path="background-bms.html"><a href="background-bms.html#model-search"><i class="fa fa-check"></i><b>2.7.2</b> Model search</a></li>
+<li class="chapter" data-level="2.7.1" data-path="background-bms.html"><a href="background-bms.html#bms-marglhood-approx"><i class="fa fa-check"></i><b>2.7.1</b> Approximating marginal likelihoods</a></li>
+<li class="chapter" data-level="2.7.2" data-path="background-bms.html"><a href="background-bms.html#bms-mcmc"><i class="fa fa-check"></i><b>2.7.2</b> Model search</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>3</b> L0 criteria</a>
@@ -208,11 +208,16 @@ div.csl-indent {
 <li class="chapter" data-level="3.3" data-path="background-l0.html"><a href="background-l0.html#l0-modelsearch"><i class="fa fa-check"></i><b>3.3</b> Model search</a>
 <ul>
 <li class="chapter" data-level="3.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>3.3.1</b> Optimization methods</a></li>
-<li class="chapter" data-level="3.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>3.3.2</b> MCMC for model search</a></li>
+<li class="chapter" data-level="3.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>3.3.2</b> MCMC</a></li>
 </ul></li>
 <li class="chapter" data-level="3.4" data-path="background-l0.html"><a href="background-l0.html#exercises"><i class="fa fa-check"></i><b>3.4</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>4</b> Generalized linear models</a></li>
+<li class="chapter" data-level="4" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>4</b> Generalized linear models</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>4.1</b> Approximating the marginal likelihood</a></li>
+<li class="chapter" data-level="4.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>4.2</b> MCMC model search</a></li>
+<li class="chapter" data-level="4.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>4.3</b> Assessing MCMC convergence</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>5</b> Generalized additive models</a></li>
 <li class="chapter" data-level="6" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>6</b> Empirical Bayes for transfer learning</a></li>
 <li class="chapter" data-level="7" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>7</b> Survival data</a></li>
@@ -247,6 +252,15 @@ Bertsimas, D., A. King, and A. Mazumder. 2016. <span>“Best Subset Selection vi
 Bertsimas, D., and B. Van Parys. 2020. <span>“Sparse High-Dimensional Regression: Exact Scalable Algorithms and Phase Transitions.”</span> <em>Annals of Statistics</em> 48 (1): 300–323.
 </div>
 <div class="csl-entry">
+Bühlmann, P., and S. van de Geer. 2011. <em>Statistics for High-Dimensional Data</em>. New York: Springer.
+</div>
+<div class="csl-entry">
+Calon, A., E. Espinet, S. Palomo-Ponce, D. V. F. Tauriello, M. Iglesias, M. V. Céspedes, M. Sevillano, et al. 2012. <span>“Dependency of Colorectal Cancer on a TGF-Beta-Driven Programme in Stromal Cells for Metastasis Initiation.”</span> <em>Cancer Cell</em> 22 (5): 571–84.
+</div>
+<div class="csl-entry">
+Carbonetto, Peter, and Matthew Stephens. 2012. <span>“Scalable Variational Inference for <span>B</span>ayesian Variable Selection in Regression, and Its Accuracy in Genetic Association Studies.”</span> <em>Bayesian Analysis</em> 7 (1): 73–108.
+</div>
+<div class="csl-entry">
 Castillo, I., J. Schmidt-Hieber, and A. W. van der Vaart. 2015. <span>“Bayesian Linear Regression with Sparse Priors.”</span> <em>The Annals of Statistics</em> 43 (5): 1986–2018.
 </div>
 <div class="csl-entry">
@@ -274,6 +288,9 @@ Giannone, Domenico, Michele Lenza, and Giorgio E Primiceri. 2021. <span>“Econo
 Hazimeh, Hussein, Rahul Mazumder, and Tim Nonet. 2023. <span>“L0learn: A Scalable Package for Sparse Learning Using <span>L</span>0 Regularization.”</span> <em>Journal of Machine Learning Research</em> 24 (205): 1–8.
 </div>
 <div class="csl-entry">
+Hoeting, Jennifer A., David Madigan, Adrian E. Raftery, and Chris T. Volinsky. 1999. <span>“Bayesian Model Averaging: A Tutorial.”</span> <em>Statistical Science</em> 14: 382–401.
+</div>
+<div class="csl-entry">
 Johnson, V. E., and D. Rossell. 2010. <span>“On the Use of Non-Local Prior Densities for Default <span>B</span>ayesian Hypothesis Tests.”</span> <em>Journal of the Royal Statistical Society B</em> 72: 143–70.
 </div>
 <div class="csl-entry">
@@ -292,6 +309,9 @@ Lindley, D. V. 1957. <span>“A Statistical Paradox.”</span> <em>Biometrika</e
 Linnainmaa, Seppo. 1970. <span>“The Representation of the Cumulative Rounding Error of an Algorithm as a Taylor Expansion of the Local Rounding Errors.”</span> PhD thesis, Master’s Thesis (in Finnish), University of Helsinki.
 </div>
 <div class="csl-entry">
+Madigan, D., and A. E. Raftery. 1994. <span>“Model Selection and Accounting for Model Uncertainty in Graphical Models Using <span>O</span>ccam’s Window.”</span> <em>Journal of the American Statistical Association</em> 89 (428): 1535–46.
+</div>
+<div class="csl-entry">
 Natarajan, B. K. 1995. <span>“Sparse Approximate Solutions to Linear Systems.”</span> <em>SIAM Journal on Computing</em> 24 (2): 227–34.
 </div>
 <div class="csl-entry">
@@ -302,6 +322,9 @@ Robbins, Herbert, and Sutton Monro. 1951. <span>“A Stochastic Approximation Me
 </div>
 <div class="csl-entry">
 Rognon-Vael, Paul, and David Rossell. 2025. <span>“Empirical <span>B</span>ayes for Data Integration.”</span> <em>arXiv</em> 2508.08336: 1–51.
+</div>
+<div class="csl-entry">
+Rognon-Vael, Paul, David Rossell, and Piotr Zwiernik. 2025. <span>“Improving Variable Selection Properties by Leveraging External Data.”</span> <em>arXiv</em> 2502.15584: 1–75.
 </div>
 <div class="csl-entry">
 Rosenblatt, Frank. 1958. <span>“The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain.”</span> <em>Psychological Review</em> 65 (6): 386–408.
