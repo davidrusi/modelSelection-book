@@ -199,7 +199,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.7.1" data-path="background-bms.html"><a href="background-bms.html#bms-marglhood-approx"><i class="fa fa-check"></i><b>2.7.1</b> Marginal likelihoods and model-specific posteriors</a></li>
 <li class="chapter" data-level="2.7.2" data-path="background-bms.html"><a href="background-bms.html#bms-mcmc"><i class="fa fa-check"></i><b>2.7.2</b> Model search</a></li>
-<li class="chapter" data-level="2.7.3" data-path="background-bms.html"><a href="background-bms.html#mcmc-basics"><i class="fa fa-check"></i><b>2.7.3</b> Markov Chain Monte Carlo basics</a></li>
+<li class="chapter" data-level="2.7.3" data-path="background-bms.html"><a href="background-bms.html#mcmc-basics"><i class="fa fa-check"></i><b>2.7.3</b> MCMC basics</a></li>
 </ul></li>
 <li class="chapter" data-level="2.8" data-path="background-bms.html"><a href="background-bms.html#exercises"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
 </ul></li>
@@ -515,7 +515,7 @@ These observations that the algorithms likely returned the global mode, or at le
 Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.</p>
 <div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="background-l0.html#cb81-1" tabindex="-1"></a><span class="fu">system.time</span>(msfast <span class="ot">&lt;-</span> <span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.287   0.590   0.126</code></pre>
+##   0.255   0.386   0.056</code></pre>
 <div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="background-l0.html#cb83-1" tabindex="-1"></a>msfast</span></code></pre></div>
 <pre><code>## icfit object</code></pre>
 <pre><code>## Model with best EBIC: X197 X199 X200</code></pre>
@@ -523,7 +523,7 @@ Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.<
 <pre><code>## Use coef(object$msfit) and predict(object$msfit) to get BMA estimates and predictions</code></pre>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="background-l0.html#cb88-1" tabindex="-1"></a><span class="fu">system.time</span>(ms <span class="ot">&lt;-</span> <span class="fu">bestEBIC</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   2.140   1.056   1.653</code></pre>
+##   2.136   0.954   1.593</code></pre>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="background-l0.html#cb90-1" tabindex="-1"></a>ms</span></code></pre></div>
 <pre><code>## icfit object</code></pre>
 <pre><code>## Model with best EBIC: X197 X199 X200</code></pre>

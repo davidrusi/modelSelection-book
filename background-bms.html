@@ -255,9 +255,9 @@ Section <a href="background-bms.html#bma-prediction">2.4</a> discusses practical
 Sections <a href="background-bms.html#bms-modelprior">2.5</a> and <a href="background-bms.html#bms-coefprior">2.6</a> discuss slightly more nuanced details on how to set prior distributions, some reasonable defaults and how to induce sparsity in high dimensional problems using either sparse model priors or non-local parameter priors.
 Finally, Section <a href="background-bms.html#bms-computation">2.7</a> outlines some key ideas behind computational aspects of BMS.
 Before proceeding, we load R packages needed by our examples.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="background-bms.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(modelSelection)</span>
-<span id="cb1-2"><a href="background-bms.html#cb1-2" tabindex="-1"></a><span class="fu">library</span>(varbvs)</span>
-<span id="cb1-3"><a href="background-bms.html#cb1-3" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="background-bms.html#cb33-1" tabindex="-1"></a><span class="fu">library</span>(modelSelection)</span>
+<span id="cb33-2"><a href="background-bms.html#cb33-2" tabindex="-1"></a><span class="fu">library</span>(varbvs)</span>
+<span id="cb33-3"><a href="background-bms.html#cb33-3" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <div id="bms-simple-example" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> A simplest example<a href="background-bms.html#bms-simple-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="example">
@@ -288,22 +288,22 @@ We obtain a high posterior probability <span class="math inline">\(P(\gamma = 0 
 We remark that for a sample size of <span class="math inline">\(n=100\)</span> and a single parameter being tested (<span class="math inline">\(\mu\)</span>), one might expect to get more conclusive evidence in favor of the null. This issue can be addressed by setting a non-local prior on <span class="math inline">\(\mu\)</span>, please see Section <a href="background-bms.html#bms-coefprior">2.6</a>.
 We use <code>coef</code> to obtain the BMA estimates and 0.95 intervals for <span class="math inline">\(\mu\)</span> (row <code>Intercept</code> in the output below) and <span class="math inline">\(\sigma^2\)</span> (row <code>phi</code>).
 For comparison, a t-test also doesn’t lead to rejecting the null model.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="background-bms.html#cb2-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb2-2"><a href="background-bms.html#cb2-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb2-3"><a href="background-bms.html#cb2-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb2-4"><a href="background-bms.html#cb2-4" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y=</span>y)</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="background-bms.html#cb3-1" tabindex="-1"></a>priorModel <span class="ot">&lt;-</span> <span class="fu">modelunifprior</span>()</span>
-<span id="cb3-2"><a href="background-bms.html#cb3-2" tabindex="-1"></a>priorCoef <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(<span class="at">taustd=</span><span class="dv">1</span>)</span>
-<span id="cb3-3"><a href="background-bms.html#cb3-3" tabindex="-1"></a>ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>df, <span class="at">priorCoef=</span>priorCoef, <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb3-4"><a href="background-bms.html#cb3-4" tabindex="-1"></a><span class="fu">postProb</span>(ms)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="background-bms.html#cb34-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb34-2"><a href="background-bms.html#cb34-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb34-3"><a href="background-bms.html#cb34-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb34-4"><a href="background-bms.html#cb34-4" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y=</span>y)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="background-bms.html#cb35-1" tabindex="-1"></a>priorModel <span class="ot">&lt;-</span> <span class="fu">modelunifprior</span>()</span>
+<span id="cb35-2"><a href="background-bms.html#cb35-2" tabindex="-1"></a>priorCoef <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(<span class="at">taustd=</span><span class="dv">1</span>)</span>
+<span id="cb35-3"><a href="background-bms.html#cb35-3" tabindex="-1"></a>ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>df, <span class="at">priorCoef=</span>priorCoef, <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb35-4"><a href="background-bms.html#cb35-4" tabindex="-1"></a><span class="fu">postProb</span>(ms)</span></code></pre></div>
 <pre><code>##   modelid family        pp
 ## 1         normal 0.7510781
 ## 2       1 normal 0.2489219</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="background-bms.html#cb5-1" tabindex="-1"></a><span class="fu">coef</span>(ms)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="background-bms.html#cb37-1" tabindex="-1"></a><span class="fu">coef</span>(ms)</span></code></pre></div>
 <pre><code>##                estimate       2.5%    97.5%    margpp
 ## (Intercept) -0.03949096 -0.2848408 0.000000 0.2489219
 ## phi          1.03658377  0.7882084 1.365121 1.0000000</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="background-bms.html#cb7-1" tabindex="-1"></a><span class="fu">t.test</span>(y)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="background-bms.html#cb39-1" tabindex="-1"></a><span class="fu">t.test</span>(y)</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -319,19 +319,19 @@ For comparison, a t-test also doesn’t lead to rejecting the null model.</p>
 Figure <a href="background-bms.html#fig:normalmean-pp">2.1</a> shows the results.
 As the sample mean of <span class="math inline">\(\mathbf{y}\)</span> grows, we obtain overwhelming evidence for <span class="math inline">\(\mu \neq 0\)</span>.
 Note that the Bayesian framework is more conservative, in that one obtains a P-value &lt; 0.05 for smaller before one obtains <span class="math inline">\(p(M_2 \mid \mathbf{y}) &gt; 0.95\)</span>. This conservative character of Bayes factors is well-known, and it is one of the reasons why BMS induces sparsity in high-dimensional problems. One may obtain even more conservative results by setting certain model and parameter priors, as discussed in the next sections.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="background-bms.html#cb9-1" tabindex="-1"></a>y0 <span class="ot">&lt;-</span> y <span class="sc">-</span> <span class="fu">mean</span>(y)</span>
-<span id="cb9-2"><a href="background-bms.html#cb9-2" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, .<span class="dv">5</span>, <span class="at">by=</span>.<span class="dv">05</span>)</span>
-<span id="cb9-3"><a href="background-bms.html#cb9-3" tabindex="-1"></a>pp.yplus <span class="ot">&lt;-</span> pval.yplus <span class="ot">&lt;-</span> <span class="fu">double</span>(<span class="fu">length</span>(mu))</span>
-<span id="cb9-4"><a href="background-bms.html#cb9-4" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(mu)) {</span>
-<span id="cb9-5"><a href="background-bms.html#cb9-5" tabindex="-1"></a>  dfplus <span class="ot">&lt;-</span> <span class="fu">transform</span>(df, <span class="at">yplus=</span> y0 <span class="sc">+</span> mu[i])</span>
-<span id="cb9-6"><a href="background-bms.html#cb9-6" tabindex="-1"></a>  ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(yplus <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>dfplus, <span class="at">priorCoef=</span>priorCoef, <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb9-7"><a href="background-bms.html#cb9-7" tabindex="-1"></a>  pp.yplus[i] <span class="ot">&lt;-</span> <span class="fu">coef</span>(ms)[<span class="st">&#39;(Intercept)&#39;</span>, <span class="st">&#39;margpp&#39;</span>]</span>
-<span id="cb9-8"><a href="background-bms.html#cb9-8" tabindex="-1"></a>  pval.yplus[i] <span class="ot">&lt;-</span> <span class="fu">t.test</span>(dfplus<span class="sc">$</span>yplus)<span class="sc">$</span>p.value</span>
-<span id="cb9-9"><a href="background-bms.html#cb9-9" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="background-bms.html#cb10-1" tabindex="-1"></a><span class="fu">plot</span>(mu, pp.yplus, <span class="at">ylab=</span><span class="st">&#39;Posterior probability&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;Sample mean&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span>
-<span id="cb10-2"><a href="background-bms.html#cb10-2" tabindex="-1"></a><span class="fu">lines</span>(mu, pval.yplus, <span class="at">col=</span><span class="st">&#39;blue&#39;</span>)</span>
-<span id="cb10-3"><a href="background-bms.html#cb10-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>), <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&#39;blue&#39;</span>,<span class="st">&#39;black&#39;</span>))</span>
-<span id="cb10-4"><a href="background-bms.html#cb10-4" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&#39;topleft&#39;</span>, <span class="fu">c</span>(<span class="st">&quot;Posterior probability&quot;</span>, <span class="st">&quot;P-value&quot;</span>), <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;blue&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="background-bms.html#cb41-1" tabindex="-1"></a>y0 <span class="ot">&lt;-</span> y <span class="sc">-</span> <span class="fu">mean</span>(y)</span>
+<span id="cb41-2"><a href="background-bms.html#cb41-2" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, .<span class="dv">5</span>, <span class="at">by=</span>.<span class="dv">05</span>)</span>
+<span id="cb41-3"><a href="background-bms.html#cb41-3" tabindex="-1"></a>pp.yplus <span class="ot">&lt;-</span> pval.yplus <span class="ot">&lt;-</span> <span class="fu">double</span>(<span class="fu">length</span>(mu))</span>
+<span id="cb41-4"><a href="background-bms.html#cb41-4" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(mu)) {</span>
+<span id="cb41-5"><a href="background-bms.html#cb41-5" tabindex="-1"></a>  dfplus <span class="ot">&lt;-</span> <span class="fu">transform</span>(df, <span class="at">yplus=</span> y0 <span class="sc">+</span> mu[i])</span>
+<span id="cb41-6"><a href="background-bms.html#cb41-6" tabindex="-1"></a>  ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(yplus <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>dfplus, <span class="at">priorCoef=</span>priorCoef, <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb41-7"><a href="background-bms.html#cb41-7" tabindex="-1"></a>  pp.yplus[i] <span class="ot">&lt;-</span> <span class="fu">coef</span>(ms)[<span class="st">&#39;(Intercept)&#39;</span>, <span class="st">&#39;margpp&#39;</span>]</span>
+<span id="cb41-8"><a href="background-bms.html#cb41-8" tabindex="-1"></a>  pval.yplus[i] <span class="ot">&lt;-</span> <span class="fu">t.test</span>(dfplus<span class="sc">$</span>yplus)<span class="sc">$</span>p.value</span>
+<span id="cb41-9"><a href="background-bms.html#cb41-9" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="background-bms.html#cb42-1" tabindex="-1"></a><span class="fu">plot</span>(mu, pp.yplus, <span class="at">ylab=</span><span class="st">&#39;Posterior probability&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;Sample mean&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span>
+<span id="cb42-2"><a href="background-bms.html#cb42-2" tabindex="-1"></a><span class="fu">lines</span>(mu, pval.yplus, <span class="at">col=</span><span class="st">&#39;blue&#39;</span>)</span>
+<span id="cb42-3"><a href="background-bms.html#cb42-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>), <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&#39;blue&#39;</span>,<span class="st">&#39;black&#39;</span>))</span>
+<span id="cb42-4"><a href="background-bms.html#cb42-4" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&#39;topleft&#39;</span>, <span class="fu">c</span>(<span class="st">&quot;Posterior probability&quot;</span>, <span class="st">&quot;P-value&quot;</span>), <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;blue&quot;</span>))</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:normalmean-pp"></span>
 <img src="modelSelection-book_files/figure-html/normalmean-pp-1.png" alt="Normal mean example (n=100). Posterior probability \(P(\mu \neq 0 \mid \mathbf{y})\) and t-test P-value as a function of the sample mean. The dotted lines indicate standard 0.95 and 0.05 thresholds for posterior probabilities and P-values respectively." width="672" />
 <p class="caption">
@@ -356,7 +356,7 @@ Suppose that we wish to consider the <span class="math inline">\(2^p\)</span> mo
 To this end, let <span class="math inline">\(\gamma_j= \mbox{I}(\beta_j \neq 0)\)</span> be an inclusion indicator for variable <span class="math inline">\(j=1,\ldots,p\)</span>. Then we can denote an arbitrary model by <span class="math inline">\(\boldsymbol{\gamma}= (\gamma_1, \ldots,\gamma_p)\)</span>, the model space is <span class="math inline">\(\Gamma= \{0,1\}^p\)</span>, and <span class="math inline">\(\boldsymbol{\theta}_\gamma= (\boldsymbol{\beta}_\gamma, \sigma^2)\)</span>, where <span class="math inline">\(\boldsymbol{\beta}_\gamma= \{ \beta_j : \gamma_j = 1 \}\)</span> are the non-zero regression parameters under <span class="math inline">\(\boldsymbol{\gamma}\)</span>.
 In such settings we use bold face notation <span class="math inline">\(\boldsymbol{\gamma}\)</span> to stress that it is a vector.</p>
 <p>For illustration suppose that <span class="math inline">\(p=2\)</span>, giving 4 possible models. A primary output of a BMS procedure are posterior probabilities <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> for each model <span class="math inline">\(\boldsymbol{\gamma}\)</span>. We defer discussion on how these are computed until after this example, and show what that output might look like.</p>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:center;">
@@ -471,7 +471,7 @@ P(\beta_j \in [l,u] \mid \mathbf{y})= \sum_{\boldsymbol{\gamma} \in \Gamma} P(\b
 <div class="example">
 <p><span id="exm:regression-bma" class="example"><strong>Example 2.3  </strong></span>Consider the <span class="math inline">\(p=2\)</span> regression in Example <a href="background-bms.html#exm:regression">2.2</a>.
 Suppose that additionally to the posterior probability of each model, we also have the following posterior means of the parameters.</p>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:center;">
@@ -617,7 +617,7 @@ For comparison the table also shows 3 penalized likelihood methods:
 the LASSO <span class="citation">(<a href="#ref-tibshirani:1996">Tibshirani 1996</a>)</span>, adaptive LASSO <span class="citation">(<a href="#ref-zou:2006">Zou 2006</a>)</span> and SCAD <span class="citation">(<a href="#ref-fan:2001">Fan and Li 2001</a>)</span>.
 The accuracy of these meethods was similar to BMA, albeit they selected a larger number of covariates (number of point estimates <span class="math inline">\(\hat{\beta}_j \neq 0\)</span>).
 For the truly high-dimensional scenario where <span class="math inline">\(p=10,172\)</span>, BMA attained the highest <span class="math inline">\(R^2\)</span> and its highest posterior probability model contained only 6 covariates.</p>
-<table class="table table-striped" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
@@ -879,38 +879,38 @@ The Complexity prior results in a much sparser model prior, which works great wh
 </tbody>
 </table>
 <p>Let us illustrate these issues in a simple simulation.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="background-bms.html#cb11-1" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">4</span>; n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
-<span id="cb11-2"><a href="background-bms.html#cb11-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), <span class="at">nrow=</span>n)</span>
-<span id="cb11-3"><a href="background-bms.html#cb11-3" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="fl">0.5</span>, p<span class="dv">-2</span>)), <span class="at">ncol=</span><span class="dv">1</span>)</span>
-<span id="cb11-4"><a href="background-bms.html#cb11-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb11-5"><a href="background-bms.html#cb11-5" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span>
-<span id="cb11-6"><a href="background-bms.html#cb11-6" tabindex="-1"></a>ms.unif <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> ., <span class="at">data=</span>df, <span class="at">priorModel =</span> <span class="fu">modelunifprior</span>(), <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb11-7"><a href="background-bms.html#cb11-7" tabindex="-1"></a>ms.bbin <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> ., <span class="at">data=</span>df, <span class="at">priorModel =</span> <span class="fu">modelbbprior</span>(), <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb11-8"><a href="background-bms.html#cb11-8" tabindex="-1"></a>ms.comp <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> ., <span class="at">data=</span>df, <span class="at">priorModel =</span> <span class="fu">modelcomplexprior</span>(), <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="background-bms.html#cb12-1" tabindex="-1"></a><span class="fu">coef</span>(ms.unif)</span></code></pre></div>
-<pre><code>##              estimate        2.5%     97.5%     margpp
-## intercept 0.009817966 -0.07719791 0.0655718 1.00000000
-## X1        0.051989511  0.00000000 0.4171738 0.17309500
-## X2        0.003345187  0.00000000 0.0000000 0.01986338
-## X3        0.457567080  0.00000000 0.7500595 0.91440091
-## X4        0.718441936  0.44977984 0.9992888 0.99952478
-## phi       0.889374709  0.59386023 1.3155059 1.00000000</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="background-bms.html#cb14-1" tabindex="-1"></a><span class="fu">coef</span>(ms.bbin)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="background-bms.html#cb43-1" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">4</span>; n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb43-2"><a href="background-bms.html#cb43-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), <span class="at">nrow=</span>n)</span>
+<span id="cb43-3"><a href="background-bms.html#cb43-3" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="fl">0.5</span>, p<span class="dv">-2</span>)), <span class="at">ncol=</span><span class="dv">1</span>)</span>
+<span id="cb43-4"><a href="background-bms.html#cb43-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb43-5"><a href="background-bms.html#cb43-5" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span>
+<span id="cb43-6"><a href="background-bms.html#cb43-6" tabindex="-1"></a>ms.unif <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> ., <span class="at">data=</span>df, <span class="at">priorModel =</span> <span class="fu">modelunifprior</span>(), <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb43-7"><a href="background-bms.html#cb43-7" tabindex="-1"></a>ms.bbin <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> ., <span class="at">data=</span>df, <span class="at">priorModel =</span> <span class="fu">modelbbprior</span>(), <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb43-8"><a href="background-bms.html#cb43-8" tabindex="-1"></a>ms.comp <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> ., <span class="at">data=</span>df, <span class="at">priorModel =</span> <span class="fu">modelcomplexprior</span>(), <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="background-bms.html#cb44-1" tabindex="-1"></a><span class="fu">coef</span>(ms.unif)</span></code></pre></div>
 <pre><code>##              estimate        2.5%      97.5%     margpp
-## intercept 0.007551939 -0.07828063 0.06742408 1.00000000
-## X1        0.075850609  0.00000000 0.45509457 0.23952664
-## X2        0.006886817  0.00000000 0.15029841 0.04047445
-## X3        0.449575079  0.00000000 0.75438360 0.88959840
-## X4        0.726238927  0.45682715 1.01238531 0.99904588
-## phi       0.890860927  0.59029866 1.36454908 1.00000000</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="background-bms.html#cb16-1" tabindex="-1"></a><span class="fu">coef</span>(ms.comp)</span></code></pre></div>
-<pre><code>##               estimate        2.5%     97.5%      margpp
-## intercept -0.017857653 -0.08082711 0.0591788 1.000000000
-## X1         0.016009404  0.00000000 0.3141465 0.050765743
-## X2         0.001173583  0.00000000 0.0000000 0.006235675
-## X3         0.305606727  0.00000000 0.7151128 0.612913816
-## X4         0.715729879  0.42432576 1.0036204 0.991811587
-## phi        0.960654943  0.62331403 1.4807537 1.000000000</code></pre>
+## intercept 0.010088004 -0.07671732 0.06700013 1.00000000
+## X1        0.052849466  0.00000000 0.43701525 0.17309500
+## X2        0.003335324  0.00000000 0.00000000 0.01986338
+## X3        0.458777850  0.00000000 0.75584664 0.91440091
+## X4        0.717333220  0.44869371 0.99985446 0.99952478
+## phi       0.890176124  0.59739527 1.33357635 1.00000000</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="background-bms.html#cb46-1" tabindex="-1"></a><span class="fu">coef</span>(ms.bbin)</span></code></pre></div>
+<pre><code>##              estimate        2.5%      97.5%     margpp
+## intercept 0.007733875 -0.07805773 0.06894077 1.00000000
+## X1        0.076415774  0.00000000 0.46090766 0.23952664
+## X2        0.007316171  0.00000000 0.16517675 0.04047445
+## X3        0.451085060  0.00000000 0.76375200 0.88959840
+## X4        0.725632631  0.45322866 1.00879847 0.99904588
+## phi       0.892743238  0.60243438 1.34532111 1.00000000</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="background-bms.html#cb48-1" tabindex="-1"></a><span class="fu">coef</span>(ms.comp)</span></code></pre></div>
+<pre><code>##                estimate        2.5%      97.5%      margpp
+## intercept -0.0175989596 -0.08065022 0.05930749 1.000000000
+## X1         0.0159372331  0.00000000 0.30412930 0.050765743
+## X2         0.0008506681  0.00000000 0.00000000 0.006235675
+## X3         0.3067855113  0.00000000 0.71561984 0.612913816
+## X4         0.7173532130  0.43773061 1.01398309 0.991811587
+## phi        0.9598673704  0.62117928 1.48441620 1.000000000</code></pre>
 </div>
 </div>
 <div id="bms-coefprior" class="section level2 hasAnchor" number="2.6">
@@ -929,18 +929,18 @@ This is interesting because much literature has been devoted to the so-called Je
 We contend that this is not so: if one views <span class="math inline">\(g\)</span> as a tuning parameter, then <span class="math inline">\(g= \infty\)</span> is an extreme value and it’s therefore unsurprising that one obtains extreme results. For example, an infinite LASSO penalty also leads to <span class="math inline">\(\hat{\mu}=0\)</span>, yet this doesn’t stop anyone from using LASSO. The question is whether one can set tuning parameters to values that lead to good behavior, and there’s abundant theoretical and empirical evidence that <span class="math inline">\(g=1\)</span> does so.</p>
 <p>Here we consider the range <span class="math inline">\(g \in [0.1, 10]\)</span>, i.e. some of these prior variances are very different from the default <span class="math inline">\(g=1\)</span>.
 We do the exercise with the dataset <code>y</code> simulated in Example <a href="background-bms.html#exm:normalmean">2.1</a>, where truly <span class="math inline">\(\mu=0\)</span>, and also with another dataset <code>y1</code> where truly <span class="math inline">\(\mu=1\)</span>.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="background-bms.html#cb18-1" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y1=</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="fl">0.5</span>))</span>
-<span id="cb18-2"><a href="background-bms.html#cb18-2" tabindex="-1"></a>gseq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>, <span class="at">length=</span><span class="dv">200</span>)</span>
-<span id="cb18-3"><a href="background-bms.html#cb18-3" tabindex="-1"></a>pp0.gseq <span class="ot">&lt;-</span> pp1.gseq <span class="ot">&lt;-</span> <span class="fu">double</span>(<span class="fu">length</span>(gseq))</span>
-<span id="cb18-4"><a href="background-bms.html#cb18-4" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(gseq)) {</span>
-<span id="cb18-5"><a href="background-bms.html#cb18-5" tabindex="-1"></a>  priorCoef <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(<span class="at">taustd=</span>gseq[i])</span>
-<span id="cb18-6"><a href="background-bms.html#cb18-6" tabindex="-1"></a>  ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>df, <span class="at">priorCoef=</span>priorCoef, <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)  </span>
-<span id="cb18-7"><a href="background-bms.html#cb18-7" tabindex="-1"></a>  pp0.gseq[i] <span class="ot">&lt;-</span> <span class="fu">coef</span>(ms)[<span class="st">&#39;(Intercept)&#39;</span>, <span class="st">&#39;margpp&#39;</span>]</span>
-<span id="cb18-8"><a href="background-bms.html#cb18-8" tabindex="-1"></a>  ms1 <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y1 <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>df1, <span class="at">priorCoef=</span>priorCoef, <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)  </span>
-<span id="cb18-9"><a href="background-bms.html#cb18-9" tabindex="-1"></a>  pp1.gseq[i] <span class="ot">&lt;-</span> <span class="fu">coef</span>(ms1)[<span class="st">&#39;(Intercept)&#39;</span>, <span class="st">&#39;margpp&#39;</span>]</span>
-<span id="cb18-10"><a href="background-bms.html#cb18-10" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="background-bms.html#cb19-1" tabindex="-1"></a><span class="fu">plot</span>(gseq, pp0.gseq, <span class="at">xlab=</span><span class="st">&#39;g&#39;</span>, <span class="at">ylab=</span><span class="st">&#39;Posterior probability&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span>
-<span id="cb19-2"><a href="background-bms.html#cb19-2" tabindex="-1"></a><span class="fu">plot</span>(gseq, pp1.gseq, <span class="at">xlab=</span><span class="st">&#39;g&#39;</span>, <span class="at">ylab=</span><span class="st">&#39;Posterior probability&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="background-bms.html#cb50-1" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y1=</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="fl">0.5</span>))</span>
+<span id="cb50-2"><a href="background-bms.html#cb50-2" tabindex="-1"></a>gseq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>, <span class="at">length=</span><span class="dv">200</span>)</span>
+<span id="cb50-3"><a href="background-bms.html#cb50-3" tabindex="-1"></a>pp0.gseq <span class="ot">&lt;-</span> pp1.gseq <span class="ot">&lt;-</span> <span class="fu">double</span>(<span class="fu">length</span>(gseq))</span>
+<span id="cb50-4"><a href="background-bms.html#cb50-4" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(gseq)) {</span>
+<span id="cb50-5"><a href="background-bms.html#cb50-5" tabindex="-1"></a>  priorCoef <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(<span class="at">taustd=</span>gseq[i])</span>
+<span id="cb50-6"><a href="background-bms.html#cb50-6" tabindex="-1"></a>  ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>df, <span class="at">priorCoef=</span>priorCoef, <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)  </span>
+<span id="cb50-7"><a href="background-bms.html#cb50-7" tabindex="-1"></a>  pp0.gseq[i] <span class="ot">&lt;-</span> <span class="fu">coef</span>(ms)[<span class="st">&#39;(Intercept)&#39;</span>, <span class="st">&#39;margpp&#39;</span>]</span>
+<span id="cb50-8"><a href="background-bms.html#cb50-8" tabindex="-1"></a>  ms1 <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y1 <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>df1, <span class="at">priorCoef=</span>priorCoef, <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)  </span>
+<span id="cb50-9"><a href="background-bms.html#cb50-9" tabindex="-1"></a>  pp1.gseq[i] <span class="ot">&lt;-</span> <span class="fu">coef</span>(ms1)[<span class="st">&#39;(Intercept)&#39;</span>, <span class="st">&#39;margpp&#39;</span>]</span>
+<span id="cb50-10"><a href="background-bms.html#cb50-10" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="background-bms.html#cb51-1" tabindex="-1"></a><span class="fu">plot</span>(gseq, pp0.gseq, <span class="at">xlab=</span><span class="st">&#39;g&#39;</span>, <span class="at">ylab=</span><span class="st">&#39;Posterior probability&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span>
+<span id="cb51-2"><a href="background-bms.html#cb51-2" tabindex="-1"></a><span class="fu">plot</span>(gseq, pp1.gseq, <span class="at">xlab=</span><span class="st">&#39;g&#39;</span>, <span class="at">ylab=</span><span class="st">&#39;Posterior probability&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:normalmean-gseq"></span>
 <img src="modelSelection-book_files/figure-html/normalmean-gseq-1.png" alt="Posterior probability \(P(\mu \neq 0 \mid \mathbf{y})\) vs. prior dispersion \(g\) in the Gaussian mean example (n=100). Left: truly \(\mu=0\). Right: truly \(\mu=0.5\)." width="50%" /><img src="modelSelection-book_files/figure-html/normalmean-gseq-2.png" alt="Posterior probability \(P(\mu \neq 0 \mid \mathbf{y})\) vs. prior dispersion \(g\) in the Gaussian mean example (n=100). Left: truly \(\mu=0\). Right: truly \(\mu=0.5\)." width="50%" />
 <p class="caption">
@@ -953,13 +953,13 @@ Although <span class="math inline">\(P(\mu \neq 0 \mid \mathbf{y})\)</span> decr
 Note that as <span class="math inline">\(g \to 0\)</span> we have <span class="math inline">\(P(\mu \neq 0 \mid \mathbf{y})\)</span> approaching 0.5, this is reasonable because for <span class="math inline">\(g=0\)</span> the <span class="math inline">\(N(0, g \sigma^2)\)</span> prior under the alternative (<span class="math inline">\(\gamma=1\)</span>) states that <span class="math inline">\(\mu=0\)</span>, i.e. the null and alternative hypotheses are equivalent and both receive the same posterior probability.
 This effect can only be appreciated when truly <span class="math inline">\(\mu = 0\)</span>, when truly <span class="math inline">\(\mu=0.5\)</span> we would need to consider much smaller <span class="math inline">\(g\)</span>.
 Just for fun, below we consider an absurdly small <span class="math inline">\(g=0.001\)</span> and an absurdly large <span class="math inline">\(g=10^6\)</span>, and even then we obtain some evidence for <span class="math inline">\(P(\mu \ne 0 \mid \mathbf{y})\)</span>.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="background-bms.html#cb20-1" tabindex="-1"></a>ms1 <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y1 <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>df1, <span class="at">priorCoef=</span><span class="fu">normalidprior</span>(<span class="at">taustd=</span><span class="fl">0.001</span>), <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb20-2"><a href="background-bms.html#cb20-2" tabindex="-1"></a><span class="fu">coef</span>(ms1)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="background-bms.html#cb52-1" tabindex="-1"></a>ms1 <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y1 <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>df1, <span class="at">priorCoef=</span><span class="fu">normalidprior</span>(<span class="at">taustd=</span><span class="fl">0.001</span>), <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb52-2"><a href="background-bms.html#cb52-2" tabindex="-1"></a><span class="fu">coef</span>(ms1)</span></code></pre></div>
 <pre><code>##               estimate        2.5%      97.5%    margpp
 ## (Intercept) 0.01192704 -0.03740929 0.07927645 0.5580635
 ## phi         0.98260934  0.65829790 1.46853024 1.0000000</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="background-bms.html#cb22-1" tabindex="-1"></a>ms1 <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y1 <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>df1, <span class="at">priorCoef=</span><span class="fu">normalidprior</span>(<span class="at">taustd=</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>), <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb22-2"><a href="background-bms.html#cb22-2" tabindex="-1"></a><span class="fu">coef</span>(ms1)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="background-bms.html#cb54-1" tabindex="-1"></a>ms1 <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y1 <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>df1, <span class="at">priorCoef=</span><span class="fu">normalidprior</span>(<span class="at">taustd=</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>), <span class="at">priorModel=</span>priorModel, <span class="at">center=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb54-2"><a href="background-bms.html#cb54-2" tabindex="-1"></a><span class="fu">coef</span>(ms1)</span></code></pre></div>
 <pre><code>##               estimate      2.5%     97.5%     margpp
 ## (Intercept) 0.02612707 0.0000000 0.4720005 0.05728419
 ## phi         0.97362830 0.6372641 1.4619225 1.00000000</code></pre>
@@ -997,48 +997,48 @@ These examples motivate the use of MCMC for model search, as described in Sectio
 <div class="example">
 <p><span id="exm:variational-simulated" class="example"><strong>Example 2.4  </strong></span>We simulate a dataset with <span class="math inline">\(n=100\)</span>, <span class="math inline">\(p=200\)</span> standard Gaussian covariates with pairwise correlations equal to 0.5.
 Only the last 4 regression are truly non-zero.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="background-bms.html#cb24-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb24-2"><a href="background-bms.html#cb24-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>; p <span class="ot">&lt;-</span> <span class="dv">200</span>  </span>
-<span id="cb24-3"><a href="background-bms.html#cb24-3" tabindex="-1"></a>beta<span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, p <span class="sc">-</span> <span class="dv">4</span>), <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>) <span class="co">#true parameters</span></span>
-<span id="cb24-4"><a href="background-bms.html#cb24-4" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">length</span>(beta))</span>
-<span id="cb24-5"><a href="background-bms.html#cb24-5" tabindex="-1"></a>S[<span class="fu">upper.tri</span>(S)] <span class="ot">&lt;-</span> S[<span class="fu">lower.tri</span>(S)] <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb24-6"><a href="background-bms.html#cb24-6" tabindex="-1"></a>x <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n=</span>n,<span class="at">sigma=</span>S)</span>
-<span id="cb24-7"><a href="background-bms.html#cb24-7" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb24-8"><a href="background-bms.html#cb24-8" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="background-bms.html#cb56-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb56-2"><a href="background-bms.html#cb56-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>; p <span class="ot">&lt;-</span> <span class="dv">200</span>  </span>
+<span id="cb56-3"><a href="background-bms.html#cb56-3" tabindex="-1"></a>beta<span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, p <span class="sc">-</span> <span class="dv">4</span>), <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>) <span class="co">#true parameters</span></span>
+<span id="cb56-4"><a href="background-bms.html#cb56-4" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">length</span>(beta))</span>
+<span id="cb56-5"><a href="background-bms.html#cb56-5" tabindex="-1"></a>S[<span class="fu">upper.tri</span>(S)] <span class="ot">&lt;-</span> S[<span class="fu">lower.tri</span>(S)] <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb56-6"><a href="background-bms.html#cb56-6" tabindex="-1"></a>x <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n=</span>n,<span class="at">sigma=</span>S)</span>
+<span id="cb56-7"><a href="background-bms.html#cb56-7" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb56-8"><a href="background-bms.html#cb56-8" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span></code></pre></div>
 <p>We obtain MCMC estimates of BMA posterior means <span class="math inline">\(E(\beta_j \mid \mathbf{y})\)</span> and posterior inclusion probabilities <span class="math inline">\(P(\beta_j \neq 0 \mid \mathbf{y})\)</span> using <code>modelSelection</code>, and analogous variational estimates using <code>varbvs</code>. For illustration, in both cases we set a Binomial model prior with 0.1 prior inclusion probability, and a Gaussian shrinkage prior on parameters with unit variance.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="background-bms.html#cb25-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb25-2"><a href="background-bms.html#cb25-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
-<span id="cb25-3"><a href="background-bms.html#cb25-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbinomprior</span>(<span class="fl">0.1</span>)</span>
-<span id="cb25-4"><a href="background-bms.html#cb25-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb25-5"><a href="background-bms.html#cb25-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
-<span id="cb25-6"><a href="background-bms.html#cb25-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="background-bms.html#cb26-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
-<span id="cb26-2"><a href="background-bms.html#cb26-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span>x, <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="background-bms.html#cb27-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">beta=</span> beta,</span>
-<span id="cb27-2"><a href="background-bms.html#cb27-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
-<span id="cb27-3"><a href="background-bms.html#cb27-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
-<span id="cb27-4"><a href="background-bms.html#cb27-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
-<span id="cb27-5"><a href="background-bms.html#cb27-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="background-bms.html#cb57-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb57-2"><a href="background-bms.html#cb57-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
+<span id="cb57-3"><a href="background-bms.html#cb57-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbinomprior</span>(<span class="fl">0.1</span>)</span>
+<span id="cb57-4"><a href="background-bms.html#cb57-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb57-5"><a href="background-bms.html#cb57-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
+<span id="cb57-6"><a href="background-bms.html#cb57-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="background-bms.html#cb58-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
+<span id="cb58-2"><a href="background-bms.html#cb58-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span>x, <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="background-bms.html#cb59-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">beta=</span> beta,</span>
+<span id="cb59-2"><a href="background-bms.html#cb59-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
+<span id="cb59-3"><a href="background-bms.html#cb59-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
+<span id="cb59-4"><a href="background-bms.html#cb59-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
+<span id="cb59-5"><a href="background-bms.html#cb59-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
 <p>Comparing <span class="math inline">\(P(\beta_j \neq 0 \mid \mathbf{y})\)</span> between the two methods shows that they both identify the same set of high posterior inclusion probability variables: 3 have posterior inclusion probability &gt; 0.9, and the associated data-generating <span class="math inline">\(\beta_j \neq 0\)</span> for the 3 of them.
 However, the plot below that the variational inclusion probabilities are much closer to 0 for the remaining variables than their MCMC counterparts.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="background-bms.html#cb28-1" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(df, pip_mcmc <span class="sc">&gt;</span> <span class="fl">0.9</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="background-bms.html#cb60-1" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(df, pip_mcmc <span class="sc">&gt;</span> <span class="fl">0.9</span>)</span></code></pre></div>
 <pre><code>##            beta postmean_mcmc  pip_mcmc postmean_vb    pip_vb
-## x197 -0.6666667    -0.5639331 0.9902477  -0.5863074 0.9999994
-## x199  0.6666667     0.6125271 0.9955392   0.6037436 1.0000000
-## x200  1.0000000     1.2624187 1.0000000   1.2422282 1.0000000</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="background-bms.html#cb30-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
-<span id="cb30-2"><a href="background-bms.html#cb30-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb30-3"><a href="background-bms.html#cb30-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb30-4"><a href="background-bms.html#cb30-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
-<span id="cb30-5"><a href="background-bms.html#cb30-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span></code></pre></div>
-<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+## x197 -0.6666667    -0.5827377 0.9878851  -0.5863083 0.9999994
+## x199  0.6666667     0.6066641 0.9954122   0.6037431 1.0000000
+## x200  1.0000000     1.2479896 1.0000000   1.2422281 1.0000000</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="background-bms.html#cb62-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
+<span id="cb62-2"><a href="background-bms.html#cb62-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb62-3"><a href="background-bms.html#cb62-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb62-4"><a href="background-bms.html#cb62-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
+<span id="cb62-5"><a href="background-bms.html#cb62-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span></code></pre></div>
+<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p>We may also compare the BMA posterior means, in this example the variational and MCMC solutions are similar.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="background-bms.html#cb31-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
-<span id="cb31-2"><a href="background-bms.html#cb31-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb31-3"><a href="background-bms.html#cb31-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb31-4"><a href="background-bms.html#cb31-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
-<span id="cb31-5"><a href="background-bms.html#cb31-5" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
-<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="background-bms.html#cb63-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
+<span id="cb63-2"><a href="background-bms.html#cb63-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb63-3"><a href="background-bms.html#cb63-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb63-4"><a href="background-bms.html#cb63-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
+<span id="cb63-5"><a href="background-bms.html#cb63-5" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
+<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
 </div>
 <div class="example">
 <p><span id="exm:variational-tgfb" class="example"><strong>Example 2.5  </strong></span><span class="citation">Calon et al. (<a href="#ref-calon:2012">2012</a>)</span> compared mice where gene TGFB was silenced to mice where it was not, found a list of 172 genes that were associated to TGFB, and showed that TGFB plays a crucial role in colon cancer progression.
@@ -1050,47 +1050,47 @@ Both TGFB and the other genes were standardized to zero mean and unit variance.<
 <p>We load the data and use <code>modelSelection</code> for MCMC-based inference and <code>varbvs</code> for variational inference.
 In both we use a Gaussian shrinkage prior on parameters with unit variance.
 In <code>varbvs</code> we use a Binomial model prior with prior inclusion probabilty 0.1, and for convenience in <code>modelSelection</code> we use a Beta-Binomial model prior as it runs faster than the Binomial prior, but our subsequent discussion continues to apply if one uses the Binomial prior as well.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="background-bms.html#cb32-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;data/tgfb.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)</span>
-<span id="cb32-2"><a href="background-bms.html#cb32-2" tabindex="-1"></a>shortlist <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">read.table</span>(<span class="st">&quot;data/tgfb_mouse_shortlist.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)[,<span class="dv">1</span>])</span>
-<span id="cb32-3"><a href="background-bms.html#cb32-3" tabindex="-1"></a>y<span class="ot">=</span> x[,<span class="dv">1</span>]   <span class="co">#TGFB expression (outcome)</span></span>
-<span id="cb32-4"><a href="background-bms.html#cb32-4" tabindex="-1"></a>x<span class="ot">=</span> x[,<span class="sc">-</span><span class="dv">1</span>]  <span class="co">#covariates</span></span>
-<span id="cb32-5"><a href="background-bms.html#cb32-5" tabindex="-1"></a>inshort<span class="ot">=</span> (<span class="fu">colnames</span>(x) <span class="sc">%in%</span> shortlist)</span></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="background-bms.html#cb33-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb33-2"><a href="background-bms.html#cb33-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
-<span id="cb33-3"><a href="background-bms.html#cb33-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbbprior</span>()</span>
-<span id="cb33-4"><a href="background-bms.html#cb33-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb33-5"><a href="background-bms.html#cb33-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
-<span id="cb33-6"><a href="background-bms.html#cb33-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="background-bms.html#cb34-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
-<span id="cb34-2"><a href="background-bms.html#cb34-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span><span class="fu">as.matrix</span>(x), <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="background-bms.html#cb35-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">inshort=</span> inshort,</span>
-<span id="cb35-2"><a href="background-bms.html#cb35-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
-<span id="cb35-3"><a href="background-bms.html#cb35-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
-<span id="cb35-4"><a href="background-bms.html#cb35-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
-<span id="cb35-5"><a href="background-bms.html#cb35-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="background-bms.html#cb64-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;data/tgfb.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)</span>
+<span id="cb64-2"><a href="background-bms.html#cb64-2" tabindex="-1"></a>shortlist <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">read.table</span>(<span class="st">&quot;data/tgfb_mouse_shortlist.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)[,<span class="dv">1</span>])</span>
+<span id="cb64-3"><a href="background-bms.html#cb64-3" tabindex="-1"></a>y<span class="ot">=</span> x[,<span class="dv">1</span>]   <span class="co">#TGFB expression (outcome)</span></span>
+<span id="cb64-4"><a href="background-bms.html#cb64-4" tabindex="-1"></a>x<span class="ot">=</span> x[,<span class="sc">-</span><span class="dv">1</span>]  <span class="co">#covariates</span></span>
+<span id="cb64-5"><a href="background-bms.html#cb64-5" tabindex="-1"></a>inshort<span class="ot">=</span> (<span class="fu">colnames</span>(x) <span class="sc">%in%</span> shortlist)</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="background-bms.html#cb65-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb65-2"><a href="background-bms.html#cb65-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
+<span id="cb65-3"><a href="background-bms.html#cb65-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbbprior</span>()</span>
+<span id="cb65-4"><a href="background-bms.html#cb65-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb65-5"><a href="background-bms.html#cb65-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
+<span id="cb65-6"><a href="background-bms.html#cb65-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="background-bms.html#cb66-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
+<span id="cb66-2"><a href="background-bms.html#cb66-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span><span class="fu">as.matrix</span>(x), <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="background-bms.html#cb67-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">inshort=</span> inshort,</span>
+<span id="cb67-2"><a href="background-bms.html#cb67-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
+<span id="cb67-3"><a href="background-bms.html#cb67-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
+<span id="cb67-4"><a href="background-bms.html#cb67-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
+<span id="cb67-5"><a href="background-bms.html#cb67-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
 <p>The marginal posterior probabilities estimated from both methods differ drastically: the variational estimates are much closer to 0 or 1 than those from MCMC, significantly underestimating model uncertainty.
 The BMA parameter estimates are also very different.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="background-bms.html#cb36-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
-<span id="cb36-2"><a href="background-bms.html#cb36-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb36-3"><a href="background-bms.html#cb36-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb36-4"><a href="background-bms.html#cb36-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
-<span id="cb36-5"><a href="background-bms.html#cb36-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span>
-<span id="cb36-6"><a href="background-bms.html#cb36-6" tabindex="-1"></a></span>
-<span id="cb36-7"><a href="background-bms.html#cb36-7" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
-<span id="cb36-8"><a href="background-bms.html#cb36-8" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb36-9"><a href="background-bms.html#cb36-9" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb36-10"><a href="background-bms.html#cb36-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
-<span id="cb36-11"><a href="background-bms.html#cb36-11" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="background-bms.html#cb68-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
+<span id="cb68-2"><a href="background-bms.html#cb68-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb68-3"><a href="background-bms.html#cb68-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb68-4"><a href="background-bms.html#cb68-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
+<span id="cb68-5"><a href="background-bms.html#cb68-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span>
+<span id="cb68-6"><a href="background-bms.html#cb68-6" tabindex="-1"></a></span>
+<span id="cb68-7"><a href="background-bms.html#cb68-7" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
+<span id="cb68-8"><a href="background-bms.html#cb68-8" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb68-9"><a href="background-bms.html#cb68-9" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb68-10"><a href="background-bms.html#cb68-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
+<span id="cb68-11"><a href="background-bms.html#cb68-11" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
 <p><img src="modelSelection-book_files/figure-html/two-plots-1.png" width="50%" /><img src="modelSelection-book_files/figure-html/two-plots-2.png" width="50%" /></p>
 <p>From purely a Bayesian point of view this shows variational inference may provide a poor approximation to the desired posterior. This is different from saying that the exact Bayesian solution provides better inference than the variational one, in terms of detecting the genes that are truly associated with TGFB.
 As an additional check in this direction, we compare the average posterior inclusion probability between genes that were inside/outside the mouse list. For the MCMC estimates there is a big difference, roughly 0.023/0.007 = 3.3, which aligns with what’s expected biologically. For the variational estimates the difference is much smaller.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="background-bms.html#cb37-1" tabindex="-1"></a><span class="fu">group_by</span>(df, inshort) <span class="sc">|&gt;</span></span>
-<span id="cb37-2"><a href="background-bms.html#cb37-2" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">mean</span>(pip_mcmc), <span class="fu">mean</span>(pip_vb))</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="background-bms.html#cb69-1" tabindex="-1"></a><span class="fu">group_by</span>(df, inshort) <span class="sc">|&gt;</span></span>
+<span id="cb69-2"><a href="background-bms.html#cb69-2" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">mean</span>(pip_mcmc), <span class="fu">mean</span>(pip_vb))</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 3
 ##   inshort `mean(pip_mcmc)` `mean(pip_vb)`
 ##   &lt;lgl&gt;              &lt;dbl&gt;          &lt;dbl&gt;
-## 1 FALSE            0.00766         0.0213
-## 2 TRUE             0.0237          0.0399</code></pre>
+## 1 FALSE            0.00768         0.0210
+## 2 TRUE             0.0226          0.0313</code></pre>
 </div>
 <div id="bms-marglhood-approx" class="section level3 hasAnchor" number="2.7.1">
 <h3><span class="header-section-number">2.7.1</span> Marginal likelihoods and model-specific posteriors<a href="background-bms.html#bms-marglhood-approx" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1169,7 +1169,7 @@ As a welcome present you’re given a glass of beer, but you’re not told the b
 You like that beer so much that you set out to find out which beer it is.
 To do so, you need to sample beers from different taps, and score them according to how similar they are to your target beer.
 The picture below illustrates the situation.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-26"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-34"></span>
 <img src="bookcover.png" alt="Beer search as a high-dimensional model selection problem" width="80%" />
 <p class="caption">
 Figure 2.3: Beer search as a high-dimensional model selection problem
@@ -1199,14 +1199,14 @@ p(\boldsymbol{\gamma} \mid \mathbf{y}) \propto
 \]</span>
 where <span class="math inline">\(|| \cdot ||_2\)</span> is the Euclidean distance.
 The animation below shows the first 200 MCMC iterations of the RWMH algorithm, initialized at a random <span class="math inline">\(\boldsymbol{\gamma}^{(0)}\)</span>.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-27"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-35"></span>
 <img src="figs/mh_lattice_unimodal.gif" alt="RWMH on a bimodal distribution on the lattice" width="80%" />
 <p class="caption">
 Figure 2.4: RWMH on a bimodal distribution on the lattice
 </p>
 </div>
 <p>The next table shows <span class="math inline">\(\hat{p}(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> gives by the proportion of iterations spent in each node after 2,000 iterations, for the 10 highest posterior probability <span class="math inline">\(\boldsymbol{\gamma}\)</span>’s. The approximation is not perfect, but it’s reasonably accurate.</p>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:center;">
@@ -1376,13 +1376,13 @@ p(\boldsymbol{\gamma} \mid \mathbf{y}) \propto
 Despite the fact that RWMH now has a harder time to transition from one mode to the other, the approximation is still reasonably accurate.
 If the posterior were more concentrated around each mode however, RWMH would not do a good job at exploring the space (like any other algorithm based on local moves).
 Fortunately, in Bayesian model selection the posterior distribution concentrates on a small set of models as <span class="math inline">\(n \to \infty\)</span>, and often (but not always) these models are contiguous in the model space. When this is the case, MCMC can be a very efficient tool.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-29"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-37"></span>
 <img src="figs/mh_lattice_bimodal.gif" alt="RWMH on a bimodal distribution on the lattice" width="80%" />
 <p class="caption">
 Figure 2.5: RWMH on a bimodal distribution on the lattice
 </p>
 </div>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:center;">

@@ -67,6 +67,3 @@ eBayes
 survival
 ggm
 mixtures
-fig:unnamed-chunk-26
-fig:unnamed-chunk-27
-fig:unnamed-chunk-29
