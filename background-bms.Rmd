@@ -752,23 +752,276 @@ where $\hat{\btheta}_\gamma= \arg\max_{\theta_\gamma} f(\btheta_\gamma)$
 
 ### Model search {#bms-mcmc}
 
-Markov Chain Monte Carlo algorithms provide the basic workhorse for Bayesian model selection when one cannot exhaustively enumerate the set of possible models.
-These algorithms have proven surprisingly effective in practice, provided that posterior model probabilities $p(\bgamma \mid \by)$ concentrate on sparse models, and that one can quickly evaluate the marginal likelihood $p(\by \mid \bgamma)$ and prior probability $p(\bgamma)$ for each model $\bgamma$.
+MCMC algorithms provide a basic workhorse for Bayesian model selection when one cannot exhaustively enumerate the set of possible models.
+These algorithms have proven surprisingly effective in practice, particularly when posterior model probabilities $p(\bgamma \mid \by)$ concentrate on sparse models, and when one can quickly evaluate the marginal likelihood $p(\by \mid \bgamma)$ (or approximate it, as discussed in Section \@ref(bms-marglhood-approx)) and prior probability $p(\bgamma)$ for each model $\bgamma$.
+MCMC is also useful to approximate the Bayesian model averaging (BMA) posterior $p(\btheta \mid \by)$, and typically this has little extra cost once one has already approximated $p(\bgamma \mid \by)$.
 
-As usual in MCMC, the main idea is to approximate the posterior distribution $p(\bgamma \mid \by)$ by obtaining a sufficiently large number of samples from it.
-There are many possible MCMC algorithms.
-A classical strategy in the variable selection setting where $\bgamma=(\gamma_1,\ldots,\gamma_p)$ and $\gamma_j=\mbox{I}(\beta_j \neq 0)$ are variable indicators is to use Gibbs sampling (@madigan:1994, @hoeting:1999), where one updates a single variable indicator $\gamma_j$ at a time.
-These are sometimes referred to as birth-death moves.
+The main idea of MCMC is to approximate the posterior distribution on the models, $p(\bgamma \mid \by)$, by obtaining a sufficiently large number of samples from it.
+If one has $B$ (typically dependent) samples $\bgamma_1,\ldots,\bgamma_B$ from $p(\bgamma \mid \by)$, one can easily estimate any quantity of interest. For example, the posterior probability of any given model $\bgamma'$ can be estimated by the proportion of samples where $\bgamma'$ was observed, i.e.
+\begin{align*}
+\hat{p}(\bgamma \mid \by)= \frac{1}{B} \sum_{b=1}^B \mbox{I}(\bgamma^{(b)}= \bgamma).
+\end{align*}
+Another typical example in variable selection is when $\bgamma=(\bgamma_1,\ldots,\bgamma_p)$ and $\gamma_j= \mbox{I}(\beta_j \neq 0)$, then a naive estimator for marginal posterior inclusion probabilities is
+\begin{align*}
+\hat{P}(\gamma_j = 1 \mid \by) = \frac{1}{B} \sum_{b=1}^B \mbox{I}(\gamma_j^{(b)} = 1).
+\end{align*}
+
+There are many possible MCMC algorithms that one may use (i.e. with $p(\bgamma \mid \by)$ as the unique stationary distribution), and the art is to choose one that returns accurate approximations in as little time as possible.
+A classical strategy in the variable selection setting is to use Gibbs sampling (@madigan:1994, @hoeting:1999), which consists in adding/excluding one covariate at a time. Such updates are sometimes referred to as birth-death moves.
 @yangyun:2016 showed that, if certain sparsity assumptions hold, then a birth-death-swap algorithm can search the model space at polynomial cost in $p$ (more precisely, they prove polynomial bounds on the algorithm's spectral gap).
 @zhou_quan:2022 proposed a locally informed thresholded (LIT) algorithm that's theoretically appealing in being scalable to high dimensions, also under suitable sparsity conditions that guarantee sufficient posterior concentration. 
 See also @chang_hyunwoong:2025 for more recent algorithms leading to dimension-free mixing.
 In practice simple Gibbs sampling works remarkably well, in our experience it usually attains a similar numerical accuracy when it's run for the same clock time as birth-death-swap and LIT. 
 
-We describe these algorithms in further detail in Chapter \@ref(glm). Briefly, the algorithms implemented in `modelSelection` are:
+Section \@ref(mcmc-basics) gives a brief introduction to MCMC, discussing popular algorithms like Metropolis-Hastings, Gibbs sampling and Hamiltonian Monte Carlo.
+The actual adaptation of these algorithms to our model selection settings of interest is given in Chapters \@ref(glm), \@ref(gam) and \@ref(ggm) for generalized linear models, generalize additive models and Gaussian graphical models respectively. 
 
-- Function `modelSelection` uses an MCMC model search, based on classical Gibbs sampling. Functions such as `bestBIC` implementing model search for $L_0$ criteria also use Gibbs sampling.
 
-- Function `modelSelectionGGM` also implements the birth-death-swap  [@yangyun:2016] and locally informed thresholded (LIT) algorithms [@zhou_quan:2022]. 
+
+Before proceeding, we illustrate the main idea with a fun analogy (which motivated this book's cover) where one is searching for beer.
+This is also a wink to my friend Gareth Roberts, who has uncanny beer-searching abilities (besides his more famously known MCMC-related abilities).
+
+
+::: {.example #beer-search}
+
+Suppose that you are inside of a bar that has an extremely large number of beer taps.
+As a welcome present you're given a glass of beer, but you're not told the brand or the name of the beer. 
+You like that beer so much that you set out to find out which beer it is.
+To do so, you need to sample beers from different taps, and score them according to how similar they are to your target beer.
+The picture below illustrates the situation.
+
+```{r, out.width='80%', fig.align='center', echo=FALSE, fig.cap="Beer search as a high-dimensional model selection problem"}
+knitr::include_graphics("bookcover.png")
+```
+
+In this analogy the beer that you first tasted are the data $\by$, the taps are possible models from where the data may have originated, and the score that you give to each sampled tap is $s(\bgamma)= p(\by \mid \bgamma) p(\bgamma)$, i.e. it's proportional to the model's posterior probability.
+Since there are too many possible taps (models), you cannot try them all. Instead, you decide to randomly explore beer taps: you will sample a total of $B$ taps, you may sample a tap more than once, and you want to sample each tap with probability proportional to its score $s(\bgamma)$.
+
+A possible MCMC algorithm for this task is as follows.
+You start your search by tasting an initial tap $\bgamma^{(0)}$ (possibly randomly chosen). You set the iteration counter to $b=1$ and then choose the next beer randomly, as follows. 
+
+1. Propose a new beer tap $\bgamma^*$ uniformly at random among the neighbors of $\bgamma^{(b-1)}$, denoted by $\mathcal{N}(\bgamma^{(b-1)})$.
+For simplicity, we assume that all taps have the same number of neighbors.
+
+2. Set the next tap to $\bgamma^{(b)}=\bgamma^*$ with probability $s(\bgamma^*)/s(\bgamma^{(b-1)})$ (if this quantity is $>1$, then we move to $\bgamma^*$ for sure).
+Otherwise, stay at the current tap, i.e. $\bgamma^{(b)}= \bgamma^{(b-1)}$.
+
+After these two steps, you set $b=b+1$ and go back to Step 1, until $b=B$.
+This strategy defines a Markov chain: the probability distribution for $\bgamma^{(b)}$ depends only on the previous tap $\bgamma^{(b-1)}$.
+Intuitively, the algorithm moves towards better beers (we move to $\bgamma^*$ for sure when its score is better than the current $\bgamma^{(b-1)}$), but it can also occasionally move to worse beers and this is why there's some hope of not getting trapped in local modes (at least, not forever).
+
+The magic is that, under mild conditions, this Markov chain converges to its unique stationary distribution, and the latter is $p(\bgamma \mid \by)$.
+This example is purely meant as an illustration: this simple algorithm is called random walk Metropolis-Hastings (RWMH) and we do not expect this to be particularly efficient, it's just an easy one to explain and to implement in your computer.
+See Section \@ref(mcmc-basics) for further details, and Exercise \@ref(exr:beerexample) to show that this algorithm is an instance of the Metropolis-Hastings algorithm.
+
+For fun, we show a numerical illustration. Consider a posterior $p(\bgamma \mid \by)$ on the 10 x 10 lattice, i.e. where $\bgamma=(\gamma_1,\gamma_2) \in \{1,2,\ldots,10\}^2$.
+First consider a $p(\bgamma \mid \by)$ that has a single mode at ${\bf m}=(10,10)$ and whose log mass function depends on the Euclidean distance to the mode. Specifically,
+$$
+p(\bgamma \mid \by) \propto 
+\exp{- 0.6 ||\bgamma - {\bf m}||_2},
+$$
+where $|| \cdot ||_2$ is the Euclidean distance.
+The animation below shows the first 200 MCMC iterations of the RWMH algorithm, initialized at a random $\bgamma^{(0)}$.
+
+```{r, out.width='80%', fig.align='center', echo=FALSE, fig.cap="RWMH on a bimodal distribution on the lattice"}
+knitr::include_graphics("figs/mh_lattice_unimodal.gif")
+```
+
+The next table shows $\hat{p}(\bgamma \mid \by)$ gives by the proportion of iterations spent in each node after 2,000 iterations, for the 10 highest posterior probability $\bgamma$'s. The approximation is not perfect, but it's reasonably accurate.
+
+```{r, echo=FALSE}
+table_data <- data.frame(
+  gamma_1 = c(10, 9, 10, 9, 8, 10, 8, 9, 8, 7),
+  gamma_2 = c(10, 10, 9, 9, 10, 8, 9, 8, 8, 10),
+  pi = c(0.1588, 0.0872, 0.0872, 0.0680, 0.0478,
+         0.0478, 0.0415, 0.0415, 0.0291, 0.0262),
+  proportion_visits = c(0.1560, 0.0755, 0.0900, 0.0560, 0.0280, 0.0450, 0.0340, 0.0250, 0.0195, 0.0240)
+)
+
+
+# Create the table with LaTeX formulas
+kableExtra::kable(table_data, 
+      col.names = c("$\\gamma_1$", "$\\gamma_2$", "$p(\\bgamma \\mid \\by)$", "$\\hat{p}(\\bgamma \\mid \\by)$"),
+      align = "c",
+      escape = FALSE) |>
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+As a second and more challenging example, consider now a posterior with two modes at $\bf{m}_1= (1,1)$ and $\bf{m}_2= (10,10)$.
+Specifically,
+$$
+p(\bgamma \mid \by) \propto 
+\sum_{j=1}^2 0.5 \exp\left\{ - 0.6 ||\bgamma - {\bf m}_j||_2 \right\}.
+$$
+
+The animation below shows the first 200 iterations, and the subsequent table $\hat{p}(\bgamma \mid \by)$ after 2,000 iterations, for the 10 top models.
+Despite the fact that RWMH now has a harder time to transition from one mode to the other, the approximation is still reasonably accurate.
+If the posterior were more concentrated around each mode however, RWMH would not do a good job at exploring the space (like any other algorithm based on local moves).
+Fortunately, in Bayesian model selection the posterior distribution concentrates on a small set of models as $n \to \infty$, and often (but not always) these models are contiguous in the model space. When this is the case, MCMC can be a very efficient tool.
+
+
+```{r, out.width='80%', fig.align='center', echo=FALSE, fig.cap="RWMH on a bimodal distribution on the lattice"}
+knitr::include_graphics("figs/mh_lattice_bimodal.gif")
+```
+
+
+```{r, echo=FALSE}
+table_data <- data.frame(
+  gamma_1 = c(1, 10, 1, 2, 9, 10, 2, 9, 1, 3),
+  gamma_2 = c(1, 10, 2, 1, 10, 9, 2, 9, 3, 1),
+  pi = c(0.0794, 0.0794, 0.0436, 0.0436, 0.0436, 0.0436, 0.0341, 0.0341, 0.0240, 0.0240),
+  proportion_visits = c(0.0850, 0.0560, 0.0430, 0.0470, 0.0350, 0.0345, 0.0340, 0.0290, 0.0250, 0.0315)
+)
+
+# Create the table with LaTeX formulas
+kableExtra::kable(table_data, 
+      col.names = c("$\\gamma_1$", "$\\gamma_2$", "$p(\\bgamma \\mid \\by)$", "$\\hat{p}(\\bgamma \\mid \\by)$"),
+      align = "c",
+      escape = FALSE) |>
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+
+
+:::
+
+
+### MCMC basics {#mcmc-basics}
+
+The basic building block for MCMC is the Metropolis-Hastings (MH) algorithm. 
+We first present this algorithm, subsequently discuss Gibbs sampling as a particular case, and finally discuss Hamiltonian Monte Carlo as another particular case that has found particular success in applications.
+For fun, you can check an animation showing how different MCMC algorithms perform at <https://chi-feng.github.io/mcmc-demo>.
+
+The goal is to sample from the posterior distribution $p(\bfeta \mid \by)$, for some object of interest $\bfeta$.
+For example in BMS we may have $\bfeta=\bgamma$ and in BMA $\bfeta=(\btheta, \bgamma)$.
+The MH algorithm starts from an initial $\bfeta=\bfeta^{(0)}$ (which can in principle be arbitrary), and at iteration $b$ uses a so-called proposal distribution $h(\bfeta \mid \bfeta^{(b-1)})$ to generate an updated parameter value $\bfeta^{(b)}$.
+
+**Metropolis-Hastings algorithm.**
+
+Let $B$ be the number of desired samples from $p(\bfeta \mid \by)$.
+
+1. Initialize $\bfeta^{(0)}$, set $b=1$.
+
+2. Propose $\bfeta^* \sim h(\bfeta \mid \bfeta^{(b-1)})$. With probability $\min \{1, u\}$ set $\bfeta^{(b)}=\bfeta^*$, else set $\bfeta^{(b)}=\bfeta^{(b-1)}$, where
+\begin{align}
+  u= \frac{p(\bfeta^* \mid \by)}{p(\bfeta^{(b-1)} \mid \by)} \frac{h(\bfeta^{(b-1)} \mid \bfeta^*)}{h(\bfeta^* \mid \bfeta^{(b-1)})}
+  = \frac{p(\by \mid \bfeta^*) p(\bfeta^*)}{p(\by \mid \bfeta^{(b-1)}) p(\bfeta^{(b-1)})} \frac{h(\bfeta^{(b-1)} \mid \bfeta^*)}{h(\bfeta^* \mid \bfeta^{(b-1)})}
+\nonumber
+\end{align}
+
+3. If $b=B$ stop, else set $b=b+1$ and go back to Step 2.
+
+
+**Ergodic theorem.**
+*If the Markov Chain $\bfeta^{(0)},\bfeta^{(1)},\ldots$ is irreducible, aperiodic and recurrent, then it has a unique stationary distribution given by $p(\bfeta \mid \by)$.*
+
+
+
+Briefly, the proof requires two steps: first, one shows that the Markov chain has a unique stationary distribution, and second that the stationary distribution is the desired $p(\bfeta \mid \by)$.
+Uniqueness of the stationary distribution holds when the chain is irreducible, aperiodic and not transient.
+
+- The latter two are typically not problematic (recurrence means that there's probability 1 of returning to any given state, and aperiodicity that there are no fixed cycles in how the chain evolves). 
+
+- Irreducibility holds as long as there's positive probability of reaching any state $\bfeta_a$ from any starting state $\bfeta_b$.
+
+Proving that the stationary distribution is $p(\bfeta \mid \by)$ can be done by showing that, if $\bfeta^{(b)} \sim p(\bfeta \mid \by)$ then the distribution of $(\bfeta^{(b)},\bfeta^{(b+1)})$ is equal to that of $(\bfeta^{(b+1)},\bfeta^{(b)})$ (this is called reversibility), which implies that the marginal distribution of $\bfeta^{(b+1)}$ is equal to that of $\bfeta^{(b)}$ and hence that $p(\bfeta \mid \by)$ is indeed a stationary distribution.
+
+**Gibbs sampling.**
+
+Let $B$ be the number of desired draws from $p(\bfeta \mid \by)$ and
+$\bfeta_{-j}= (\eta_1,\ldots,\eta_{j-1},\eta_{j+1},\ldots,\eta_d)$ the vector $\bfeta$ after removing its $j^{th}$ entry.
+
+1. Initialize $\bfeta^{(0)}$, set $b=1$.
+
+2. Set $\bfeta^{(b)}=\bfeta^{(b-1)}$. For $j=1,\ldots,d$, update $\eta_j^{(b)} \sim p(\eta_j \mid \bfeta_{-j}^{(b)},\by)$.
+
+3. If $b=B$ stop, else set $b=b+1$ and go back to Step 2.
+
+
+
+We finally discuss Hamiltonian Monte Carlo (HMC) as powerful alternative to Gibbs, that is applicable to situations where the parameters have a continuous distribution $p(\bfeta \mid \by)$. Note that this precludes the application of HMC to model selection, where $\bfeta=\bgamma$ is discrete and $\btheta$ follows a mixture of continuous and discrete distributions.
+HMC is a MH where the proposal depends on the gradient of $\log p(\bfeta \mid \by)$. By using gradient information, the proposals can sometimes explore the posterior distribution more efficiently.
+
+The main trick is to introduce artificial momentum variables ${\bf v} \in \mathbb{R}^d$ that are independent from $\bfeta$, such that
+ \begin{align}
+   p(\bfeta, {\bf v} \mid \by)= p(\bfeta \mid \by) N({\bf v}; {\bf 0}, M)
+\nonumber
+\end{align}
+for some matrix $M$ (typically diagonal) %, ideally given by the inverse posterior covariance of $V(\bfeta \mid \by)$).
+One then produces samples from $p(\bfeta, {\bf v} \mid \by)$ and therefore also from $p(\bfeta \mid \by)$ (by discarding the generated ${\bf v}$'s).
+
+That is, one introduces $d$ momentum variables ${\bf v}$, one for each of the $d$ elements in $\bfeta$. The algorithm updates these momentum variables to a noisy version of the gradient $\nabla_\theta \log p(\bfeta \mid \by)$, and then deterministically updates $\bfeta$ in the direction of the momentum. The process is repeated $L$ steps, where the momentum is updated based on the new gradient, and $\bfeta$ updated based on the new momentum.
+The algorithm is given below.
+
+**Hamiltonian Monte Carlo.**
+
+Let $L \geq 1$ and $\epsilon > 0$ be tuning parameters. Initialize $\bfeta^{(0)}$, set $b=1$.
+
+1. Sample ${\bf v}^{(b)} \sim N({\bf 0}, M)$
+
+2. Deterministic proposal. Set $(\bfeta^*,{\bf v}^*)= (\bfeta^{(b-1)}, {\bf v}^{(b)})$. Repeat $L$ times:
+
+- ${\bf v}^*= {\bf v}^* - \frac{\epsilon}{2} \nabla_{\bfeta} \log p(\bfeta^* \mid \by)$
+
+- $\bfeta^*= \bfeta^* + \epsilon M^{-1} {\bf v}^*$
+
+- ${\bf v}^*= {\bf v}^* - \frac{\epsilon}{2} \nabla_{\bfeta} \log p(\bfeta^* \mid \by)$
+
+3. Set $\bfeta^{(b)}= \bfeta^*$ with probability $\min \{1, u\}$
+\begin{align}
+  u=  \frac{p(\by \mid \bfeta^*) p(\bfeta^*)}{p(\by \mid \bfeta^{(b-1)}) p(\bfeta^{(b-1)})}
+\nonumber
+\end{align}
+
+Remarks:
+
+- HMC originated from physics, a set of partial differential equations called Hamiltonian dynamics. These PDE's are hard to solve analytically, instead Algorithm \ref{alg:hmc} uses a discretization (the Leapfrog method).
+
+- The acceptance probability $u$ does not feature in the ratio of proposals featuring $h()$ in MH. It can be shown that such ratio is equal to 1, which simplifies calculations.
+
+- As $\epsilon \rightarrow 0$, one obtains an acceptance probability $u=1$. In practice, $\epsilon>0$ is set to a small value.
+
+- A popular algorithm called {\it no U-turn sampler} sets $L$ automatically, and is used by the Stan and numpyro softwares.
+
+
+## Exercises
+
+
+:::{.exercise #beerexample}
+
+Consider a MH algorithm that proceeds as the random search algorithm described in \@ref(exm:beer-search).
+At the start of iteration $b$ one knows the current model $\bgamma^{(b-1)}$, and proposes $\bgamma^*$ randomly from $\mathcal{N}(\bgamma^{(b-1)})$, the set of neighbors of $\bgamma^{(b-1)}$.
+
+Show that the MH algorithm sets $\bgamma^{(b)}=\bgamma^*$ with probability
+$$
+\min \left\{1, \frac{s(\bgamma^*)}{s(\bgamma^{(b-1)})} \right\},
+$$ 
+and otherwise sets $\bgamma^{(b)}= \bgamma^{(b-1)}$.
+
+You may assume that the number of neighbors $|\mathcal{N}(\bgamma)|$ is the same for all $\bgamma$,
+and that for any two models $(\bgamma,\bgamma')$, $\bgamma$ is a neighbor of $\bgamma'$ if and only if $\bgamma'$ is a neighbor of $\bgamma$.
+
+:::
+
+
+:::{.solution-panel}
+<div class="solution-panel-header">Solution to Exercise \@ref(exr:beerexample)</div>
+
+First note that the proposal distribution is
+$$
+h(\bgamma \mid \bgamma^{(b-1)}) = \frac{1}{|\mathcal{N}(\bgamma^{(b-1)})|}.
+$$
+Hence the MH acceptance probability is the minimum between 1 and
+\begin{align*}
+\frac{s(\bgamma^*)}{s(\bgamma^{(b-1)})}
+\frac{h(\bgamma^* \mid \bgamma^{(b-1)})}{h(\bgamma^{(b-1)} \mid \bgamma^*)}=
+\frac{s(\bgamma^*)}{s(\bgamma^{(b-1)})}
+\frac{|N(\bgamma^{(b-1)})|}{|N(\bgamma^*)|}
+\end{align*}
+which gives the desired result, since $|N(\bgamma^*)|= |N(\bgamma^{(b-1)})|$ by assumption.
+
+
+:::
 
 
 

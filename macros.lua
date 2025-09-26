@@ -16,6 +16,7 @@ local MAP = {
   ["\\bbeta"] = "\\boldsymbol{\\beta}",
   ["\\bgamma"] = "\\boldsymbol{\\gamma}",
   ["\\btheta"] = "\\boldsymbol{\\theta}",
+  ["\\bfeta"] = "\\boldsymbol{\\eta}",
 }
 
 local function replace_macros(s)
