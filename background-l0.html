@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-09-24" />
+<meta name="date" content="2025-09-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -197,9 +197,11 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="background-bms.html"><a href="background-bms.html#bms-computation"><i class="fa fa-check"></i><b>2.7</b> Computation</a>
 <ul>
-<li class="chapter" data-level="2.7.1" data-path="background-bms.html"><a href="background-bms.html#bms-marglhood-approx"><i class="fa fa-check"></i><b>2.7.1</b> Approximating marginal likelihoods</a></li>
+<li class="chapter" data-level="2.7.1" data-path="background-bms.html"><a href="background-bms.html#bms-marglhood-approx"><i class="fa fa-check"></i><b>2.7.1</b> Marginal likelihoods and model-specific posteriors</a></li>
 <li class="chapter" data-level="2.7.2" data-path="background-bms.html"><a href="background-bms.html#bms-mcmc"><i class="fa fa-check"></i><b>2.7.2</b> Model search</a></li>
+<li class="chapter" data-level="2.7.3" data-path="background-bms.html"><a href="background-bms.html#mcmc-basics"><i class="fa fa-check"></i><b>2.7.3</b> Markov Chain Monte Carlo basics</a></li>
 </ul></li>
+<li class="chapter" data-level="2.8" data-path="background-bms.html"><a href="background-bms.html#exercises"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>3</b> L0 criteria</a>
 <ul>
@@ -210,7 +212,7 @@ div.csl-indent {
 <li class="chapter" data-level="3.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>3.3.1</b> Optimization methods</a></li>
 <li class="chapter" data-level="3.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>3.3.2</b> MCMC</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="background-l0.html"><a href="background-l0.html#exercises"><i class="fa fa-check"></i><b>3.4</b> Exercises</a></li>
+<li class="chapter" data-level="3.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>3.4</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>4</b> Generalized linear models</a>
 <ul>
@@ -465,7 +467,7 @@ Likewise, if one were to ignore age, then it would appear that blood pressure is
 <span id="cb77-2"><a href="background-l0.html#cb77-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">pch=</span>sex)) <span class="sc">+</span></span>
 <span id="cb77-3"><a href="background-l0.html#cb77-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">group=</span>sex), <span class="at">method=</span><span class="st">&#39;lm&#39;</span>, <span class="at">se=</span><span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb77-4"><a href="background-l0.html#cb77-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span> <span class="st">&quot;Systolic blood pressure&quot;</span>)</span></code></pre></div>
-<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-114-1.png" width="672" /></p>
+<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
 <p>Since there are only four models we can easily obtain the BIC for each. We use <code>includevars</code> to force the inclusion of the intercept, i.e. do not consider models that exclude the intercept.
 As shown below, the best model according to the BIC includes both age and sex, recovering the data-generating truth.
 The second best model however is the intercept-only model, as we expect given that blood pressure has little marginal association to either age or sex alone.</p>
@@ -513,7 +515,7 @@ These observations that the algorithms likely returned the global mode, or at le
 Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.</p>
 <div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="background-l0.html#cb81-1" tabindex="-1"></a><span class="fu">system.time</span>(msfast <span class="ot">&lt;-</span> <span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.289   0.429   0.057</code></pre>
+##   0.287   0.590   0.126</code></pre>
 <div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="background-l0.html#cb83-1" tabindex="-1"></a>msfast</span></code></pre></div>
 <pre><code>## icfit object</code></pre>
 <pre><code>## Model with best EBIC: X197 X199 X200</code></pre>
@@ -521,7 +523,7 @@ Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.<
 <pre><code>## Use coef(object$msfit) and predict(object$msfit) to get BMA estimates and predictions</code></pre>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="background-l0.html#cb88-1" tabindex="-1"></a><span class="fu">system.time</span>(ms <span class="ot">&lt;-</span> <span class="fu">bestEBIC</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   2.183   0.998   1.636</code></pre>
+##   2.140   1.056   1.653</code></pre>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="background-l0.html#cb90-1" tabindex="-1"></a>ms</span></code></pre></div>
 <pre><code>## icfit object</code></pre>
 <pre><code>## Model with best EBIC: X197 X199 X200</code></pre>
@@ -549,8 +551,8 @@ The motivation for <a href="background-l0.html#eq:l0-posterior">(3.3)</a> is tha
 For example, this facilitates transferring theoretical guarantees for MCMC algorithms that were obtained in a Bayesian setting to <span class="math inline">\(L_0\)</span> criteria (Section <a href="background-bms.html#bms-mcmc">2.7.2</a>).</p>
 </div>
 </div>
-<div id="exercises" class="section level2 hasAnchor" number="3.4">
-<h2><span class="header-section-number">3.4</span> Exercises<a href="background-l0.html#exercises" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="exercises-1" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Exercises<a href="background-l0.html#exercises-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="exercise">
 <p><span id="exr:aicbic-consistency" class="exercise"><strong>Exercise 3.1  </strong></span>Consistency of AIC and BIC.
 Suppose that we want to compare two nested models <span class="math inline">\(\boldsymbol{\gamma} \subset \boldsymbol{\gamma}&#39;\)</span>, where <span class="math inline">\(\boldsymbol{\gamma}&#39;\)</span> adds a single parameter to <span class="math inline">\(\boldsymbol{\gamma}\)</span>.
