@@ -1,8 +1,9 @@
 book_filename: "modelSelection-book"
 rmd_files: ["index.Rmd",
   "quick-start.Rmd",
-  "background-bms.Rmd",
-  "background-l0.Rmd",
+  "bms.Rmd",
+  "computation.Rmd",
+  "l0.Rmd",
   "glm.Rmd",
   "gam.Rmd",
   "eBayes.Rmd",

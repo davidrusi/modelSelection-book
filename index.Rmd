@@ -18,6 +18,7 @@ output:
     citation_package: natbib
     includes:
       in_header: preamble.tex
+    pandoc_args: ["--lua-filter=macros.lua"]
   bookdown::epub_book:
     pandoc_args: ["--lua-filter=macros.lua"]
 ---
