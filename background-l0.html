@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3 L0 criteria | High-dimensional model choice. A hands-on take</title>
+  <title>4 L0 criteria | High-dimensional model choice. A hands-on take</title>
   <meta name="description" content="High-dimensional model selection with the modelSelection R package" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3 L0 criteria | High-dimensional model choice. A hands-on take" />
+  <meta property="og:title" content="4 L0 criteria | High-dimensional model choice. A hands-on take" />
   <meta property="og:type" content="book" />
   <meta property="og:image" content="/bookcover_titled.png" />
   <meta property="og:description" content="High-dimensional model selection with the modelSelection R package" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 L0 criteria | High-dimensional model choice. A hands-on take" />
+  <meta name="twitter:title" content="4 L0 criteria | High-dimensional model choice. A hands-on take" />
   
   <meta name="twitter:description" content="High-dimensional model selection with the modelSelection R package" />
   <meta name="twitter:image" content="/bookcover_titled.png" />
@@ -23,14 +23,14 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-09-26" />
+<meta name="date" content="2025-10-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="background-bms.html"/>
+<link rel="prev" href="bms-computation.html"/>
 <link rel="next" href="glm.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -179,7 +179,7 @@ div.csl-indent {
 <li class="chapter" data-level="2" data-path="background-bms.html"><a href="background-bms.html"><i class="fa fa-check"></i><b>2</b> Bayesian model selection and averaging</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="background-bms.html"><a href="background-bms.html#bms-simple-example"><i class="fa fa-check"></i><b>2.1</b> A simplest example</a></li>
-<li class="chapter" data-level="2.2" data-path="background-bms.html"><a href="background-bms.html#bms-framework"><i class="fa fa-check"></i><b>2.2</b> General framework</a></li>
+<li class="chapter" data-level="2.2" data-path="background-bms.html"><a href="background-bms.html#bms-framework"><i class="fa fa-check"></i><b>2.2</b> Bayesian model selection</a></li>
 <li class="chapter" data-level="2.3" data-path="background-bms.html"><a href="background-bms.html#bma"><i class="fa fa-check"></i><b>2.3</b> Bayesian model averaging</a></li>
 <li class="chapter" data-level="2.4" data-path="background-bms.html"><a href="background-bms.html#bma-prediction"><i class="fa fa-check"></i><b>2.4</b> Prediction problems</a></li>
 <li class="chapter" data-level="2.5" data-path="background-bms.html"><a href="background-bms.html#bms-modelprior"><i class="fa fa-check"></i><b>2.5</b> Prior on models</a>
@@ -195,36 +195,39 @@ div.csl-indent {
 <li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.6.2</b> Non-local priors</a></li>
 <li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.6.3</b> Sensitivity to prior variance</a></li>
 </ul></li>
-<li class="chapter" data-level="2.7" data-path="background-bms.html"><a href="background-bms.html#bms-computation"><i class="fa fa-check"></i><b>2.7</b> Computation</a>
+</ul></li>
+<li class="chapter" data-level="3" data-path="bms-computation.html"><a href="bms-computation.html"><i class="fa fa-check"></i><b>3</b> Bayesian computation</a>
 <ul>
-<li class="chapter" data-level="2.7.1" data-path="background-bms.html"><a href="background-bms.html#bms-marglhood-approx"><i class="fa fa-check"></i><b>2.7.1</b> Marginal likelihoods and model-specific posteriors</a></li>
-<li class="chapter" data-level="2.7.2" data-path="background-bms.html"><a href="background-bms.html#bms-mcmc"><i class="fa fa-check"></i><b>2.7.2</b> Model search</a></li>
-<li class="chapter" data-level="2.7.3" data-path="background-bms.html"><a href="background-bms.html#mcmc-basics"><i class="fa fa-check"></i><b>2.7.3</b> MCMC basics</a></li>
+<li class="chapter" data-level="3.1" data-path="bms-computation.html"><a href="bms-computation.html#bms-marglhood-approx"><i class="fa fa-check"></i><b>3.1</b> Marginal likelihoods and model-specific posteriors</a></li>
+<li class="chapter" data-level="3.2" data-path="bms-computation.html"><a href="bms-computation.html#bms-mcmc"><i class="fa fa-check"></i><b>3.2</b> Model search</a></li>
+<li class="chapter" data-level="3.3" data-path="bms-computation.html"><a href="bms-computation.html#mcmc-basics"><i class="fa fa-check"></i><b>3.3</b> MCMC basics</a></li>
+<li class="chapter" data-level="3.4" data-path="bms-computation.html"><a href="bms-computation.html#gibbs-sampling"><i class="fa fa-check"></i><b>3.4</b> Gibbs sampling</a></li>
+<li class="chapter" data-level="3.5" data-path="bms-computation.html"><a href="bms-computation.html#locally-informed"><i class="fa fa-check"></i><b>3.5</b> Locally-informed proposals</a></li>
+<li class="chapter" data-level="3.6" data-path="bms-computation.html"><a href="bms-computation.html#hmc"><i class="fa fa-check"></i><b>3.6</b> Hamiltonian Monte Carlo</a></li>
+<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="2.8" data-path="background-bms.html"><a href="background-bms.html#exercises"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>3</b> L0 criteria</a>
+<li class="chapter" data-level="4" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>4</b> L0 criteria</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="background-l0.html"><a href="background-l0.html#l0-basics"><i class="fa fa-check"></i><b>3.1</b> Basics</a></li>
-<li class="chapter" data-level="3.2" data-path="background-l0.html"><a href="background-l0.html#l0-theory"><i class="fa fa-check"></i><b>3.2</b> Theoretical considerations</a></li>
-<li class="chapter" data-level="3.3" data-path="background-l0.html"><a href="background-l0.html#l0-modelsearch"><i class="fa fa-check"></i><b>3.3</b> Model search</a>
+<li class="chapter" data-level="4.1" data-path="background-l0.html"><a href="background-l0.html#l0-basics"><i class="fa fa-check"></i><b>4.1</b> Basics</a></li>
+<li class="chapter" data-level="4.2" data-path="background-l0.html"><a href="background-l0.html#l0-theory"><i class="fa fa-check"></i><b>4.2</b> Theoretical considerations</a></li>
+<li class="chapter" data-level="4.3" data-path="background-l0.html"><a href="background-l0.html#l0-modelsearch"><i class="fa fa-check"></i><b>4.3</b> Model search</a>
 <ul>
-<li class="chapter" data-level="3.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>3.3.1</b> Optimization methods</a></li>
-<li class="chapter" data-level="3.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>3.3.2</b> MCMC</a></li>
+<li class="chapter" data-level="4.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>4.3.1</b> Optimization methods</a></li>
+<li class="chapter" data-level="4.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>4.3.2</b> MCMC</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>3.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>4</b> Generalized linear models</a>
+<li class="chapter" data-level="5" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>4.1</b> Approximating the marginal likelihood</a></li>
-<li class="chapter" data-level="4.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>4.2</b> MCMC model search</a></li>
-<li class="chapter" data-level="4.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>4.3</b> Assessing MCMC convergence</a></li>
+<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.1</b> Approximating the marginal likelihood</a></li>
+<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.2</b> MCMC model search</a></li>
+<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.3</b> Assessing MCMC convergence</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>5</b> Generalized additive models</a></li>
-<li class="chapter" data-level="6" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>6</b> Empirical Bayes for transfer learning</a></li>
-<li class="chapter" data-level="7" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>7</b> Survival data</a></li>
-<li class="chapter" data-level="8" data-path="ggm.html"><a href="ggm.html"><i class="fa fa-check"></i><b>8</b> Gaussian graphical models</a></li>
-<li class="chapter" data-level="9" data-path="mixtures.html"><a href="mixtures.html"><i class="fa fa-check"></i><b>9</b> Gaussian mixture models</a></li>
+<li class="chapter" data-level="6" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>6</b> Generalized additive models</a></li>
+<li class="chapter" data-level="7" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>7</b> Empirical Bayes for transfer learning</a></li>
+<li class="chapter" data-level="8" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>8</b> Survival data</a></li>
+<li class="chapter" data-level="9" data-path="ggm.html"><a href="ggm.html"><i class="fa fa-check"></i><b>9</b> Gaussian graphical models</a></li>
+<li class="chapter" data-level="10" data-path="mixtures.html"><a href="mixtures.html"><i class="fa fa-check"></i><b>10</b> Gaussian mixture models</a></li>
 </ul>
 
       </nav>
@@ -242,23 +245,23 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="background-l0" class="section level1 hasAnchor" number="3">
-<h1><span class="header-section-number">3</span> L0 criteria<a href="background-l0.html#background-l0" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="background-l0" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">4</span> L0 criteria<a href="background-l0.html#background-l0" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p><span class="math inline">\(L_0\)</span> criteria are a class of methods that select a model by assessing its goodness-of-fit (measured by a log-likelihood or loss function) relative to the model’s dimension (e.g. number of non-zero parameters, in standard regression).
 The main practical reason for considering <span class="math inline">\(L_0\)</span> penalties is that they do a better job at identifying the set of truly non-zero parameters than pretty much any other known method (<span class="citation">Wainwright (<a href="#ref-wainwright:2009information">2009</a>)</span>, <span class="citation">Raskutti, Wainwright, and Yu (<a href="#ref-raskutti:2011">2011</a>)</span>).
 In fact, standard tools for hypothesis testing like P-values and E-values can be seen as a form of <span class="math inline">\(L_0\)</span> criterion, and Bayes factors are strongly related to <span class="math inline">\(L_0\)</span> criteria as well.
 Over-simplifying things a bit, we would argue that (suitably-defined) <span class="math inline">\(L_0\)</span> criteria are preferable to continuous shrinkage-based methods (LASSO and extensions, Bayesian continuous shrinkage priors) for hypothesis testing and for model selection problems where one seeks guarantees to recover the right model, and in particular to control false positives.
-The downside is that <span class="math inline">\(L_0\)</span> are computationally harder in a worst-case scenario but, as discussed in Section <a href="background-l0.html#l0-modelsearch">3.3</a>, the latest theory and algorithms show that one can usually solve the problem fairly quickly (i.e. one is not in that worst-case scenario).
+The downside is that <span class="math inline">\(L_0\)</span> are computationally harder in a worst-case scenario but, as discussed in Section <a href="background-l0.html#l0-modelsearch">4.3</a>, the latest theory and algorithms show that one can usually solve the problem fairly quickly (i.e. one is not in that worst-case scenario).
 To bring a parallelism with another challenging optimization problem, consider deep learning.
 Its objective function is multi-modal, there are billions of parameters,
 technical issues like vanishing gradients, and their effective training requires large amounts of data and computational power.
 Now that sufficient data and compute are available,
 stochastic gradient descent (<span class="citation">Robbins and Monro (<a href="#ref-robbins:1951">1951</a>)</span>, <span class="citation">Kiefer and Wolfowitz (<a href="#ref-kiefer:1952">1952</a>)</span>, <span class="citation">Rosenblatt (<a href="#ref-rosenblatt:1958">1958</a>)</span>) and backpropagation (<span class="citation">Linnainmaa (<a href="#ref-linnainmaa:1970">1970</a>)</span>, <span class="citation">Rumelhart, Hinton, and Williams (<a href="#ref-rumelhart:1986">1986</a>)</span>) are routinely applied to solve the problem, regardless of whether one can mathematically prove that the solution is a global optimum.
 Similarly, we nowadays have algorithms and compute power to solve the <span class="math inline">\(L_0\)</span> problem for most practical instances (even if not in the worst-case), often with more theoretical guarantees on global optimality than one has for deep learning.</p>
-<p>Before diving into the definition (Section <a href="background-l0.html#l0-basics">3.1</a>), theory overview (Section <a href="background-l0.html#l0-theory">3.2</a>) and computational considerations of <span class="math inline">\(L_0\)</span> criteria (Section <a href="background-l0.html#l0-modelsearch">3.3</a>), we
+<p>Before diving into the definition (Section <a href="background-l0.html#l0-basics">4.1</a>), theory overview (Section <a href="background-l0.html#l0-theory">4.2</a>) and computational considerations of <span class="math inline">\(L_0\)</span> criteria (Section <a href="background-l0.html#l0-modelsearch">4.3</a>), we
 show a very simple example that motivates their usefulness.</p>
 <div class="example">
-<p><span id="exm:lasso-failure" class="example"><strong>Example 3.1  </strong></span>This is a setting with <span class="math inline">\(p=3\)</span> covariates and a large sample size <span class="math inline">\(n=1000\)</span>, yet the LASSO fails to recover the truth.
+<p><span id="exm:lasso-failure" class="example"><strong>Example 4.1  </strong></span>This is a setting with <span class="math inline">\(p=3\)</span> covariates and a large sample size <span class="math inline">\(n=1000\)</span>, yet the LASSO fails to recover the truth.
 Suppose that data are truly generated by the following mechanism.
 <span class="math display">\[\begin{align*}
 x_{i1} &amp; \sim N(0,1) \\
@@ -270,7 +273,7 @@ with independence across <span class="math inline">\(i=1,\ldots,n\)</span>.</p>
 <p>That is <span class="math inline">\(y_i\)</span> truly depends on <span class="math inline">\(x_{i1}\)</span> and <span class="math inline">\(x_{i2}\)</span> but not on <span class="math inline">\(x_{i3}\)</span>.
 However, <span class="math inline">\(x_{i3}\)</span> is a near-copy of the mean of <span class="math inline">\(y_i\)</span>, and hence the marginal correlation between <span class="math inline">\(x_{i3}\)</span> and <span class="math inline">\(y_i\)</span> is high.
 As one increases the LASSO penalization parameter, the path of solutions moves from the model excluding all covariates to first including <span class="math inline">\(x_{i3}\)</span> (the variable most correlated with <span class="math inline">\(y_i\)</span>), and subsequently to adding <span class="math inline">\(x_{i1}\)</span> and <span class="math inline">\(x_{i2}\)</span>, without ever dropping <span class="math inline">\(x_{i3}\)</span>. That is, the true model is not recovered by any value of the penalization parameter.
-In constrast, the Bayesian information criterion (BIC, defined in Section <a href="background-l0.html#l0-basics">3.1</a>) correctly identifies the true model.</p>
+In constrast, the Bayesian information criterion (BIC, defined in Section <a href="background-l0.html#l0-basics">4.1</a>) correctly identifies the true model.</p>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="background-l0.html#cb71-1" tabindex="-1"></a><span class="fu">library</span>(modelSelection)</span>
 <span id="cb71-2"><a href="background-l0.html#cb71-2" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span>
 <span id="cb71-3"><a href="background-l0.html#cb71-3" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -358,37 +361,37 @@ The table below shows the proportion of times that each covariate was selected a
 </tbody>
 </table>
 <p>These results show that LASSO detected the truly relevant covariates 1-2 in over 99% of the simulations, both for <span class="math inline">\(n=200\)</span> and <span class="math inline">\(n=1000\)</span>.
-The issue is that it also selected covariate 3, which is a false positive, and this issue got worse for <span class="math inline">\(n=1000\)</span> where it was selected 61.5% of the times. This is not a coincidence, there is theory for LASSO explaining that it can be expected to select a super-set of the truly active variables (the so-called screening property), but that this may contain false positives when the covariates are correlated in challenging ways (see Section <a href="background-l0.html#l0-theory">3.2</a>).
+The issue is that it also selected covariate 3, which is a false positive, and this issue got worse for <span class="math inline">\(n=1000\)</span> where it was selected 61.5% of the times. This is not a coincidence, there is theory for LASSO explaining that it can be expected to select a super-set of the truly active variables (the so-called screening property), but that this may contain false positives when the covariates are correlated in challenging ways (see Section <a href="background-l0.html#l0-theory">4.2</a>).
 In contrast, L0 criteria like the BIC have better theoretical properties in such settings.</p>
 <p><strong>Remark:</strong> both methods use BIC to select the best model, it’s just that LASSO-BIC only evaluates the BIC for models visited by the LASSO path, and the latter may not visit the data-generating model.</p>
 </div>
-<div id="l0-basics" class="section level2 hasAnchor" number="3.1">
-<h2><span class="header-section-number">3.1</span> Basics<a href="background-l0.html#l0-basics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="l0-basics" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Basics<a href="background-l0.html#l0-basics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We recall the notation introduced in Section <a href="background-bms.html#background-bms">2</a>.
 We denote individual models by <span class="math inline">\(\boldsymbol{\gamma} \in \Gamma\)</span>, and by <span class="math inline">\(\Gamma\)</span> the set of models under consideration (e.g. the <span class="math inline">\(2^p\)</span> regression models associated to inclusion/exclusion of <span class="math inline">\(p\)</span> covariates). For each model we have a parameter vector <span class="math inline">\(\boldsymbol{\theta}_\gamma\)</span>, we denote its dimension by <span class="math inline">\(\mbox{dim}(\boldsymbol{\theta}_\gamma)\)</span> and the maximum value of the log-likelihood function by <span class="math inline">\(L_\gamma\)</span> (i.e. the likelihood evaluated at the MLE <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma\)</span>, if the latter exists). An <span class="math inline">\(L_0\)</span> criterion selects the model <span class="math inline">\(\hat{\boldsymbol{\gamma}}\)</span> that minimizes
 <span class="math display" id="eq:l0-definition">\[\begin{align}
 - 2 L_\gamma + \lambda \mbox{dim}(\boldsymbol{\theta}_\gamma),
-\tag{3.1}
+\tag{4.1}
 \end{align}\]</span>
 for some given <span class="math inline">\(\lambda \geq 0\)</span>. Different choices of <span class="math inline">\(\lambda\)</span> give rise to popular criteria such as Akaike’s information criterion (AIC) or the Bayesian information criterion (BIC), discussed below.
-In fact, the second term in <a href="background-l0.html#eq:l0-definition">(3.1)</a> can be replaced by any function that only depends on <span class="math inline">\(\mbox{dim}(\boldsymbol{\theta}_\gamma)\)</span>, for example this is the case for the Extended Bayesian information criterion (EBIC), also discussed below.</p>
+In fact, the second term in <a href="background-l0.html#eq:l0-definition">(4.1)</a> can be replaced by any function that only depends on <span class="math inline">\(\mbox{dim}(\boldsymbol{\theta}_\gamma)\)</span>, for example this is the case for the Extended Bayesian information criterion (EBIC), also discussed below.</p>
 <p>For example, in Gaussian linear regression we have that <span class="math inline">\(\boldsymbol{\theta}_\gamma= (\boldsymbol{\beta}_\gamma, \sigma^2)\)</span>, where <span class="math inline">\(\boldsymbol{\beta}_\gamma\)</span> are regression parameters for the covariates selected by <span class="math inline">\(\boldsymbol{\gamma}\)</span> and <span class="math inline">\(\sigma^2\)</span> is the error variance.
 <span class="math inline">\(L_\gamma\)</span> is a monotone decreasing function of the sum of squared residuals associated to the ordinary least-squares estimator <span class="math inline">\(\hat{\boldsymbol{\beta}}_\gamma\)</span>.
-In this particular case, one can interpret <a href="background-l0.html#eq:l0-definition">(3.1)</a> as the Lagrangian associated to the so-called <em>best subset problem</em>, defined by the solution with lowest least-squares error with at most <span class="math inline">\(k\)</span> non-zero coefficients, for some given <span class="math inline">\(k\)</span>. That is,
+In this particular case, one can interpret <a href="background-l0.html#eq:l0-definition">(4.1)</a> as the Lagrangian associated to the so-called <em>best subset problem</em>, defined by the solution with lowest least-squares error with at most <span class="math inline">\(k\)</span> non-zero coefficients, for some given <span class="math inline">\(k\)</span>. That is,
 <span class="math display" id="eq:best-subset">\[\begin{align}
 \min_{\boldsymbol{\beta}: |\boldsymbol{\beta}|_0 \leq k} \sum_{i=1}^n (y_i - \mathbf{x}_i^T \boldsymbol{\beta})^2,
-\tag{3.2}
+\tag{4.2}
 \end{align}\]</span>
 where <span class="math inline">\(\boldsymbol{\beta} \in \mathbb{R}^p\)</span> is the whole set of regression parameters.
-Problems <a href="background-l0.html#eq:l0-definition">(3.1)</a> and <a href="background-l0.html#eq:best-subset">(3.2)</a> are not mathematically equivalent, in the sense that there may not be a one-to-one correspondence between solving the latter for a given <span class="math inline">\(k\)</span> and solving the former for a corresponding <span class="math inline">\(\lambda(k)\)</span>.
+Problems <a href="background-l0.html#eq:l0-definition">(4.1)</a> and <a href="background-l0.html#eq:best-subset">(4.2)</a> are not mathematically equivalent, in the sense that there may not be a one-to-one correspondence between solving the latter for a given <span class="math inline">\(k\)</span> and solving the former for a corresponding <span class="math inline">\(\lambda(k)\)</span>.
 However the two problems are strongly related:</p>
 <ul>
-<li><p>The least-squares criterion can only decrease when adding parameters, hence <span class="math inline">\(|\boldsymbol{\beta}|_0 \leq k\)</span> in <a href="background-l0.html#eq:best-subset">(3.2)</a> can be replaced by <span class="math inline">\(|\boldsymbol{\beta}|_0 = k\)</span>.</p></li>
-<li><p>If <span class="math inline">\(\hat{\boldsymbol{\beta}}_{\hat{\gamma}}\)</span> is the solution to <a href="background-l0.html#eq:l0-definition">(3.1)</a> for some given <span class="math inline">\(\lambda\)</span>, and it has <span class="math inline">\(\mbox{dim}(\hat{\boldsymbol{\beta}}_{\hat{\gamma}})=k\)</span> non-zero parameters, then <span class="math inline">\(\hat{\boldsymbol{\beta}}_{\hat{\gamma}}\)</span> also solves <a href="background-l0.html#eq:best-subset">(3.2)</a> for that <span class="math inline">\(k\)</span>.</p></li>
+<li><p>The least-squares criterion can only decrease when adding parameters, hence <span class="math inline">\(|\boldsymbol{\beta}|_0 \leq k\)</span> in <a href="background-l0.html#eq:best-subset">(4.2)</a> can be replaced by <span class="math inline">\(|\boldsymbol{\beta}|_0 = k\)</span>.</p></li>
+<li><p>If <span class="math inline">\(\hat{\boldsymbol{\beta}}_{\hat{\gamma}}\)</span> is the solution to <a href="background-l0.html#eq:l0-definition">(4.1)</a> for some given <span class="math inline">\(\lambda\)</span>, and it has <span class="math inline">\(\mbox{dim}(\hat{\boldsymbol{\beta}}_{\hat{\gamma}})=k\)</span> non-zero parameters, then <span class="math inline">\(\hat{\boldsymbol{\beta}}_{\hat{\gamma}}\)</span> also solves <a href="background-l0.html#eq:best-subset">(4.2)</a> for that <span class="math inline">\(k\)</span>.</p></li>
 </ul>
-<p>That is, by solving <a href="background-l0.html#eq:l0-definition">(3.1)</a> for a sequence of <span class="math inline">\(\lambda\)</span> values, one also solves <a href="background-l0.html#eq:best-subset">(3.2)</a> for a corresponding sequence of <span class="math inline">\(k\)</span> values.
-The caveat is that even if one solves <a href="background-l0.html#eq:l0-definition">(3.1)</a> for all <span class="math inline">\(\lambda\)</span>’s, there is no guarantee that the obtained solutions will cover all possible <span class="math inline">\(k\)</span>’s.
-For example, the solutions to <a href="background-l0.html#eq:l0-definition">(3.1)</a> for increasing <span class="math inline">\(\lambda\)</span> might jump from a model dimension <span class="math inline">\(k=0\)</span> to <span class="math inline">\(k=2\)</span>, without ever visiting <span class="math inline">\(k=1\)</span>.</p>
+<p>That is, by solving <a href="background-l0.html#eq:l0-definition">(4.1)</a> for a sequence of <span class="math inline">\(\lambda\)</span> values, one also solves <a href="background-l0.html#eq:best-subset">(4.2)</a> for a corresponding sequence of <span class="math inline">\(k\)</span> values.
+The caveat is that even if one solves <a href="background-l0.html#eq:l0-definition">(4.1)</a> for all <span class="math inline">\(\lambda\)</span>’s, there is no guarantee that the obtained solutions will cover all possible <span class="math inline">\(k\)</span>’s.
+For example, the solutions to <a href="background-l0.html#eq:l0-definition">(4.1)</a> for increasing <span class="math inline">\(\lambda\)</span> might jump from a model dimension <span class="math inline">\(k=0\)</span> to <span class="math inline">\(k=2\)</span>, without ever visiting <span class="math inline">\(k=1\)</span>.</p>
 <p>The AIC is obtained by setting <span class="math inline">\(\lambda=2\)</span>.
 It was proposed as an approximation to optimizing the leave-one-out cross-validation criterion, in an asymptotic setting where the number of parameters <span class="math inline">\(p\)</span> is fixed and the sample size <span class="math inline">\(n \rightarrow \infty\)</span> <span class="citation">(<a href="#ref-stone:1977">Stone 1977</a>)</span>.
 The appeal of AIC is that one does not need to perform cross-validation for each model, which may be probihitive in high-dimensional problems where one considers many models.
@@ -412,15 +415,15 @@ For intuition, if <span class="math inline">\(\mbox{dim}(\boldsymbol{\theta}_\ga
 \end{align*}\]</span>
 That is, in high-dimensional problems where <span class="math inline">\(n = o(p^2)\)</span> the leading term in the penalty is driven by <span class="math inline">\(2 \log p\)</span>.</p>
 </div>
-<div id="l0-theory" class="section level2 hasAnchor" number="3.2">
-<h2><span class="header-section-number">3.2</span> Theoretical considerations<a href="background-l0.html#l0-theory" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="l0-theory" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Theoretical considerations<a href="background-l0.html#l0-theory" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>For a suitably chosen penalty <span class="math inline">\(\lambda\)</span>, <span class="math inline">\(L_0\)</span> penalties offer theoretical advantages over pretty much any other known method.
 Given the hands-on nature of this book we do not enter a detailed discussion, but rather offer a brief summary.
 The main advantage is that <span class="math inline">\(L_0\)</span> criteria achieve consistent model selection, i.e. recover the true set of non-zero parameters as <span class="math inline">\(n \to \infty\)</span>, under weaker conditions than alternative methods. For example, for the LASSO <span class="citation">(<a href="#ref-tibshirani:1996">Tibshirani 1996</a>)</span> to be model selection consistent a so-called irrepresentability condition must hold, and this condition limits how correlated the covariates can be.
 In contrast, <span class="math inline">\(L_0\)</span> criteria are model selection under milder conditions on the correlation structure between covariates, see <span class="citation">Chen and Chen (<a href="#ref-chen:2008">2008</a>)</span> for results on the EBIC and <span class="citation">Rognon-Vael, Rossell, and Zwiernik (<a href="#ref-rognon:2025">2025</a>)</span> for a wider discussion.
 Some key take-home messages:</p>
 <ul>
-<li><p>The AIC is not model selection consistent even when comparing two models of fixed dimension. The smaller model is true then the AIC has positive probability of selecting the larger model. See Exercise <a href="background-l0.html#exr:aicbic-consistency">3.1</a>.</p></li>
+<li><p>The AIC is not model selection consistent even when comparing two models of fixed dimension. The smaller model is true then the AIC has positive probability of selecting the larger model. See Exercise <a href="background-l0.html#exr:aicbic-consistency">4.1</a>.</p></li>
 <li><p>Since the AIC is asymptotically equivalent to leave-one-out cross-validation in certain settings, it follows that the latter is also not model selection consistent.</p></li>
 <li><p>The BIC is model selection consistent (under regularity conditions), provided <span class="math inline">\(p= o(n)\)</span> and certain betamin conditions hold (<span class="citation">Rognon-Vael, Rossell, and Zwiernik (<a href="#ref-rognon:2025">2025</a>)</span>, Theorem 4.5).</p></li>
 <li><p>The EBIC is model selection consistent (under regularity conditions) in high dimensions. When <span class="math inline">\(p\)</span> grows at a polynomial rate with <span class="math inline">\(n\)</span> this was proven by <span class="citation">Chen and Chen (<a href="#ref-chen:2008">2008</a>)</span>, whereas Theorem S6.1 in <span class="citation">Rognon-Vael, Rossell, and Zwiernik (<a href="#ref-rognon:2025">2025</a>)</span> allows <span class="math inline">\(p\)</span> to grow exponentially in <span class="math inline">\(n\)</span> (subject to so-called betamin conditions).</p></li>
@@ -438,17 +441,17 @@ O\left(\frac{|\boldsymbol{\gamma}^*|_0 \log p}{n} \right).
 In separate work, <span class="citation">Zhang, Wainwright, and Jordan (<a href="#ref-zhangyuchen:2014">2014</a>)</span> showed that there’s a gap between the minimax prediction loss attainable by polynomial-time algorithms and that attainable by <span class="math inline">\(L_0\)</span> criteria.</p>
 <p>In practice and in our experience however, <span class="math inline">\(L_0\)</span> criteria offer little to no advantages over the LASSO and extensions when it comes to prediction, and the same holds true for Bayesian model selection and averaging, unless one is in a truly high-dimensional example requiring a very strong false positive control (for example, see the colon cancer example in Section <a href="background-bms.html#bma-prediction">2.4</a>).</p>
 </div>
-<div id="l0-modelsearch" class="section level2 hasAnchor" number="3.3">
-<h2><span class="header-section-number">3.3</span> Model search<a href="background-l0.html#l0-modelsearch" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="l0-modelsearch" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Model search<a href="background-l0.html#l0-modelsearch" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The <span class="math inline">\(L_0\)</span> problem is known to be worst-case NP-hard (<span class="citation">Natarajan (<a href="#ref-natarajan:1995">1995</a>)</span>, <span class="citation">Cover and Van Campenhout (<a href="#ref-cover:2007">2007</a>)</span>, <span class="citation">Foster, Karloff, and Thaler (<a href="#ref-foster:2015">2015</a>)</span>). Intuitively, one can always find a problem instance such that it is necessary to perform an exhaustive enumeration to find the best model.
 Because of this, many researchers have believed the problem to be unsolvable in practice.
 There has been however a strem of research showing that in most practical settings one is not in a worst-case situation, and the problem can be quickly solved.
-We discuss strategies from the optimization literature in Section <a href="background-l0.html#l0-optimization">3.3.1</a>, and from the MCMC literature in Section <a href="background-l0.html#l0-mcmc">3.3.2</a>.</p>
+We discuss strategies from the optimization literature in Section <a href="background-l0.html#l0-optimization">4.3.1</a>, and from the MCMC literature in Section <a href="background-l0.html#l0-mcmc">4.3.2</a>.</p>
 <p>As a word of caution, we first give a simple yet realistic example where a coordinate descent algorithm (CDA) may fail to find the model with best BIC.
 This motivates considering costlier alternatives, such as combinatorial searches, cutting-plane or MCMC methods.
 We then give a second example where heuristics work perfectly well, to illustrate that <span class="math inline">\(L_0\)</span> problems can often be solved quickly.</p>
 <div class="example">
-<p><span id="exm:bloodpressure-genderage" class="example"><strong>Example 3.2  </strong></span>Consider a study on systolic blood pressure on an elderly population that records the age and sex of each patient. The goal is to determine which of these two covariates are truly associated to blood pressure.
+<p><span id="exm:bloodpressure-genderage" class="example"><strong>Example 4.2  </strong></span>Consider a study on systolic blood pressure on an elderly population that records the age and sex of each patient. The goal is to determine which of these two covariates are truly associated to blood pressure.
 In such a simple setting we could do a pretty simple analysis, such as fitting a linear regression model with both covariates and obtaining confidence intervals and P-values.
 However, for illustration suppose that we use the BIC to choose the best model.</p>
 <p>We simulate a dataset that reflects practical difficulties that one may encounter. Suppose that truly both age and gender are associated to blood pressure (as occurs in real life) but that age and gender are correlated in a challenging way.
@@ -487,17 +490,17 @@ Unfortunately, this strategy does not in general guarantee finding the global mo
 Further, the strategy is not sensible if <span class="math inline">\(p&gt;n\)</span> and one wants to restrict the search to models with <span class="math inline">\(\leq n\)</span> variables, as is typically the case.
 Instead, for <span class="math inline">\(p&gt;n\)</span> settings it is common to use variable screening methods to identify promising covariates and then one could initialize the model search there. Our example shows that screening variables based on marginal correlations (which would excluce age and sex from further consideration) may lead to bad local modes.</p>
 </div>
-<div id="l0-optimization" class="section level3 hasAnchor" number="3.3.1">
-<h3><span class="header-section-number">3.3.1</span> Optimization methods<a href="background-l0.html#l0-optimization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="l0-optimization" class="section level3 hasAnchor" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Optimization methods<a href="background-l0.html#l0-optimization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>There has been tremendous progress in optimization methods to solve the L0 problem in linear regression. <span class="citation">Bertsimas, King, and Mazumder (<a href="#ref-bertsimas:2016">2016</a>)</span> proposed a mixed integer programming to solve the problem to exact optimality when the number of variables <span class="math inline">\(p\)</span> is in the hundreds, and <span class="citation">Bertsimas and Van Parys (<a href="#ref-bertsimas:2020">2020</a>)</span> a cutting plane method that works for <span class="math inline">\(p\)</span> in the hundreds of thousands. These methods make use of advanced optimization methods and specialized software.
 More recently <span class="citation">Hazimeh, Mazumder, and Nonet (<a href="#ref-hazimeh:2023">2023</a>)</span> developed the R package <code>L0Learn</code>, which implements a heuristic optimization algorithm that combines coordinate descent with local combinatorial search. This algorithm runs extremely quickly for <span class="math inline">\(p\)</span> in the hundreds of thousands, although there is no strict guarantee of global optimality.</p>
 <p>We illustrate how these algorithms perform with an example. Both are implemented in R package <code>modelSelection</code>.</p>
 <ul>
 <li><p><code>bestEBIC_fast</code> uses a coordinate descent algorithm combined with a local combinatorial search. For Gaussian and binary outcomes, it’s a wrapper to function <code>L0Learn.fit</code> in <code>L0Learn</code> package, see its documentation for details.</p></li>
-<li><p><code>bestEBIC</code> uses an MCMC model search, see Section <a href="background-l0.html#l0-mcmc">3.3.2</a> for a full description. It takes more time than <code>bestEBIC_fast</code> but, if we run it for long enough, it’s guaranteed to find the best model eventually.</p></li>
+<li><p><code>bestEBIC</code> uses an MCMC model search, see Section <a href="background-l0.html#l0-mcmc">4.3.2</a> for a full description. It takes more time than <code>bestEBIC_fast</code> but, if we run it for long enough, it’s guaranteed to find the best model eventually.</p></li>
 </ul>
 <div class="example">
-<p><span id="exm:ebic-csdata" class="example"><strong>Example 3.3  </strong></span>We simulate a dataset where <span class="math inline">\(n=100\)</span>, <span class="math inline">\(p=200\)</span>, the covariate values arise from a multivariate Gaussian with zero mean, unit variances and all pairwise correlations equal to 0.5.
+<p><span id="exm:ebic-csdata" class="example"><strong>Example 4.3  </strong></span>We simulate a dataset where <span class="math inline">\(n=100\)</span>, <span class="math inline">\(p=200\)</span>, the covariate values arise from a multivariate Gaussian with zero mean, unit variances and all pairwise correlations equal to 0.5.
 Out of the <span class="math inline">\(p=200\)</span> covariates, only the last 4 truly have an effect, with regression coefficients <span class="math inline">\(\beta_{197}=-2/3\)</span>, <span class="math inline">\(\beta_{198}=1/3\)</span>, <span class="math inline">\(\beta_{199}=2/3\)</span> and <span class="math inline">\(\beta_{200}=1\)</span>.</p>
 <div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="background-l0.html#cb80-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb80-2"><a href="background-l0.html#cb80-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>  </span>
@@ -515,7 +518,7 @@ These observations that the algorithms likely returned the global mode, or at le
 Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.</p>
 <div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="background-l0.html#cb81-1" tabindex="-1"></a><span class="fu">system.time</span>(msfast <span class="ot">&lt;-</span> <span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.255   0.386   0.056</code></pre>
+##   0.250   0.416   0.054</code></pre>
 <div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="background-l0.html#cb83-1" tabindex="-1"></a>msfast</span></code></pre></div>
 <pre><code>## icfit object</code></pre>
 <pre><code>## Model with best EBIC: X197 X199 X200</code></pre>
@@ -523,7 +526,7 @@ Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.<
 <pre><code>## Use coef(object$msfit) and predict(object$msfit) to get BMA estimates and predictions</code></pre>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="background-l0.html#cb88-1" tabindex="-1"></a><span class="fu">system.time</span>(ms <span class="ot">&lt;-</span> <span class="fu">bestEBIC</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   2.136   0.954   1.593</code></pre>
+##   2.064   1.022   1.565</code></pre>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="background-l0.html#cb90-1" tabindex="-1"></a>ms</span></code></pre></div>
 <pre><code>## icfit object</code></pre>
 <pre><code>## Model with best EBIC: X197 X199 X200</code></pre>
@@ -534,27 +537,27 @@ In this case, variable 198 really has an effect, but it’s not included in the 
 To see this issue in a more promounced example, try repeating this exercise but setting the data-generating <code>beta</code> to a smaller value (e.g. divide its entries by 2). Then EBIC will fail to include most truly non-zero coefficients.</p>
 </div>
 </div>
-<div id="l0-mcmc" class="section level3 hasAnchor" number="3.3.2">
-<h3><span class="header-section-number">3.3.2</span> MCMC<a href="background-l0.html#l0-mcmc" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>We now discuss how to use the MCMC methods discussed in Section <a href="background-bms.html#bms-mcmc">2.7.2</a> to find the model that optimizes a given <span class="math inline">\(L_0\)</span> criterion.
-Let <span class="math inline">\(C_\gamma= - 2 L_\gamma + \lambda \mbox{dim}(\boldsymbol{\theta}_\gamma)\)</span> be an arbitrary <span class="math inline">\(L_0\)</span> criterion as defined in <a href="background-l0.html#eq:l0-definition">(3.1)</a>.
+<div id="l0-mcmc" class="section level3 hasAnchor" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> MCMC<a href="background-l0.html#l0-mcmc" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We now discuss how to use the MCMC methods discussed in Section <a href="bms-computation.html#bms-mcmc">3.2</a> to find the model that optimizes a given <span class="math inline">\(L_0\)</span> criterion.
+Let <span class="math inline">\(C_\gamma= - 2 L_\gamma + \lambda \mbox{dim}(\boldsymbol{\theta}_\gamma)\)</span> be an arbitrary <span class="math inline">\(L_0\)</span> criterion as defined in <a href="background-l0.html#eq:l0-definition">(4.1)</a>.
 The main idea is to define a probability distribution on <span class="math inline">\(\gamma\)</span> as follows
 <span class="math display" id="eq:l0-posterior">\[\begin{align}
 \pi(\gamma)= \frac{e^{-C_\gamma/2}}{\sum_{\gamma&#39; \in \Gamma} e^{-C_{\gamma&#39;}/2}}.
-\tag{3.3}
+\tag{4.3}
 \end{align}\]</span>
 Clearly <span class="math inline">\(\pi(\gamma) \in [0,1]\)</span> and <span class="math inline">\(\sum_{\gamma} \pi(\gamma)=1\)</span>, defining a probability distribution.
 It is also to see that if a model <span class="math inline">\(\boldsymbol{\gamma}^*\)</span> minimizes <span class="math inline">\(C_\gamma\)</span> then it also maximizes <span class="math inline">\(\pi(\boldsymbol{\gamma})\)</span>.</p>
 <p>Therefore, one can use MCMC to sample from <span class="math inline">\(\pi(\boldsymbol{\gamma})\)</span>, and by definition one is more likely to sample <span class="math inline">\(\boldsymbol{\gamma}^*\)</span> than any other model (upon MCMC convergence, and assuming that <span class="math inline">\(\boldsymbol{\gamma}^*\)</span> is unique).</p>
-<p>One can replace the numerator in <a href="background-l0.html#eq:l0-posterior">(3.3)</a> by any positive function that’s decreasing in <span class="math inline">\(C_\gamma\)</span> (and adjust the denominator analogously). In particular, the term <span class="math inline">\(C_\gamma/2\)</span> could be replaced by <span class="math inline">\(C_\gamma/c\)</span> for any <span class="math inline">\(c&gt;0\)</span>.
-The motivation for <a href="background-l0.html#eq:l0-posterior">(3.3)</a> is that, when <span class="math inline">\(C_\gamma\)</span> are the BIC or EBIC, then there is an asymptotic connection between <span class="math inline">\(\pi(\boldsymbol{\gamma})\)</span> and posterior probabilities obtained from a Bayesian model selection setting.
-For example, this facilitates transferring theoretical guarantees for MCMC algorithms that were obtained in a Bayesian setting to <span class="math inline">\(L_0\)</span> criteria (Section <a href="background-bms.html#bms-mcmc">2.7.2</a>).</p>
+<p>One can replace the numerator in <a href="background-l0.html#eq:l0-posterior">(4.3)</a> by any positive function that’s decreasing in <span class="math inline">\(C_\gamma\)</span> (and adjust the denominator analogously). In particular, the term <span class="math inline">\(C_\gamma/2\)</span> could be replaced by <span class="math inline">\(C_\gamma/c\)</span> for any <span class="math inline">\(c&gt;0\)</span>.
+The motivation for <a href="background-l0.html#eq:l0-posterior">(4.3)</a> is that, when <span class="math inline">\(C_\gamma\)</span> are the BIC or EBIC, then there is an asymptotic connection between <span class="math inline">\(\pi(\boldsymbol{\gamma})\)</span> and posterior probabilities obtained from a Bayesian model selection setting.
+For example, this facilitates transferring theoretical guarantees for MCMC algorithms that were obtained in a Bayesian setting to <span class="math inline">\(L_0\)</span> criteria (Section <a href="bms-computation.html#bms-mcmc">3.2</a>).</p>
 </div>
 </div>
-<div id="exercises-1" class="section level2 hasAnchor" number="3.4">
-<h2><span class="header-section-number">3.4</span> Exercises<a href="background-l0.html#exercises-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="exercises-1" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Exercises<a href="background-l0.html#exercises-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="exercise">
-<p><span id="exr:aicbic-consistency" class="exercise"><strong>Exercise 3.1  </strong></span>Consistency of AIC and BIC.
+<p><span id="exr:aicbic-consistency" class="exercise"><strong>Exercise 4.1  </strong></span>Consistency of AIC and BIC.
 Suppose that we want to compare two nested models <span class="math inline">\(\boldsymbol{\gamma} \subset \boldsymbol{\gamma}&#39;\)</span>, where <span class="math inline">\(\boldsymbol{\gamma}&#39;\)</span> adds a single parameter to <span class="math inline">\(\boldsymbol{\gamma}\)</span>.
 Suppose that data are truly generated by <span class="math inline">\(\boldsymbol{\gamma}\)</span> (the simpler model signifying the null hypothesis),
 and that the likelihood-ratio statistic <span class="math inline">\(2(L_{\gamma&#39;} - L_{\gamma}) \stackrel{D}{\longrightarrow} \chi_1^2\)</span> as <span class="math inline">\(n \to \infty\)</span> (as is the case for regular linear and generalized linear models, for example).
@@ -563,7 +566,7 @@ Discuss how your findings for the AIC compare to a P-value based test that uses 
 </div>
 <div class="solution-panel">
 <div class="solution-panel-header">
-Solution to Exercise <a href="background-l0.html#exr:aicbic-consistency">3.1</a>
+Solution to Exercise <a href="background-l0.html#exr:aicbic-consistency">4.1</a>
 </div>
 <p>The AIC chooses model <span class="math inline">\(\boldsymbol{\gamma}&#39;\)</span> over <span class="math inline">\(\boldsymbol{\gamma}\)</span> whenever
 <span class="math display">\[\begin{align*}
@@ -657,7 +660,7 @@ Zhang, Y., M. J. Wainwright, and M. I. Jordan. 2014. <span>“Lower Bounds on th
           </div>
         </div>
       </div>
-<a href="background-bms.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bms-computation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="glm.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

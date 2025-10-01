@@ -18,7 +18,12 @@ exm:beer-search
 fig:unnamed-chunk-34
 fig:unnamed-chunk-35
 fig:unnamed-chunk-37
+def:irreducible
+thm:mcmc-unique-stationary
+thm:ergodic-theorem
 exr:beerexample
+exr:mh-stationary
+exr:gibbs-as-mh
 exm:lasso-failure
 eq:l0-definition
 eq:best-subset
@@ -50,6 +55,9 @@ bms-computation
 bms-marglhood-approx
 bms-mcmc
 mcmc-basics
+gibbs-sampling
+locally-informed
+hmc
 exercises
 background-l0
 l0-basics
@@ -67,3 +75,6 @@ eBayes
 survival
 ggm
 mixtures
+fig:unnamed-chunk-13
+fig:unnamed-chunk-14
+fig:unnamed-chunk-16

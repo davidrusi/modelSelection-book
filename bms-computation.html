@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Bayesian computation | High-dimensional model choice. A hands-on take</title>
+  <meta name="description" content="High-dimensional model selection with the modelSelection R package" />
+  <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Bayesian computation | High-dimensional model choice. A hands-on take" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="/bookcover_titled.png" />
+  <meta property="og:description" content="High-dimensional model selection with the modelSelection R package" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Bayesian computation | High-dimensional model choice. A hands-on take" />
+  
+  <meta name="twitter:description" content="High-dimensional model selection with the modelSelection R package" />
+  <meta name="twitter:image" content="/bookcover_titled.png" />
+
+<meta name="author" content="David Rossell" />
+
+
+<meta name="date" content="2025-10-01" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="background-bms.html"/>
+<link rel="next" href="background-l0.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="quick-start.html"><a href="quick-start.html"><i class="fa fa-check"></i><b>1</b> Quick start</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="quick-start.html"><a href="quick-start.html#linear-regression"><i class="fa fa-check"></i><b>1.1</b> Linear regression</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="quick-start.html"><a href="quick-start.html#l0-criteria"><i class="fa fa-check"></i><b>1.1.1</b> L0 criteria</a></li>
+<li class="chapter" data-level="1.1.2" data-path="quick-start.html"><a href="quick-start.html#bayesian-model-selection"><i class="fa fa-check"></i><b>1.1.2</b> Bayesian model selection</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="quick-start.html"><a href="quick-start.html#logistic-regression"><i class="fa fa-check"></i><b>1.2</b> Logistic regression</a></li>
+<li class="chapter" data-level="1.3" data-path="quick-start.html"><a href="quick-start.html#non-linear-effects-via-generalized-additive-models-gams"><i class="fa fa-check"></i><b>1.3</b> Non-Linear effects via Generalized Additive Models (GAMs)</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="background-bms.html"><a href="background-bms.html"><i class="fa fa-check"></i><b>2</b> Bayesian model selection and averaging</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="background-bms.html"><a href="background-bms.html#bms-simple-example"><i class="fa fa-check"></i><b>2.1</b> A simplest example</a></li>
+<li class="chapter" data-level="2.2" data-path="background-bms.html"><a href="background-bms.html#bms-framework"><i class="fa fa-check"></i><b>2.2</b> Bayesian model selection</a></li>
+<li class="chapter" data-level="2.3" data-path="background-bms.html"><a href="background-bms.html#bma"><i class="fa fa-check"></i><b>2.3</b> Bayesian model averaging</a></li>
+<li class="chapter" data-level="2.4" data-path="background-bms.html"><a href="background-bms.html#bma-prediction"><i class="fa fa-check"></i><b>2.4</b> Prediction problems</a></li>
+<li class="chapter" data-level="2.5" data-path="background-bms.html"><a href="background-bms.html#bms-modelprior"><i class="fa fa-check"></i><b>2.5</b> Prior on models</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="background-bms.html"><a href="background-bms.html#binomial-prior"><i class="fa fa-check"></i><b>2.5.1</b> Binomial prior</a></li>
+<li class="chapter" data-level="2.5.2" data-path="background-bms.html"><a href="background-bms.html#beta-binomial-prior"><i class="fa fa-check"></i><b>2.5.2</b> Beta-Binomial prior</a></li>
+<li class="chapter" data-level="2.5.3" data-path="background-bms.html"><a href="background-bms.html#complexity-prior"><i class="fa fa-check"></i><b>2.5.3</b> Complexity prior</a></li>
+<li class="chapter" data-level="2.5.4" data-path="background-bms.html"><a href="background-bms.html#a-simple-example"><i class="fa fa-check"></i><b>2.5.4</b> A simple example</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="background-bms.html"><a href="background-bms.html#bms-coefprior"><i class="fa fa-check"></i><b>2.6</b> Prior on coefficients</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#bms-localprior"><i class="fa fa-check"></i><b>2.6.1</b> Local priors</a></li>
+<li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.6.2</b> Non-local priors</a></li>
+<li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.6.3</b> Sensitivity to prior variance</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="bms-computation.html"><a href="bms-computation.html"><i class="fa fa-check"></i><b>3</b> Bayesian computation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="bms-computation.html"><a href="bms-computation.html#bms-marglhood-approx"><i class="fa fa-check"></i><b>3.1</b> Marginal likelihoods and model-specific posteriors</a></li>
+<li class="chapter" data-level="3.2" data-path="bms-computation.html"><a href="bms-computation.html#bms-mcmc"><i class="fa fa-check"></i><b>3.2</b> Model search</a></li>
+<li class="chapter" data-level="3.3" data-path="bms-computation.html"><a href="bms-computation.html#mcmc-basics"><i class="fa fa-check"></i><b>3.3</b> MCMC basics</a></li>
+<li class="chapter" data-level="3.4" data-path="bms-computation.html"><a href="bms-computation.html#gibbs-sampling"><i class="fa fa-check"></i><b>3.4</b> Gibbs sampling</a></li>
+<li class="chapter" data-level="3.5" data-path="bms-computation.html"><a href="bms-computation.html#locally-informed"><i class="fa fa-check"></i><b>3.5</b> Locally-informed proposals</a></li>
+<li class="chapter" data-level="3.6" data-path="bms-computation.html"><a href="bms-computation.html#hmc"><i class="fa fa-check"></i><b>3.6</b> Hamiltonian Monte Carlo</a></li>
+<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>4</b> L0 criteria</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="background-l0.html"><a href="background-l0.html#l0-basics"><i class="fa fa-check"></i><b>4.1</b> Basics</a></li>
+<li class="chapter" data-level="4.2" data-path="background-l0.html"><a href="background-l0.html#l0-theory"><i class="fa fa-check"></i><b>4.2</b> Theoretical considerations</a></li>
+<li class="chapter" data-level="4.3" data-path="background-l0.html"><a href="background-l0.html#l0-modelsearch"><i class="fa fa-check"></i><b>4.3</b> Model search</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>4.3.1</b> Optimization methods</a></li>
+<li class="chapter" data-level="4.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>4.3.2</b> MCMC</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.1</b> Approximating the marginal likelihood</a></li>
+<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.2</b> MCMC model search</a></li>
+<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.3</b> Assessing MCMC convergence</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>6</b> Generalized additive models</a></li>
+<li class="chapter" data-level="7" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>7</b> Empirical Bayes for transfer learning</a></li>
+<li class="chapter" data-level="8" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>8</b> Survival data</a></li>
+<li class="chapter" data-level="9" data-path="ggm.html"><a href="ggm.html"><i class="fa fa-check"></i><b>9</b> Gaussian graphical models</a></li>
+<li class="chapter" data-level="10" data-path="mixtures.html"><a href="mixtures.html"><i class="fa fa-check"></i><b>10</b> Gaussian mixture models</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">High-dimensional model choice. A hands-on take</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="bms-computation" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">3</span> Bayesian computation<a href="bms-computation.html#bms-computation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>To summarize what we saw in Chapter <a href="background-bms.html#background-bms">2</a>,
+after setting suitable priors on the models and parameters, we obtained two posterior distributions of interest: the posterior distribution on the models <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> and the BMA posterior on parameters <span class="math inline">\(p(\boldsymbol{\theta} \mid \mathbf{y})\)</span>, where <span class="math inline">\(\boldsymbol{\theta}= \{ \boldsymbol{\theta}_\gamma \}_{\gamma \in \Gamma}\)</span> is the collection of parameters from all models.
+These are given by
+<span class="math display">\[\begin{align}
+  p(\boldsymbol{\gamma} \mid \mathbf{y})&amp;= \frac{p(\mathbf{y} \mid \boldsymbol{\gamma})p(\boldsymbol{\gamma})}{p(\mathbf{y})} \propto p(\mathbf{y} \mid \boldsymbol{\gamma}) p(\boldsymbol{\gamma})
+  \nonumber \\
+  p(\boldsymbol{\theta} \mid \mathbf{y})&amp;= \sum_{\gamma} p(\boldsymbol{\theta} \mid \boldsymbol{\gamma},\mathbf{y}) p(\boldsymbol{\gamma} \mid \mathbf{y}).
+\nonumber
+\end{align}\]</span></p>
+<p>Therefore, one needs to compute
+<span class="math display">\[\begin{align}
+&amp; p(\mathbf{y} \mid \boldsymbol{\gamma})= \int p(\mathbf{y} \mid \boldsymbol{\theta}_\gamma, \boldsymbol{\gamma}) p(\boldsymbol{\theta}_\gamma \mid \boldsymbol{\gamma}) d\boldsymbol{\theta}_\gamma
+\nonumber \\
+&amp; p(\boldsymbol{\theta}_\gamma \mid \boldsymbol{\gamma}, \mathbf{y})=
+   \frac{p(\mathbf{y} \mid \boldsymbol{\theta}_\gamma, \boldsymbol{\gamma}) p(\boldsymbol{\theta}_\gamma \mid \boldsymbol{\gamma})}{p(\mathbf{y} \mid \boldsymbol{\gamma})}.
+\nonumber
+\end{align}\]</span></p>
+<p>We next overview some basic notions in Bayesian computation, see for example <span class="citation">Gamerman and Lopes (<a href="#ref-gamerman:2006">2006</a>)</span> for a lengthier yet accessible introduction to many of the ideas discussed here, and <span class="citation">Brooks et al. (<a href="#ref-brooks:2011">2011</a>)</span> for a handbook covering a range of applied MCMC topics.</p>
+<p>Outside simple cases such as linear regression or additive non-linear regression with Gaussian errors (Section <a href="gam.html#gam">6</a>), neither <span class="math inline">\(p(\mathbf{y} \mid \boldsymbol{\gamma})\)</span> nor <span class="math inline">\(p(\boldsymbol{\theta}_\gamma \mid \boldsymbol{\gamma},\mathbf{y})\)</span> have closed-form.
+A fairly fast and often quite accurate approximation is to use Normal/Laplace approximations, and these are
+discussed in Section <a href="bms-computation.html#bms-marglhood-approx">3.1</a>.</p>
+<p>The other main challenge is that, even if <span class="math inline">\(p(\mathbf{y} \mid \boldsymbol{\gamma})\)</span> can be quickly computed, one may need to explore a prohibitively large model space.
+Markov Chain Monte Carlo (MCMC) methods, discussed in Section <a href="bms-computation.html#bms-mcmc">3.2</a>), are the standard tool for this task.
+Another possible strategy is to use variational inference methods adapted to the model selection setting, e.g. as done by <span class="citation">Carbonetto and Stephens (<a href="#ref-carbonetto:2012">2012</a>)</span> for regression problems.
+The main caveat of variational methods are that they can significantly under-estimate uncertainty, and this is particularly critical for model selection and hypothesis testing problems. We illustrate this issue with two examples, where we compare MCMC to the variational approach of <span class="citation">Carbonetto and Stephens (<a href="#ref-carbonetto:2012">2012</a>)</span> implemented in package <code>varbvs</code>.
+Example <a href="bms-computation.html#exm:variational-simulated">3.1</a> shows a simulated data where variational inference underestimates model uncertainty, in that posterior inclusion probabilities are closer to 0 or 1 than for MCMC. Other than that, there is a reasonable agreements between the results from both methods.
+Example <a href="bms-computation.html#exm:variational-tgfb">3.2</a> analyzes a colon cancer gene expression dataset from <span class="citation">Calon et al. (<a href="#ref-calon:2012">2012</a>)</span>, and there the variational and MCMC solutions differ significantly. In fact, the findings from the latter align better with the expected biology.
+These examples motivate the use of MCMC for model search, as described in Section <a href="bms-computation.html#bms-mcmc">3.2</a>.</p>
+<div class="example">
+<p><span id="exm:variational-simulated" class="example"><strong>Example 3.1  </strong></span>We simulate a dataset with <span class="math inline">\(n=100\)</span>, <span class="math inline">\(p=200\)</span> standard Gaussian covariates with pairwise correlations equal to 0.5.
+Only the last 4 regression are truly non-zero.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="bms-computation.html#cb1-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb1-2"><a href="bms-computation.html#cb1-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>; p <span class="ot">&lt;-</span> <span class="dv">200</span>  </span>
+<span id="cb1-3"><a href="bms-computation.html#cb1-3" tabindex="-1"></a>beta<span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, p <span class="sc">-</span> <span class="dv">4</span>), <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>) <span class="co">#true parameters</span></span>
+<span id="cb1-4"><a href="bms-computation.html#cb1-4" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">length</span>(beta))</span>
+<span id="cb1-5"><a href="bms-computation.html#cb1-5" tabindex="-1"></a>S[<span class="fu">upper.tri</span>(S)] <span class="ot">&lt;-</span> S[<span class="fu">lower.tri</span>(S)] <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb1-6"><a href="bms-computation.html#cb1-6" tabindex="-1"></a>x <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n=</span>n,<span class="at">sigma=</span>S)</span>
+<span id="cb1-7"><a href="bms-computation.html#cb1-7" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb1-8"><a href="bms-computation.html#cb1-8" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span></code></pre></div>
+<p>We obtain MCMC estimates of BMA posterior means <span class="math inline">\(E(\beta_j \mid \mathbf{y})\)</span> and posterior inclusion probabilities <span class="math inline">\(P(\beta_j \neq 0 \mid \mathbf{y})\)</span> using <code>modelSelection</code>, and analogous variational estimates using <code>varbvs</code>. For illustration, in both cases we set a Binomial model prior with 0.1 prior inclusion probability, and a Gaussian shrinkage prior on parameters with unit variance.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="bms-computation.html#cb2-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb2-2"><a href="bms-computation.html#cb2-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
+<span id="cb2-3"><a href="bms-computation.html#cb2-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbinomprior</span>(<span class="fl">0.1</span>)</span>
+<span id="cb2-4"><a href="bms-computation.html#cb2-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb2-5"><a href="bms-computation.html#cb2-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
+<span id="cb2-6"><a href="bms-computation.html#cb2-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="bms-computation.html#cb3-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
+<span id="cb3-2"><a href="bms-computation.html#cb3-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span>x, <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="bms-computation.html#cb4-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">beta=</span> beta,</span>
+<span id="cb4-2"><a href="bms-computation.html#cb4-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
+<span id="cb4-3"><a href="bms-computation.html#cb4-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
+<span id="cb4-4"><a href="bms-computation.html#cb4-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
+<span id="cb4-5"><a href="bms-computation.html#cb4-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
+<p>Comparing <span class="math inline">\(P(\beta_j \neq 0 \mid \mathbf{y})\)</span> between the two methods shows that they both identify the same set of high posterior inclusion probability variables: 3 have posterior inclusion probability &gt; 0.9, and the associated data-generating <span class="math inline">\(\beta_j \neq 0\)</span> for the 3 of them.
+However, the plot below that the variational inclusion probabilities are much closer to 0 for the remaining variables than their MCMC counterparts.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="bms-computation.html#cb5-1" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(df, pip_mcmc <span class="sc">&gt;</span> <span class="fl">0.9</span>)</span></code></pre></div>
+<pre><code>##            beta postmean_mcmc  pip_mcmc postmean_vb    pip_vb
+## x197 -0.6666667    -0.5785718 0.9899169  -0.5863032 0.9999994
+## x199  0.6666667     0.6058829 0.9940702   0.6037483 1.0000000
+## x200  1.0000000     1.2520182 1.0000000   1.2422319 1.0000000</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="bms-computation.html#cb7-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="bms-computation.html#cb7-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb7-3"><a href="bms-computation.html#cb7-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb7-4"><a href="bms-computation.html#cb7-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
+<span id="cb7-5"><a href="bms-computation.html#cb7-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span></code></pre></div>
+<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>We may also compare the BMA posterior means, in this example the variational and MCMC solutions are similar.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="bms-computation.html#cb8-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="bms-computation.html#cb8-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb8-3"><a href="bms-computation.html#cb8-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb8-4"><a href="bms-computation.html#cb8-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
+<span id="cb8-5"><a href="bms-computation.html#cb8-5" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
+<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div class="example">
+<p><span id="exm:variational-tgfb" class="example"><strong>Example 3.2  </strong></span><span class="citation">Calon et al. (<a href="#ref-calon:2012">2012</a>)</span> compared mice where gene TGFB was silenced to mice where it was not, found a list of 172 genes that were associated to TGFB, and showed that TGFB plays a crucial role in colon cancer progression.
+We take their data as subsequently analyzed in <span class="citation">Rognon-Vael and Rossell (<a href="#ref-rognon:2025empirical">2025</a>)</span>,
+which contains the expression of TGFB plus <span class="math inline">\(p=1,000\)</span> genes (including the 172 genes from the mouse list) for <span class="math inline">\(n=262\)</span> human patients.
+The goal is to regress TGFB on the other genes, which is of interest given the importance of TGFB in colon cancer progression.
+We also wish to assess whether the 172 genes identified from the mouse study are more likely to be associated to TGFB, as would be expected biologically and as shown in <span class="citation">Rognon-Vael and Rossell (<a href="#ref-rognon:2025empirical">2025</a>)</span>.
+Both TGFB and the other genes were standardized to zero mean and unit variance.</p>
+<p>We load the data and use <code>modelSelection</code> for MCMC-based inference and <code>varbvs</code> for variational inference.
+In both we use a Gaussian shrinkage prior on parameters with unit variance.
+In <code>varbvs</code> we use a Binomial model prior with prior inclusion probabilty 0.1, and for convenience in <code>modelSelection</code> we use a Beta-Binomial model prior as it runs faster than the Binomial prior, but our subsequent discussion continues to apply if one uses the Binomial prior as well.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="bms-computation.html#cb9-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;data/tgfb.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)</span>
+<span id="cb9-2"><a href="bms-computation.html#cb9-2" tabindex="-1"></a>shortlist <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">read.table</span>(<span class="st">&quot;data/tgfb_mouse_shortlist.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)[,<span class="dv">1</span>])</span>
+<span id="cb9-3"><a href="bms-computation.html#cb9-3" tabindex="-1"></a>y<span class="ot">=</span> x[,<span class="dv">1</span>]   <span class="co">#TGFB expression (outcome)</span></span>
+<span id="cb9-4"><a href="bms-computation.html#cb9-4" tabindex="-1"></a>x<span class="ot">=</span> x[,<span class="sc">-</span><span class="dv">1</span>]  <span class="co">#covariates</span></span>
+<span id="cb9-5"><a href="bms-computation.html#cb9-5" tabindex="-1"></a>inshort<span class="ot">=</span> (<span class="fu">colnames</span>(x) <span class="sc">%in%</span> shortlist)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="bms-computation.html#cb10-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb10-2"><a href="bms-computation.html#cb10-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
+<span id="cb10-3"><a href="bms-computation.html#cb10-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbbprior</span>()</span>
+<span id="cb10-4"><a href="bms-computation.html#cb10-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb10-5"><a href="bms-computation.html#cb10-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
+<span id="cb10-6"><a href="bms-computation.html#cb10-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="bms-computation.html#cb11-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
+<span id="cb11-2"><a href="bms-computation.html#cb11-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span><span class="fu">as.matrix</span>(x), <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="bms-computation.html#cb12-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">inshort=</span> inshort,</span>
+<span id="cb12-2"><a href="bms-computation.html#cb12-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
+<span id="cb12-3"><a href="bms-computation.html#cb12-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
+<span id="cb12-4"><a href="bms-computation.html#cb12-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
+<span id="cb12-5"><a href="bms-computation.html#cb12-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
+<p>The marginal posterior probabilities estimated from both methods differ drastically: the variational estimates are much closer to 0 or 1 than those from MCMC, significantly underestimating model uncertainty.
+The BMA parameter estimates are also very different.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="bms-computation.html#cb13-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="bms-computation.html#cb13-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb13-3"><a href="bms-computation.html#cb13-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb13-4"><a href="bms-computation.html#cb13-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
+<span id="cb13-5"><a href="bms-computation.html#cb13-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span>
+<span id="cb13-6"><a href="bms-computation.html#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="bms-computation.html#cb13-7" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
+<span id="cb13-8"><a href="bms-computation.html#cb13-8" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb13-9"><a href="bms-computation.html#cb13-9" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb13-10"><a href="bms-computation.html#cb13-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
+<span id="cb13-11"><a href="bms-computation.html#cb13-11" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
+<p><img src="modelSelection-book_files/figure-html/two-plots-1.png" width="50%" /><img src="modelSelection-book_files/figure-html/two-plots-2.png" width="50%" /></p>
+<p>From purely a Bayesian point of view this shows variational inference may provide a poor approximation to the desired posterior. This is different from saying that the exact Bayesian solution provides better inference than the variational one, in terms of detecting the genes that are truly associated with TGFB.
+As an additional check in this direction, we compare the average posterior inclusion probability between genes that were inside/outside the mouse list. For the MCMC estimates there is a big difference, roughly 0.023/0.007 = 3.3, which aligns with what’s expected biologically. For the variational estimates the difference is much smaller.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="bms-computation.html#cb14-1" tabindex="-1"></a><span class="fu">group_by</span>(df, inshort) <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="bms-computation.html#cb14-2" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">mean</span>(pip_mcmc), <span class="fu">mean</span>(pip_vb))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 3
+##   inshort `mean(pip_mcmc)` `mean(pip_vb)`
+##   &lt;lgl&gt;              &lt;dbl&gt;          &lt;dbl&gt;
+## 1 FALSE            0.00732         0.0208
+## 2 TRUE             0.0240          0.0396</code></pre>
+</div>
+<div id="bms-marglhood-approx" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Marginal likelihoods and model-specific posteriors<a href="bms-computation.html#bms-marglhood-approx" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The marginal likelihood in <a href="#eq:bms-marglhood">(<strong>??</strong>)</a> has a closed-form expression in some instances, mainly regression with Gaussian errors (e.g., linear regression, non-linear additive regression) with conjugate parameter priors.
+Recall that the marginal likelihood for model <span class="math inline">\(\boldsymbol{\gamma}\)</span> is
+<span class="math display">\[\begin{align*}
+p(\mathbf{y} \mid \gamma)= \int p(\mathbf{y} \mid \boldsymbol{\theta}_\gamma, \gamma) p(\boldsymbol{\theta}_\gamma \mid \gamma) d\boldsymbol{\theta}_\gamma.
+\end{align*}\]</span></p>
+<p>Outside these special cases, a numerical approximation is required.
+The <code>modelSelection</code> function implements some such approximations, and their use can be specified with the argument <code>method</code>.
+For example, set <code>method=='Laplace'</code> to use Laplace approximations, described next.
+If <code>method</code> is not specified, <code>modelSelection</code> selects a sensible default.</p>
+<p>Laplace approximations are fairly computationally efficient, and also highly accurate as <span class="math inline">\(n\)</span> grows <span class="citation">(<a href="#ref-kass:1990">Kass, Tierney, and Kadane 1990</a>)</span>.
+Consider the integral
+<span class="math display">\[\begin{align}
+\int e^{f(\boldsymbol{\theta}_\gamma)} d\boldsymbol{\theta}_\gamma
+\nonumber
+\end{align}\]</span>
+where <span class="math inline">\(\boldsymbol{\theta}_\gamma \in \mathbb{R}^{d_\gamma}\)</span> and <span class="math inline">\(d_\gamma= \mbox{dim}(\boldsymbol{\theta}_\gamma)\)</span> is the number of parameters.
+Let <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma= \arg\max_{\boldsymbol{\theta}_\gamma} f(\boldsymbol{\theta}_\gamma)\)</span> and <span class="math inline">\(H_\gamma(\boldsymbol{\theta})= - \nabla^2 f(\boldsymbol{\theta}_\gamma)\)</span>.
+The Laplace approximation is
+<span class="math display">\[\begin{align}
+  \int e^{f(\boldsymbol{\theta}_\gamma)} d\boldsymbol{\theta}_\gamma
+\approx \int e^{f(\hat{\boldsymbol{\theta}}_\gamma)} e^{- \frac{1}{2} (\hat{\boldsymbol{\theta}}_\gamma - \boldsymbol{\theta}_\gamma)^T H(\hat{\boldsymbol{\theta}}_\gamma) (\hat{\boldsymbol{\theta}}_\gamma - \boldsymbol{\theta}_\gamma)} d\boldsymbol{\theta}_\gamma
+= \frac{e^{f(\hat{\boldsymbol{\theta}}_\gamma)} (2 \pi)^{d_\gamma/2}}{|H_\gamma(\hat{\boldsymbol{\theta}}_\gamma)|^{\frac{1}{2}}}.
+\nonumber
+\end{align}\]</span></p>
+<p>In our Bayesian model selection context, the Laplace approximation to the marginal likelihood of model <span class="math inline">\(\boldsymbol{\gamma}\)</span> is
+<span class="math display">\[\begin{align}
+\hat{p}(\mathbf{y} \mid \boldsymbol{\gamma})=  \frac{p(\mathbf{y} \mid \hat{\boldsymbol{\theta}}_\gamma, \boldsymbol{\gamma}) p(\hat{\boldsymbol{\theta}}_\gamma) (2 \pi)^{d_\gamma/2}}{|H_\gamma(\hat{\boldsymbol{\theta}}_\gamma)|^{\frac{1}{2}}}.
+\nonumber
+\end{align}\]</span></p>
+<p>Laplace approximations require finding the posterior mode <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma\)</span> (alternatively, the MLE is sometimes used) and the hessian of the log-posterior density at <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma\)</span>. Both these quantities can be found quickly for models that feature a few parameters, but the calculations get cumbersome when:</p>
+<ul>
+<li><p>One considers many models, i.e. one must repeat the optimization exercise many times</p></li>
+<li><p>Some models that feature many parameters have high posterior probability, and hence they’re visited often by an MCMC model search algorithm</p></li>
+<li><p>The sample size <span class="math inline">\(n\)</span> is large, so evaluating gradients (or hessians) to obtain <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma\)</span> gets costly.</p></li>
+</ul>
+<p>An alternative is to use approximate Laplace approximations (ALA) <span class="citation">(<a href="#ref-rossell:2021">Rossell, Abril, and Bhattacharya 2021</a>)</span>, which are available by using <code>method=='ALA'</code>.
+Briefly, ALA approximates <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma\)</span> by taking a single Newton-Raphson step from an initial estimate <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma^{(0)}\)</span>. By default <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma^{(0)}= 0\)</span> is taken, see <span class="citation">Rossell, Abril, and Bhattacharya (<a href="#ref-rossell:2021">2021</a>)</span> for a study of the theoretical properties of this choice. Alternatively, in <code>modelSelection</code> one may provide other
+<span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma^{(0)}\)</span> with the argument <code>initpar</code>.</p>
+<p>Laplace approximations are based on a simple Taylor expansion of <span class="math inline">\(f(\boldsymbol{\theta}_\gamma)\)</span> around <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma\)</span>. This expansion also gives a Gaussian approximation to <span class="math inline">\(p(\boldsymbol{\theta}_\gamma \mid \gamma, \mathbf{y})\)</span>. Specifically,
+<span class="math display">\[\begin{align}
+\hat{p}(\boldsymbol{\theta}_\gamma \mid \boldsymbol{\gamma}, \mathbf{y}) \approx N \left(\boldsymbol{\theta}_\gamma; \hat{\boldsymbol{\theta}}_\gamma; H^{-1}(\hat{\boldsymbol{\theta}}_\gamma) \right),
+\nonumber
+\end{align}\]</span>
+where <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma= \arg\max_{\theta_\gamma} f(\boldsymbol{\theta}_\gamma)\)</span></p>
+</div>
+<div id="bms-mcmc" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Model search<a href="bms-computation.html#bms-mcmc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>MCMC algorithms provide a basic workhorse for Bayesian model selection when one cannot exhaustively enumerate the set of possible models.
+These algorithms have proven surprisingly effective in practice, particularly when posterior model probabilities <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> concentrate on sparse models, and when one can quickly evaluate the marginal likelihood <span class="math inline">\(p(\mathbf{y} \mid \boldsymbol{\gamma})\)</span> (or approximate it, as discussed in Section <a href="bms-computation.html#bms-marglhood-approx">3.1</a>) and prior probability <span class="math inline">\(p(\boldsymbol{\gamma})\)</span> for each model <span class="math inline">\(\boldsymbol{\gamma}\)</span>.
+MCMC is also useful to approximate the Bayesian model averaging (BMA) posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \mathbf{y})\)</span>, and typically this has little extra cost once one has already approximated <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span>.</p>
+<p>The main idea of MCMC is to approximate the posterior distribution on the models, <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span>, by obtaining a sufficiently large number of samples from it.
+If one has <span class="math inline">\(B\)</span> (typically dependent) samples <span class="math inline">\(\boldsymbol{\gamma}_1,\ldots,\boldsymbol{\gamma}_B\)</span> from <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span>, one can easily estimate any quantity of interest. For example, the posterior probability of any given model <span class="math inline">\(\boldsymbol{\gamma}&#39;\)</span> can be estimated by the proportion of samples where <span class="math inline">\(\boldsymbol{\gamma}&#39;\)</span> was observed, i.e.
+<span class="math display">\[\begin{align*}
+\hat{p}(\boldsymbol{\gamma} \mid \mathbf{y})= \frac{1}{B} \sum_{b=1}^B \mbox{I}(\boldsymbol{\gamma}^{(b)}= \boldsymbol{\gamma}).
+\end{align*}\]</span>
+Another typical example in variable selection is when <span class="math inline">\(\boldsymbol{\gamma}=(\boldsymbol{\gamma}_1,\ldots,\boldsymbol{\gamma}_p)\)</span> and <span class="math inline">\(\gamma_j= \mbox{I}(\beta_j \neq 0)\)</span>, then a naive estimator for marginal posterior inclusion probabilities is
+<span class="math display">\[\begin{align*}
+\hat{P}(\gamma_j = 1 \mid \mathbf{y}) = \frac{1}{B} \sum_{b=1}^B \mbox{I}(\gamma_j^{(b)} = 1).
+\end{align*}\]</span></p>
+<p>There are many possible MCMC algorithms that one may use (i.e. with <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> as the unique stationary distribution), and the art is to choose one that returns accurate approximations in as little time as possible.
+A classical strategy in the variable selection setting is to use Gibbs sampling (<span class="citation">Madigan and Raftery (<a href="#ref-madigan:1994">1994</a>)</span>, <span class="citation">Hoeting et al. (<a href="#ref-hoeting:1999">1999</a>)</span>), which consists in adding/excluding one covariate at a time. Such updates are sometimes referred to as birth-death moves.
+<span class="citation">Yang, Wainwright, and Jordan (<a href="#ref-yangyun:2016">2016</a>)</span> showed that, if certain sparsity assumptions hold, then a birth-death-swap algorithm can search the model space at polynomial cost in <span class="math inline">\(p\)</span> (more precisely, they prove polynomial bounds on the algorithm’s spectral gap).
+<span class="citation">Zhou et al. (<a href="#ref-zhou_quan:2022">2022</a>)</span> proposed a locally informed thresholded algorithm (LIT) that’s theoretically appealing in being scalable to high dimensions, also under suitable sparsity conditions that guarantee sufficient posterior concentration.
+See also <span class="citation">Chang and Zhou (<a href="#ref-chang_hyunwoong:2025">2025</a>)</span> for more recent algorithms leading to dimension-free mixing.
+In practice simple Gibbs sampling works remarkably well, in our experience it usually attains a similar numerical accuracy when it’s run for the same clock time as birth-death-swap and LIT.</p>
+<p>Section <a href="bms-computation.html#mcmc-basics">3.3</a> gives a brief introduction to MCMC and its cornerstone algorithm, Metropolis-Hastings (MH).
+We then discuss Gibbs sampling in Section <a href="bms-computation.html#gibbs-sampling">3.4</a>, locally-informed proposals in Section <a href="bms-computation.html#locally-informed">3.5</a> and Hamiltonian Monte Carlo in Section <a href="bms-computation.html#hmc">3.6</a>, all of which are particular cases of the MH algorithm.
+The actual adaptations of these algorithms to our model selection settings of interest are given in Chapters <a href="glm.html#glm">5</a>, <a href="gam.html#gam">6</a> and <a href="ggm.html#ggm">9</a> for generalized linear models, generalize additive models and Gaussian graphical models respectively.</p>
+<p>Before proceeding, we illustrate the main idea with a fun analogy (which motivated this book’s cover) where one is searching for beer.
+This is also a wink to my friend Gareth Roberts, who has uncanny beer-searching abilities (besides his more famously known MCMC-related abilities).</p>
+<div class="example">
+<p><span id="exm:beer-search" class="example"><strong>Example 3.3  </strong></span>Suppose that you are inside of a bar that has an extremely large number of beer taps.
+As a welcome present you’re given a glass of beer, but you’re not told the brand or the name of the beer.
+You like that beer so much that you set out to find out which beer it is.
+To do so, you need to sample beers from different taps, and score them according to how similar they are to your target beer.
+The picture below illustrates the situation.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-13"></span>
+<img src="bookcover.png" alt="Beer search as a high-dimensional model selection problem" width="80%" />
+<p class="caption">
+Figure 3.1: Beer search as a high-dimensional model selection problem
+</p>
+</div>
+<p>In this analogy the beer that you first tasted are the data <span class="math inline">\(\mathbf{y}\)</span>, the taps are possible models from where the data may have originated, and the score that you give to each sampled tap is <span class="math inline">\(s(\boldsymbol{\gamma})= p(\mathbf{y} \mid \boldsymbol{\gamma}) p(\boldsymbol{\gamma})\)</span>, i.e. it’s proportional to the model’s posterior probability.
+Since there are too many possible taps (models), you cannot try them all. Instead, you decide to randomly explore beer taps: you will sample a total of <span class="math inline">\(B\)</span> taps, you may sample a tap more than once, and you want to sample each tap with probability proportional to its score <span class="math inline">\(s(\boldsymbol{\gamma})\)</span>.</p>
+<p>A possible MCMC algorithm for this task is as follows.
+You start your search by tasting an initial tap <span class="math inline">\(\boldsymbol{\gamma}^{(0)}\)</span> (possibly randomly chosen). You set the iteration counter to <span class="math inline">\(b=1\)</span> and then choose the next beer randomly, as follows.</p>
+<ol style="list-style-type: decimal">
+<li><p>Propose a new beer tap <span class="math inline">\(\boldsymbol{\gamma}^*\)</span> uniformly at random among the neighbors of <span class="math inline">\(\boldsymbol{\gamma}^{(b-1)}\)</span>, denoted by <span class="math inline">\(\mathcal{N}(\boldsymbol{\gamma}^{(b-1)})\)</span>.
+For simplicity, we assume that all taps have the same number of neighbors.</p></li>
+<li><p>Set the next tap to <span class="math inline">\(\boldsymbol{\gamma}^{(b)}=\boldsymbol{\gamma}^*\)</span> with probability <span class="math inline">\(s(\boldsymbol{\gamma}^*)/s(\boldsymbol{\gamma}^{(b-1)})\)</span> (if this quantity is <span class="math inline">\(&gt;1\)</span>, then we move to <span class="math inline">\(\boldsymbol{\gamma}^*\)</span> for sure).
+Otherwise, stay at the current tap, i.e. <span class="math inline">\(\boldsymbol{\gamma}^{(b)}= \boldsymbol{\gamma}^{(b-1)}\)</span>.</p></li>
+</ol>
+<p>After these two steps, you set <span class="math inline">\(b=b+1\)</span> and go back to Step 1, until <span class="math inline">\(b=B\)</span>.
+This strategy defines a Markov chain: the probability distribution for <span class="math inline">\(\boldsymbol{\gamma}^{(b)}\)</span> depends only on the previous tap <span class="math inline">\(\boldsymbol{\gamma}^{(b-1)}\)</span>.
+Intuitively, the algorithm moves towards better beers (we move to <span class="math inline">\(\boldsymbol{\gamma}^*\)</span> for sure when its score is better than the current <span class="math inline">\(\boldsymbol{\gamma}^{(b-1)}\)</span>), but it can also occasionally move to worse beers and this is why there’s some hope of not getting trapped in local modes (at least, not forever).</p>
+<p>The magic is that, under mild conditions, this Markov chain converges to its unique stationary distribution, and the latter is <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span>.
+This example is purely meant as an illustration: this simple algorithm is called random walk Metropolis-Hastings (RWMH) and we do not expect this to be particularly efficient, it’s just an easy one to explain and to implement in your computer.
+See Section <a href="bms-computation.html#mcmc-basics">3.3</a> for further details, and Exercise <a href="bms-computation.html#exr:beerexample">3.1</a> to show that this algorithm is an instance of the Metropolis-Hastings algorithm.</p>
+<p>For fun, we show a numerical illustration. Consider a posterior <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> on the 10 x 10 lattice, i.e. where <span class="math inline">\(\boldsymbol{\gamma}=(\gamma_1,\gamma_2) \in \{1,2,\ldots,10\}^2\)</span>.
+First consider a <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> that has a single mode at <span class="math inline">\({\bf m}=(10,10)\)</span> and whose log mass function depends on the Euclidean distance to the mode. Specifically,
+<span class="math display">\[
+p(\boldsymbol{\gamma} \mid \mathbf{y}) \propto
+\exp{- 0.6 ||\boldsymbol{\gamma} - {\bf m}||_2},
+\]</span>
+where <span class="math inline">\(|| \cdot ||_2\)</span> is the Euclidean distance.
+The animation below shows the first 200 MCMC iterations of the RWMH algorithm, initialized at a random <span class="math inline">\(\boldsymbol{\gamma}^{(0)}\)</span>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-14"></span>
+<img src="figs/mh_lattice_unimodal.gif" alt="RWMH on a bimodal distribution on the lattice" width="80%" />
+<p class="caption">
+Figure 3.2: RWMH on a bimodal distribution on the lattice
+</p>
+</div>
+<p>The next table shows <span class="math inline">\(\hat{p}(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> gives by the proportion of iterations spent in each node after 2,000 iterations, for the 10 highest posterior probability <span class="math inline">\(\boldsymbol{\gamma}\)</span>’s. The approximation is not perfect, but it’s reasonably accurate.</p>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+<span class="math inline">\(\gamma_1\)</span>
+</th>
+<th style="text-align:center;">
+<span class="math inline">\(\gamma_2\)</span>
+</th>
+<th style="text-align:center;">
+<span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span>
+</th>
+<th style="text-align:center;">
+<span class="math inline">\(\hat{p}(\boldsymbol{\gamma} \mid \mathbf{y})\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+0.1588
+</td>
+<td style="text-align:center;">
+0.1560
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+0.0872
+</td>
+<td style="text-align:center;">
+0.0755
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+0.0872
+</td>
+<td style="text-align:center;">
+0.0900
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+0.0680
+</td>
+<td style="text-align:center;">
+0.0560
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+8
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+0.0478
+</td>
+<td style="text-align:center;">
+0.0280
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+8
+</td>
+<td style="text-align:center;">
+0.0478
+</td>
+<td style="text-align:center;">
+0.0450
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+8
+</td>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+0.0415
+</td>
+<td style="text-align:center;">
+0.0340
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+8
+</td>
+<td style="text-align:center;">
+0.0415
+</td>
+<td style="text-align:center;">
+0.0250
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+8
+</td>
+<td style="text-align:center;">
+8
+</td>
+<td style="text-align:center;">
+0.0291
+</td>
+<td style="text-align:center;">
+0.0195
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+0.0262
+</td>
+<td style="text-align:center;">
+0.0240
+</td>
+</tr>
+</tbody>
+</table>
+<p>As a second and more challenging example, consider now a posterior with two modes at <span class="math inline">\(\bf{m}_1= (1,1)\)</span> and <span class="math inline">\(\bf{m}_2= (10,10)\)</span>.
+Specifically,
+<span class="math display">\[
+p(\boldsymbol{\gamma} \mid \mathbf{y}) \propto
+\sum_{j=1}^2 0.5 \exp\left\{ - 0.6 ||\boldsymbol{\gamma} - {\bf m}_j||_2 \right\}.
+\]</span></p>
+<p>The animation below shows the first 200 iterations, and the subsequent table <span class="math inline">\(\hat{p}(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> after 2,000 iterations, for the 10 top models.
+Despite the fact that RWMH now has a harder time to transition from one mode to the other, the approximation is still reasonably accurate.
+If the posterior were more concentrated around each mode however, RWMH would not do a good job at exploring the space (like any other algorithm based on local moves).
+Fortunately, in Bayesian model selection the posterior distribution concentrates on a small set of models as <span class="math inline">\(n \to \infty\)</span>, and often (but not always) these models are contiguous in the model space. When this is the case, MCMC can be a very efficient tool.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-16"></span>
+<img src="figs/mh_lattice_bimodal.gif" alt="RWMH on a bimodal distribution on the lattice" width="80%" />
+<p class="caption">
+Figure 3.3: RWMH on a bimodal distribution on the lattice
+</p>
+</div>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+<span class="math inline">\(\gamma_1\)</span>
+</th>
+<th style="text-align:center;">
+<span class="math inline">\(\gamma_2\)</span>
+</th>
+<th style="text-align:center;">
+<span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span>
+</th>
+<th style="text-align:center;">
+<span class="math inline">\(\hat{p}(\boldsymbol{\gamma} \mid \mathbf{y})\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.0794
+</td>
+<td style="text-align:center;">
+0.0850
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+0.0794
+</td>
+<td style="text-align:center;">
+0.0560
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+0.0436
+</td>
+<td style="text-align:center;">
+0.0430
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.0436
+</td>
+<td style="text-align:center;">
+0.0470
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+0.0436
+</td>
+<td style="text-align:center;">
+0.0350
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+0.0436
+</td>
+<td style="text-align:center;">
+0.0345
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+0.0341
+</td>
+<td style="text-align:center;">
+0.0340
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+0.0341
+</td>
+<td style="text-align:center;">
+0.0290
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.0240
+</td>
+<td style="text-align:center;">
+0.0250
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.0240
+</td>
+<td style="text-align:center;">
+0.0315
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="mcmc-basics" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> MCMC basics<a href="bms-computation.html#mcmc-basics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The basic building block for MCMC is the Metropolis-Hastings (MH) algorithm.
+We first present this algorithm, subsequently discuss Gibbs sampling as a particular case, and finally discuss Hamiltonian Monte Carlo as another particular case that has found particular success in applications.
+For fun, you can check an animation showing how different MCMC algorithms perform at <a href="https://chi-feng.github.io/mcmc-demo" class="uri">https://chi-feng.github.io/mcmc-demo</a>.</p>
+<p>The goal is to sample from the posterior distribution <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span>, for some object of interest <span class="math inline">\(\boldsymbol{\eta}\)</span>.
+For example in BMS we may have <span class="math inline">\(\boldsymbol{\eta}=\boldsymbol{\gamma}\)</span> and in BMA <span class="math inline">\(\boldsymbol{\eta}=(\boldsymbol{\theta}, \boldsymbol{\gamma})\)</span>.
+The MH algorithm starts from an initial <span class="math inline">\(\boldsymbol{\eta}=\boldsymbol{\eta}^{(0)}\)</span> (which can in principle be arbitrary), and at iteration <span class="math inline">\(b\)</span> uses a so-called proposal distribution <span class="math inline">\(h(\boldsymbol{\eta} \mid \boldsymbol{\eta}^{(b-1)})\)</span> to generate an updated parameter value <span class="math inline">\(\boldsymbol{\eta}^{(b)}\)</span>.</p>
+<div class="algorithm">
+<p><strong>Metropolis-Hastings algorithm.</strong></p>
+<p>Let <span class="math inline">\(B\)</span> be the number of desired samples from <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span>.</p>
+<ol style="list-style-type: decimal">
+<li><p>Initialize <span class="math inline">\(\boldsymbol{\eta}^{(0)}\)</span>, set <span class="math inline">\(b=1\)</span>.</p></li>
+<li><p>Propose <span class="math inline">\(\boldsymbol{\eta}^* \sim h(\boldsymbol{\eta} \mid \boldsymbol{\eta}^{(b-1)})\)</span>. With probability <span class="math inline">\(\min \{1, u\}\)</span> set <span class="math inline">\(\boldsymbol{\eta}^{(b)}=\boldsymbol{\eta}^*\)</span>, else set <span class="math inline">\(\boldsymbol{\eta}^{(b)}=\boldsymbol{\eta}^{(b-1)}\)</span>, where
+<span class="math display">\[\begin{align}
+  u= \frac{p(\boldsymbol{\eta}^* \mid \mathbf{y})}{p(\boldsymbol{\eta}^{(b-1)} \mid \mathbf{y})} \frac{h(\boldsymbol{\eta}^{(b-1)} \mid \boldsymbol{\eta}^*)}{h(\boldsymbol{\eta}^* \mid \boldsymbol{\eta}^{(b-1)})}
+  = \frac{p(\mathbf{y} \mid \boldsymbol{\eta}^*) p(\boldsymbol{\eta}^*)}{p(\mathbf{y} \mid \boldsymbol{\eta}^{(b-1)}) p(\boldsymbol{\eta}^{(b-1)})} \frac{h(\boldsymbol{\eta}^{(b-1)} \mid \boldsymbol{\eta}^*)}{h(\boldsymbol{\eta}^* \mid \boldsymbol{\eta}^{(b-1)})}
+\nonumber
+\end{align}\]</span></p></li>
+<li><p>If <span class="math inline">\(b=B\)</span> stop, else set <span class="math inline">\(b=b+1\)</span> and go back to Step 2.</p></li>
+</ol>
+</div>
+<p>The short story is that under mild conditions, the Markov chain <span class="math inline">\((\boldsymbol{\eta}^{(b)})_{b \geq 0}\)</span> defined by the MH algorithm converges to its unique stationary distribution.
+And, by construction, the stationary distribution is the posterior distribution <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> (this is guaranteed because of reversibility, see below).</p>
+<p>The slightly longer story is as follows.
+Let <span class="math inline">\((\boldsymbol{\eta}^{(b)})_{b \geq 0}\)</span> be a Markov chain on a (measurable) state space with transition kernel <span class="math inline">\(Q\)</span>. Two key properties, irreducibility and recurrence, guarantee the existence of a stationary distribution <span class="math inline">\(\pi\)</span>, meaning that <span class="math inline">\(Q \pi= \pi\)</span> (Theorem <a href="bms-computation.html#thm:mcmc-unique-stationary">3.1</a>).
+If the chain is also aperiodic, then the ergodic theorem (Theorem <a href="bms-computation.html#thm:ergodic-theorem">3.2</a>) gives an analog of the strong law of large numbers for Markov chains, and guarantees that the chain converges to its stationary distribution. We next state these definitions and results.</p>
+<div class="definition">
+<p><span id="def:irreducible" class="definition"><strong>Definition 3.1  </strong></span>A chain is <span class="math inline">\(\psi\)</span>-irreducible iff there is a measure <span class="math inline">\(\psi\)</span> such that every set of positive <span class="math inline">\(\psi\)</span>-measure is reachable from every starting point, in some number of steps with positive probability.</p>
+<p>A <span class="math inline">\(\psi\)</span>-irreducible chain is positive Harris recurrent iff
+starting from any <span class="math inline">\(\boldsymbol{\eta}\)</span>, the chain will visit every set of positive <span class="math inline">\(\psi\)</span>-measure infinitely often, with probability 1.</p>
+</div>
+<div class="theorem">
+<p><span id="thm:mcmc-unique-stationary" class="theorem"><strong>Theorem 3.1  </strong></span><strong>Existence &amp; uniqueness of a stationary distribution.</strong></p>
+<p>Suppose that a Markov chain with kernel <span class="math inline">\(Q\)</span> is <span class="math inline">\(\psi\)</span>-irreducible and positive Harris recurrent.
+Then there exists a unique invariant probability <span class="math inline">\(\pi\)</span> satisfying <span class="math inline">\(\pi Q=\pi\)</span>.</p>
+</div>
+<div class="theorem">
+<p><span id="thm:ergodic-theorem" class="theorem"><strong>Theorem 3.2  </strong></span><strong>Ergodic theorem (Harris / Meyn–Tweedie form).</strong>
+Suppose that a Markov Chain with kernel <span class="math inline">\(Q\)</span> is <span class="math inline">\(\psi\)</span>-irreducible, aperiodic and positive Harris recurrent.
+Then for any <span class="math inline">\(\pi\)</span>-integrable function <span class="math inline">\(f\)</span>,
+<span class="math display">\[
+  \frac{1}{B}\sum_{b=1}^{B} f(\boldsymbol{\eta}^{(b)})\ \xrightarrow{\text{a.s.}}\ \int f\,d\pi \qquad(B \to \infty),
+  \]</span>
+and the law of <span class="math inline">\(\boldsymbol{\eta}^{(b)}\)</span> converges to <span class="math inline">\(\pi\)</span> (often in total variation).</p>
+</div>
+<p>That is, to ensure that the chain converges to the desired <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span>, it suffices that the chain is irreducible, aperiodic and recurrent.
+Irreducibility is usually easy to satisfy, for example it holds when the proposal <span class="math inline">\(h()\)</span> has full support, and also when the proposal makes local moves but the state space is connected, so that after several iterations one can move from any state to any other state (or its neighbourhood, for non-discrete spaces) with positive probability.
+Aperiodicity is also typically easy except in degenerate cases, for example usually MH has non-zero probability of staying at the same state and that’s enough to ensure aperiodicity.
+Proving recurrence can be harder for general state spaces, but for finite discrete spaces irreducibility automatically implies recurrence. For example, in Bayesian model selection <span class="math inline">\(\boldsymbol{\eta}=\boldsymbol{\gamma} \in \Gamma\)</span> is a model and <span class="math inline">\(\Gamma\)</span> is a possibly large, but finite, model space. More generally, recurrence can be proven using so-called drift + minorization techniques, under conditions on the tails of the target and proposal distributions.</p>
+<p>Proving that the stationary distribution is <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> can be done by showing that, if <span class="math inline">\(\boldsymbol{\eta}^{(b)} \sim p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> then the distribution of <span class="math inline">\((\boldsymbol{\eta}^{(b)},\boldsymbol{\eta}^{(b+1)})\)</span> is equal to that of <span class="math inline">\((\boldsymbol{\eta}^{(b+1)},\boldsymbol{\eta}^{(b)})\)</span> (this is called reversibility), which implies that the marginal distribution of <span class="math inline">\(\boldsymbol{\eta}^{(b+1)}\)</span> is equal to that of <span class="math inline">\(\boldsymbol{\eta}^{(b)}\)</span> and hence that <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> is indeed a stationary distribution. See Exercise <a href="bms-computation.html#exr:mh-stationary">3.2</a> for details.</p>
+</div>
+<div id="gibbs-sampling" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Gibbs sampling<a href="bms-computation.html#gibbs-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Gibbs sampling is a simple instance of the MH algorithm, yet it is surprisingly effective in many applications, including sampling from distributions in high-dimensional model spaces.
+Gibbs proceeds by proposing a new <span class="math inline">\(\boldsymbol{\eta}^*\)</span> using full conditional posterior distributions, and accepting the proposal with probability 1 (Exercise <a href="bms-computation.html#exr:gibbs-as-mh">3.3</a>).
+In its most basic form, Gibbs sampling proceeds as follows.
+Let <span class="math inline">\(B\)</span> be the number of desired draws from <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> and
+<span class="math inline">\(\boldsymbol{\eta}_{-j}= \boldsymbol{\eta} \setminus \eta_j\)</span> the vector <span class="math inline">\(\boldsymbol{\eta}\)</span> after removing its <span class="math inline">\(j^{th}\)</span> entry.</p>
+<div class="algorithm">
+<p><strong>Gibbs sampling.</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Initialize <span class="math inline">\(\boldsymbol{\eta}^{(0)}\)</span>, set <span class="math inline">\(b=1\)</span>.</p></li>
+<li><p>Set <span class="math inline">\(\boldsymbol{\eta}^*=\boldsymbol{\eta}^{(b-1)}\)</span>. For <span class="math inline">\(j=1,\ldots,d\)</span>, update <span class="math inline">\(\eta_j^* \sim p(\eta_j \mid \boldsymbol{\eta}_{-j}^*,\mathbf{y})\)</span>.</p></li>
+<li><p>Set <span class="math inline">\(\boldsymbol{\eta}^{(b)}= \boldsymbol{\eta}^*\)</span>. If <span class="math inline">\(b=B\)</span> stop, else set <span class="math inline">\(b=b+1\)</span> and go back to Step 2.</p></li>
+</ol>
+</div>
+<p>Popular variations of basic Gibbs include random scan Gibbs, where in Step 2 one draws the index <span class="math inline">\(j\)</span> at random, and block Gibbs, where one samples a subset of parameters (rather than only one) given the remaining parameters.</p>
+<p>The reason why Gibbs is convenient is that, in many cases, <span class="math inline">\(p(\eta_j \mid \boldsymbol{\eta}_{-j}^*,\mathbf{y})\)</span> is easy to sample from. If this is not the case, one may use MH to sample from <span class="math inline">\(p(\eta_j \mid \boldsymbol{\eta}_{-j}^*,\mathbf{y})\)</span>, this is known as Metropolis-within-Gibbs.
+This can be particularly convenient in model selection settings when marginal likelihoods for models <span class="math inline">\(\boldsymbol{\gamma}\)</span> are not available in closed-form. For example, let <span class="math inline">\(\boldsymbol{\gamma}=(\gamma_1,\ldots,\gamma_p)\)</span> and <span class="math inline">\(\gamma_j= \mbox{I}(\beta_j \neq 0)\)</span>. If one cannot sample directly from <span class="math inline">\(p(\gamma_j \mid \boldsymbol{\gamma}_{-j}, \mathbf{y})\)</span>, one can instead propose <span class="math inline">\((\gamma_j^*, \beta_j^*) \sim h(\gamma_j, \beta_j \mid \boldsymbol{\gamma}_{-j}, \boldsymbol{\beta}_{-j}, \mathbf{y})\)</span> and use MH as usual. One often can define
+<span class="math display">\[\begin{align*}
+&amp;h(\gamma_j \mid \boldsymbol{\gamma}_{-j}, \boldsymbol{\beta}_{-j}, \mathbf{y}) \approx p(\gamma_j \mid \boldsymbol{\gamma}_{-j}, \boldsymbol{\beta}_{-j}, \mathbf{y})
+\\
+&amp;h(\beta_j \mid \boldsymbol{\gamma}, \boldsymbol{\beta}_{-j}, \mathbf{y}) \approx p(\beta_j \mid \boldsymbol{\gamma}, \boldsymbol{\beta}_{-j}, \mathbf{y}),
+\end{align*}\]</span>
+and in this case the MH acceptance probability is close to 1.
+For example <span class="math inline">\(h(\gamma_j \mid \boldsymbol{\gamma}_{-j}, \boldsymbol{\beta}_{-j}, \mathbf{y})\)</span> can be based on Laplace approximations to the marginal likelihood, and <span class="math inline">\(h(\beta_j \mid \boldsymbol{\gamma}, \boldsymbol{\beta}_{-j}, \mathbf{y})\)</span> on a Gaussian approximation to the posterior of <span class="math inline">\(\beta_j\)</span> under model <span class="math inline">\(\boldsymbol{\gamma}\)</span> (and given <span class="math inline">\(\boldsymbol{\beta}_{-j}\)</span>).</p>
+</div>
+<div id="locally-informed" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Locally-informed proposals<a href="bms-computation.html#locally-informed" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When devising an MH proposal distribution it is natural to seek that the proposal captures characteristics of the target posterior <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span>.
+For instance, in Example <a href="bms-computation.html#exm:beer-search">3.3</a> we proposed a new beer tap uniformly among the current neighbors. If most neighbors have low posterior probability, most proposals will be rejected and the chain will get stuck.
+Intuitively, if one were to propose <span class="math inline">\(\boldsymbol{\eta}^* \sim p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> then the MH acceptance probability would be 1 and one would draw independent posterior samples from <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span>.
+Unfortunately one cannot sample from <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> (else, MCMC wouldn’t be needed), and in high dimensions it is very hard to devise global approximations <span class="math inline">\(\hat{p}(\boldsymbol{\eta} \mid \mathbf{y})\)</span> that lead to good MCMC mixing.
+Locally-informed proposals use (local) information about <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> at <span class="math inline">\(\boldsymbol{\eta}^{(b)}\)</span>, where <span class="math inline">\(b\)</span> is the current iteration.
+For example, for continuous targets one may use the gradient or hessian of <span class="math inline">\(\log p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> at <span class="math inline">\(\boldsymbol{\eta}^{(b)}\)</span> to build the proposal. Popular algorithms along these lines include MALA (<span class="citation">Besag (<a href="#ref-besag:1994">1994</a>)</span>, <span class="citation">Roberts and Rosenthal (<a href="#ref-roberts:1998">1998</a>)</span>, <span class="citation">Girolami and Calderhead (<a href="#ref-girolami:2011">2011</a>)</span>) and Hamiltonian Monte Carlo (Section <a href="bms-computation.html#hmc">3.6</a>), both of which use gradients.</p>
+<p>In model selection problems the state is discrete, i.e. <span class="math inline">\(\boldsymbol{\eta}= \boldsymbol{\gamma}\)</span> where <span class="math inline">\(\boldsymbol{\gamma}\)</span> denotes a model. Here one can use local information by considering models <span class="math inline">\(\boldsymbol{\gamma}\)</span> that lie in a neighborhood <span class="math inline">\(\mathcal{N}(\boldsymbol{\gamma}^{(b)})\)</span> of the current <span class="math inline">\(\boldsymbol{\gamma}^{(b)}\)</span>, and set a proposal that is guided by their posterior probability.
+For example, in variable selection these neighborhoods may be defined by adding or dropping a single parameter to <span class="math inline">\(\boldsymbol{\gamma}^{(b)}\)</span> (birth-death move), or by exchanging a currently zero by a currently non-zero parameter (swap move).
+See <span class="citation">Chang and Zhou (<a href="#ref-chang_hyunwoong:2025">2025</a>)</span> for a theoretical analysis of locally-informed algorithms in discrete spaces, establishing conditions in which they lead to dimension-free mixing (spectral gap bounds that don’t depend on the dimension of <span class="math inline">\(\boldsymbol{\gamma}\)</span>).</p>
+<p>An interesting algorithm building on this idea is the locally-informed thresholded (LIT) algorithm of <span class="citation">Zhou et al. (<a href="#ref-zhou_quan:2022">2022</a>)</span>.
+The key idea is to propose <span class="math inline">\(\boldsymbol{\gamma}^* \in \mathcal{N}(\boldsymbol{\gamma}^{(b)})\)</span> with probability
+<span class="math display">\[
+h(\boldsymbol{\gamma}^* \mid \boldsymbol{\gamma}^{(b)})=
+\frac{w(\boldsymbol{\gamma}^*, \boldsymbol{\gamma}^{(b)})}{\sum_{\boldsymbol{\gamma}^* \in \mathcal{N}(\boldsymbol{\gamma}^{(b)})} w(\boldsymbol{\gamma}, \boldsymbol{\gamma}^{(b)})},
+\]</span>
+where
+<span class="math display">\[
+w(\boldsymbol{\gamma}, \boldsymbol{\gamma}^{(b)}) = \min \left\{ \max \left\{ \underline{w} , \frac{ p(\boldsymbol{\gamma} \mid \mathbf{y}) }{ p(\boldsymbol{\gamma}^{(b)} \mid \mathbf{y}) } \right\} , \bar{w} \right\},
+\]</span>
+for suitably-chosen <span class="math inline">\((\underline{w}, \bar{w})\)</span> (and said choice depends on the problem’s dimension <span class="math inline">\(d\)</span>, e.g. <span class="math inline">\(\underline{w}= 1/d^k\)</span> and <span class="math inline">\(\bar{w}= d^k\)</span> with <span class="math inline">\(k=1\)</span> or 2).
+That is, the probability of proposing <span class="math inline">\(\boldsymbol{\gamma}\)</span> depends on its posterior odds relative to <span class="math inline">\(\boldsymbol{\gamma}^{(b)}\)</span>, truncated to be in <span class="math inline">\((\underline{w}, \bar{w})\)</span> (the truncation is needed to avoid the chain getting stuck when transitioning to successively higher probability models).</p>
+<p>Intuitively, one expects locally-informed algorithms like LIT to be effective for unimodal target posteriors, such as the first posterior shown in Example <a href="bms-computation.html#exm:beer-search">3.3</a>.
+In fact, the dimension-free results in <span class="citation">Zhou et al. (<a href="#ref-zhou_quan:2022">2022</a>)</span> require that the posterior distribution is (rather strongly) concentrated.
+Fortunately, in Bayesian model selection the posterior distribution on models typically becomes quite concentrated as <span class="math inline">\(n \to \infty\)</span>, and it is also quite concentrated on sparse models when <span class="math inline">\(n\)</span> is small. Hence, there is hope for locally-informed algorithms to be effective in many applications.
+This being said, as argued in Example <a href="bms-computation.html#exm:beer-search">3.3</a> if the posterior is strongly multimodal then locally-informed algorithms are expected to work poorly in practice.</p>
+</div>
+<div id="hmc" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Hamiltonian Monte Carlo<a href="bms-computation.html#hmc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Hamiltonian Monte Carlo (HMC) is a gradient-based method to sample from continuous distributions, with the appeal that it can propose updates that are far from the current state (i.e. non-local updates).
+See <span class="citation">Neal (<a href="#ref-neal:2011">2011</a>)</span> for a good review.
+Two ways how HMC can be used in model selection are as follows.
+First, once one has approximated the posterior on models <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> (e.g. using another MCMC method), one can sample from <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{\gamma}, \mathbf{y})\)</span> by using HMC to sample the non-zero entries in <span class="math inline">\(\boldsymbol{\theta}\)</span>.
+Second, HMC can sometimes be used to sample directly from the BMA posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \mathbf{y})\)</span>, and subsequently sampling from <span class="math inline">\(p(\boldsymbol{\gamma} \mid \boldsymbol{\theta}, \mathbf{y})\)</span> is trivial because <span class="math inline">\(\boldsymbol{\gamma}\)</span> is a deterministic function of <span class="math inline">\(\boldsymbol{\theta}\)</span>, e.g. <span class="math inline">\(\gamma_j = \mbox{I}(\theta_j \neq 0)\)</span>.
+This second use may seem puzzling, because <span class="math inline">\(p(\boldsymbol{\theta} \mid \mathbf{y})\)</span> is a mixture of continuous and discrete distributions (e.g. the probability that some <span class="math inline">\(\theta_j\)</span>’s are zero is <span class="math inline">\(&gt;0\)</span>).
+<span class="citation">Xu and Duan (<a href="#ref-xu_maoran:2023">2023</a>)</span> proposed a construction that makes the use of HMC possible.
+Briefly, let <span class="math inline">\(\boldsymbol{\theta}\)</span> be the whole set of parameters across all models, e.g. <span class="math inline">\(p\)</span> regression coefficients.
+<span class="citation">Xu and Duan (<a href="#ref-xu_maoran:2023">2023</a>)</span> proposed running HMC on an augmented continuous parameter space <span class="math inline">\(\tilde{\boldsymbol{\theta}}\)</span>, such that the original parameters <span class="math inline">\(\boldsymbol{\theta}\)</span> are obtained by projecting <span class="math inline">\(\tilde{\boldsymbol{\theta}}\)</span> into <span class="math inline">\(L_1\)</span> balls. This projection gives positive posterior probability of having zeroes in <span class="math inline">\(\boldsymbol{\theta}\)</span>.
+Two appealing properties of this approach is that one may use probabilistic programming languages like STAN or Numpyro, and that one doesn’t need to compute marginal likelihoods <span class="math inline">\(p(\mathbf{y} \mid \boldsymbol{\gamma})\)</span>.
+There is no guarantee that the chain will mix well, however.
+In our experience, if marginal likelihoods are cheap to approximate then it is preferable to sample directly from <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> (as discussed in the previous sections), and then from <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{\gamma})\)</span> using whatever sampler is convenient.</p>
+<p>We next review the HMC basics.
+The goal is to sample from <span class="math inline">\(p(\beta \mid \mathbf{y})\)</span>, where <span class="math inline">\(\boldsymbol{\eta} \in \mathbb{R}^d\)</span>.
+The main trick is to introduce artificial momentum variables <span class="math inline">\({\bf v} \in \mathbb{R}^d\)</span> that are independent from <span class="math inline">\(\boldsymbol{\eta}\)</span>, such that
+<span class="math display">\[\begin{align}
+   p(\boldsymbol{\eta}, {\bf v} \mid \mathbf{y})= p(\boldsymbol{\eta} \mid \mathbf{y}) N({\bf v}; {\bf 0}, M)
+\nonumber
+\end{align}\]</span>
+for some matrix <span class="math inline">\(M\)</span> (typically taken to be diagonal).
+One then produces samples from <span class="math inline">\(p(\boldsymbol{\eta}, {\bf v} \mid \mathbf{y})\)</span> and therefore also from <span class="math inline">\(p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> (by discarding the generated <span class="math inline">\({\bf v}\)</span>’s).</p>
+<p>In a nutshell, HMC first updates the momentum variables <span class="math inline">\({\bf v}\)</span> to a noisy version of the gradient <span class="math inline">\(\nabla_\eta \log p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> evaluated at the current value of <span class="math inline">\(\boldsymbol{\eta}\)</span>, and next deterministically updates <span class="math inline">\(\boldsymbol{\eta}\)</span> in the direction of the momentum. The process is repeated <span class="math inline">\(L\)</span> steps, where the momentum is deterministically updated based on the new gradient, and <span class="math inline">\(\boldsymbol{\eta}\)</span> updated based on the new momentum.
+The algorithm is given below.</p>
+<div class="algorithm">
+<p><strong>Hamiltonian Monte Carlo.</strong></p>
+<p>Let <span class="math inline">\(L \geq 1\)</span> and <span class="math inline">\(\epsilon &gt; 0\)</span> be tuning parameters. Initialize <span class="math inline">\(\boldsymbol{\eta}^{(0)}\)</span>, set <span class="math inline">\(b=1\)</span>.</p>
+<ol style="list-style-type: decimal">
+<li><p>Sample <span class="math inline">\({\bf v}^{(b)} \sim N({\bf 0}, M)\)</span></p></li>
+<li><p>Deterministic proposal. Set <span class="math inline">\((\boldsymbol{\eta}^*,{\bf v}^*)= (\boldsymbol{\eta}^{(b-1)}, {\bf v}^{(b)})\)</span>. Repeat <span class="math inline">\(L\)</span> times:</p></li>
+</ol>
+<ul>
+<li><p><span class="math inline">\({\bf v}^*= {\bf v}^* - \frac{\epsilon}{2} \nabla_{\boldsymbol{\eta}} \log p(\boldsymbol{\eta}^* \mid \mathbf{y})\)</span></p></li>
+<li><p><span class="math inline">\(\boldsymbol{\eta}^*= \boldsymbol{\eta}^* + \epsilon M^{-1} {\bf v}^*\)</span></p></li>
+<li><p><span class="math inline">\({\bf v}^*= {\bf v}^* - \frac{\epsilon}{2} \nabla_{\boldsymbol{\eta}} \log p(\boldsymbol{\eta}^* \mid \mathbf{y})\)</span></p></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Set <span class="math inline">\(\boldsymbol{\eta}^{(b)}= \boldsymbol{\eta}^*\)</span> with probability <span class="math inline">\(\min \{1, u\}\)</span>
+<span class="math display">\[\begin{align}
+  u=  \frac{p(\mathbf{y} \mid \boldsymbol{\eta}^*) p(\boldsymbol{\eta}^*)}{p(\mathbf{y} \mid \boldsymbol{\eta}^{(b-1)}) p(\boldsymbol{\eta}^{(b-1)})}
+\nonumber
+\end{align}\]</span></li>
+</ol>
+</div>
+<p>HMC has two tuning parameters, the number of steps <span class="math inline">\(L\)</span> and the step size <span class="math inline">\(\epsilon\)</span>.
+HMC originated from physics, more specifically a set of partial differential equations called Hamiltonian dynamics. These are hard to solve analytically, instead HMC uses a discretization (the Leapfrog method) based on the chosen <span class="math inline">\((L,\epsilon)\)</span>.
+Regarding <span class="math inline">\(\epsilon\)</span>, it can be shown that as <span class="math inline">\(\epsilon \rightarrow 0\)</span> the acceptance probability <span class="math inline">\(u\)</span> approaches 1, hence in practice one sets a small <span class="math inline">\(\epsilon&gt;0\)</span>.
+Note also that <span class="math inline">\(u\)</span> does not require evaluating the ratio of MH proposals densities, which simplifies calculations, this is because it can be shown that such ratio is equal to 1.
+Regarding <span class="math inline">\(L\)</span>, the most popular HMC algorithm is the so-called <em>no U-turn sampler</em> <span class="citation">(<a href="#ref-hoffman:2014">Hoffman and Gelman 2014</a>)</span>, which sets <span class="math inline">\(L\)</span> automatically, and is used by the STAN and numpyro softwares.</p>
+</div>
+<div id="exercises" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> Exercises<a href="bms-computation.html#exercises" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:beerexample" class="exercise"><strong>Exercise 3.1  </strong></span>Consider a MH algorithm that proceeds as the random search algorithm described in <a href="bms-computation.html#exm:beer-search">3.3</a>.
+At the start of iteration <span class="math inline">\(b\)</span> one knows the current model <span class="math inline">\(\boldsymbol{\gamma}^{(b-1)}\)</span>, and proposes <span class="math inline">\(\boldsymbol{\gamma}^*\)</span> randomly from <span class="math inline">\(\mathcal{N}(\boldsymbol{\gamma}^{(b-1)})\)</span>, the set of neighbors of <span class="math inline">\(\boldsymbol{\gamma}^{(b-1)}\)</span>.</p>
+<p>Show that the MH algorithm sets <span class="math inline">\(\boldsymbol{\gamma}^{(b)}=\boldsymbol{\gamma}^*\)</span> with probability
+<span class="math display">\[
+\min \left\{1, \frac{s(\boldsymbol{\gamma}^*)}{s(\boldsymbol{\gamma}^{(b-1)})} \right\},
+\]</span>
+and otherwise sets <span class="math inline">\(\boldsymbol{\gamma}^{(b)}= \boldsymbol{\gamma}^{(b-1)}\)</span>.</p>
+<p>You may assume that the number of neighbors <span class="math inline">\(|\mathcal{N}(\boldsymbol{\gamma})|\)</span> is the same for all <span class="math inline">\(\boldsymbol{\gamma}\)</span>,
+and that for any two models <span class="math inline">\((\boldsymbol{\gamma},\boldsymbol{\gamma}&#39;)\)</span>, <span class="math inline">\(\boldsymbol{\gamma}\)</span> is a neighbor of <span class="math inline">\(\boldsymbol{\gamma}&#39;\)</span> if and only if <span class="math inline">\(\boldsymbol{\gamma}&#39;\)</span> is a neighbor of <span class="math inline">\(\boldsymbol{\gamma}\)</span>.</p>
+</div>
+<div class="solution-panel">
+<div class="solution-panel-header">
+Solution to Exercise <a href="bms-computation.html#exr:beerexample">3.1</a>
+</div>
+<p>First note that the proposal distribution is
+<span class="math display">\[
+h(\boldsymbol{\gamma} \mid \boldsymbol{\gamma}^{(b-1)}) = \frac{1}{|\mathcal{N}(\boldsymbol{\gamma}^{(b-1)})|}.
+\]</span>
+Hence the MH acceptance probability is the minimum between 1 and
+<span class="math display">\[\begin{align*}
+\frac{s(\boldsymbol{\gamma}^*)}{s(\boldsymbol{\gamma}^{(b-1)})}
+\frac{h(\boldsymbol{\gamma}^* \mid \boldsymbol{\gamma}^{(b-1)})}{h(\boldsymbol{\gamma}^{(b-1)} \mid \boldsymbol{\gamma}^*)}=
+\frac{s(\boldsymbol{\gamma}^*)}{s(\boldsymbol{\gamma}^{(b-1)})}
+\frac{|N(\boldsymbol{\gamma}^{(b-1)})|}{|N(\boldsymbol{\gamma}^*)|}
+\end{align*}\]</span>
+which gives the desired result, since <span class="math inline">\(|N(\boldsymbol{\gamma}^*)|= |N(\boldsymbol{\gamma}^{(b-1)})|\)</span> by assumption.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:mh-stationary" class="exercise"><strong>Exercise 3.2  </strong></span>Consider a Metropolis-Hasting with target distribution <span class="math inline">\(\pi(z)\)</span> and proposal <span class="math inline">\(h(z, z&#39;)\)</span>.
+The transition kernel is
+<span class="math display">\[
+Q(z, z&#39;)= h(z, z&#39;) \alpha(z, z&#39;) + r(z) \delta_z(z&#39;),
+\]</span>
+where <span class="math inline">\(\alpha(z,z&#39;)\)</span> is the MH acceptance probability for a proposed <span class="math inline">\(z&#39;\)</span>, <span class="math inline">\(\delta_z(z&#39;)\)</span> is a point-mass at <span class="math inline">\(z\)</span>, and
+<span class="math display">\[
+r(z) = 1- \int h(z,z&#39;) \alpha(z,z&#39;) dz&#39;
+\]</span>
+is the probability of staying at <span class="math inline">\(z\)</span>.</p>
+<p>Show that if <span class="math inline">\(z \sim \pi(z)\)</span>, for any set <span class="math inline">\(A\)</span> the probability that <span class="math inline">\(z&#39; \in A\)</span> is equal to <span class="math inline">\(\pi(A)\)</span>, i.e. that <span class="math inline">\(\pi\)</span> is a stationary distribution for <span class="math inline">\(Q\)</span>.
+You may use that MH satisfies the detailed-balance (or reversibility) condition
+<span class="math display">\[
+\pi(z) h(z, z&#39;) \alpha(z,z&#39;) = \pi(z&#39;) h(z&#39;, z) \alpha(z&#39;, z&#39;).
+\]</span></p>
+</div>
+<div class="solution-panel">
+<div class="solution-panel-header">
+Solution to Exercise <a href="bms-computation.html#exr:mh-stationary">3.2</a>
+</div>
+<p>The goal is to show that
+<span class="math display">\[
+\int \int \pi(z) Q(z,z&#39;) \mbox{I}(z&#39; \in A) dz dz&#39; = \pi(A),
+\]</span>
+where <span class="math inline">\(dz\)</span> and <span class="math inline">\(dz&#39;\)</span> denote an integral with respect to a suitable dominating measure.
+Plugging in the expression for <span class="math inline">\(Q(z,z&#39;)\)</span> and using Fubini to exchange the order of the integrals, the left-hand side integral is equal to
+<span class="math display">\[\begin{align}
+&amp;\int \int \pi(z) \left[ h(z, z&#39;) \alpha(z, z&#39;) + r(z) \delta_z(z&#39;) \right]  \mbox{I}(z&#39; \in A) dz dz&#39;
+\nonumber \\
+=
+&amp;\int \int \pi(z) h(z, z&#39;) \alpha(z, z&#39;) \mbox{I}(z&#39; \in A) dz dz&#39; +
+\int \pi(z) r(z) \int \mbox{I}(z&#39; \in A) \delta_z(z&#39;) dz&#39; dz
+\nonumber \\
+=
+&amp;\int \pi(z&#39;) \mbox{I}(z&#39; \in A) \left[ \int  h(z&#39;, z) \alpha(z&#39;, z)  dz \right] dz&#39; +
+\int \pi(z) r(z) \mbox{I}(z \in A) dz
+\nonumber \\
+=
+&amp;\int \pi(z&#39;) \mbox{I}(z&#39; \in A) [ 1 - r(z&#39;)] dz&#39; +
+\int \pi(z) r(z) \mbox{I}(z \in A) dz
+\nonumber \\
+=
+&amp;\int \pi(z) \mbox{I}(z \in A) [ 1 - r(z)] dz +
+\int \pi(z) r(z) \mbox{I}(z \in A) dz
+= \int \pi(z) \mbox{I}(z \in A) dz= \pi(A),
+\end{align}\]</span>
+as we wished to prove.
+The key step is in the second equality above where we used reversibility. In the third equality we used the definition of <span class="math inline">\(r(z&#39;)\)</span>.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:gibbs-as-mh" class="exercise"><strong>Exercise 3.3  </strong></span>Consider a MH algorithm with proposal distribution <span class="math inline">\(\eta_j^* \sim p(\eta_j \mid \boldsymbol{\eta}_{-j}^{(b)}, \mathbf{y})\)</span>, where <span class="math inline">\(\boldsymbol{\eta}_{-j}^{(b)}\)</span> is the current value of the remaining parameters.
+Show that the MH acceptance probability is 1.</p>
+</div>
+<div class="solution-panel">
+<div class="solution-panel-header">
+Solution to Exercise <a href="bms-computation.html#exr:gibbs-as-mh">3.3</a>
+</div>
+<p>The acceptance probability is the minimum between 1 and
+<span class="math display">\[
+\frac{p(\eta_j^* \mid \boldsymbol{\eta}_{-j}^{(b)}, \mathbf{y})}{p(\eta_j^{(b)} \mid \boldsymbol{\eta}_{-j}^{(b)}, \mathbf{y})}
+\frac{p(\eta_j^{(b)} \mid \boldsymbol{\eta}_{-j}^{(b)}, \mathbf{y})}{p(\eta_j^* \mid \boldsymbol{\eta}_{-j}^{(b)}, \mathbf{y})}= 1.
+\]</span></p>
+</div>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-besag:1994" class="csl-entry">
+Besag, Julian. 1994. <span>“Comments on Representations of Knowledge in Complex Systems by u. Grenander and MI Miller.”</span> <em>Journal of the Royal Statistical Society B</em> 56: 591–92.
+</div>
+<div id="ref-brooks:2011" class="csl-entry">
+Brooks, Steve, Andrew Gelman, Galin Jones, and Xiao-Li Meng. 2011. <em>Handbook of Markov Chain Monte Carlo</em>. CRC press.
+</div>
+<div id="ref-calon:2012" class="csl-entry">
+Calon, A., E. Espinet, S. Palomo-Ponce, D. V. F. Tauriello, M. Iglesias, M. V. Céspedes, M. Sevillano, et al. 2012. <span>“Dependency of Colorectal Cancer on a TGF-Beta-Driven Programme in Stromal Cells for Metastasis Initiation.”</span> <em>Cancer Cell</em> 22 (5): 571–84.
+</div>
+<div id="ref-carbonetto:2012" class="csl-entry">
+Carbonetto, Peter, and Matthew Stephens. 2012. <span>“Scalable Variational Inference for <span>B</span>ayesian Variable Selection in Regression, and Its Accuracy in Genetic Association Studies.”</span> <em>Bayesian Analysis</em> 7 (1): 73–108.
+</div>
+<div id="ref-chang_hyunwoong:2025" class="csl-entry">
+Chang, Hyunwoong, and Quan Zhou. 2025. <span>“Dimension-Free Relaxation Times of Informed <span>MCMC</span> Samplers on Discrete Spaces.”</span> <em>Bernoulli</em> (forthcoming): 1–28.
+</div>
+<div id="ref-gamerman:2006" class="csl-entry">
+Gamerman, Dani, and Hedibert F Lopes. 2006. <em>Markov Chain Monte Carlo: Stochastic Simulation for <span>B</span>ayesian Inference</em>. Chapman; Hall/CRC.
+</div>
+<div id="ref-girolami:2011" class="csl-entry">
+Girolami, Mark, and Ben Calderhead. 2011. <span>“Riemann Manifold Langevin and Hamiltonian Monte Carlo Methods.”</span> <em>Journal of the Royal Statistical Society B</em> 73 (2): 123–214.
+</div>
+<div id="ref-hoeting:1999" class="csl-entry">
+Hoeting, Jennifer A., David Madigan, Adrian E. Raftery, and Chris T. Volinsky. 1999. <span>“Bayesian Model Averaging: A Tutorial.”</span> <em>Statistical Science</em> 14: 382–401.
+</div>
+<div id="ref-hoffman:2014" class="csl-entry">
+Hoffman, Matthew D, and Andrew Gelman. 2014. <span>“The No-<span>U</span>-Turn Sampler: Adaptively Setting Path Lengths in <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo.”</span> <em>Journal of Machine Learning Research</em> 15 (1): 1593–623.
+</div>
+<div id="ref-kass:1990" class="csl-entry">
+Kass, R. E., L. Tierney, and J. B. Kadane. 1990. <span>“The Validity of Posterior Expansions Based on <span>L</span>aplace’s Method.”</span> <em>Bayesian and Likelihood Methods in Statistics and Econometrics</em> 7: 473–88.
+</div>
+<div id="ref-madigan:1994" class="csl-entry">
+Madigan, D., and A. E. Raftery. 1994. <span>“Model Selection and Accounting for Model Uncertainty in Graphical Models Using <span>O</span>ccam’s Window.”</span> <em>Journal of the American Statistical Association</em> 89 (428): 1535–46.
+</div>
+<div id="ref-neal:2011" class="csl-entry">
+Neal, Radford. 2011. <span>“<span>MCMC</span> Using <span>H</span>amiltonian Dynamics.”</span> In <em>Handbook of <span>M</span>arkov Chain <span>M</span>onte <span>C</span>arlo</em>, 113–62. Chapman; Hall/CRC.
+</div>
+<div id="ref-roberts:1998" class="csl-entry">
+Roberts, Gareth O, and Jeffrey S Rosenthal. 1998. <span>“Optimal Scaling of Discrete Approximations to Langevin Diffusions.”</span> <em>Journal of the Royal Statistical Society B</em> 60 (1): 255–68.
+</div>
+<div id="ref-rognon:2025empirical" class="csl-entry">
+Rognon-Vael, Paul, and David Rossell. 2025. <span>“Empirical <span>B</span>ayes for Data Integration.”</span> <em>arXiv</em> 2508.08336: 1–51.
+</div>
+<div id="ref-rossell:2021" class="csl-entry">
+Rossell, D., O. Abril, and A. Bhattacharya. 2021. <span>“Approximate <span>L</span>aplace Approximations for Scalable Model Selection.”</span> <em>Journal of the Royal Statistical Society B</em> 83 (4): 853–79.
+</div>
+<div id="ref-xu_maoran:2023" class="csl-entry">
+Xu, Maoran, and Leo L Duan. 2023. <span>“Bayesian Inference with the L1-Ball Prior: Solving Combinatorial Problems with Exact Zeros.”</span> <em>Journal of the Royal Statistical Society B</em> 85 (5): 1538–60.
+</div>
+<div id="ref-yangyun:2016" class="csl-entry">
+Yang, Y., M. J. Wainwright, and M. I. Jordan. 2016. <span>“On the Computational Complexity of High-Dimensional <span>B</span>ayesian Variable Selection.”</span> <em>The Annals of Statistics</em> 44 (6): 2497–2532.
+</div>
+<div id="ref-zhou_quan:2022" class="csl-entry">
+Zhou, Quan, Jun Yang, Dootika Vats, Gareth O Roberts, and Jeffrey S Rosenthal. 2022. <span>“Dimension-Free Mixing for High-Dimensional <span>B</span>ayesian Variable Selection.”</span> <em>Journal of the Royal Statistical Society B</em> 84 (5): 1751–84.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="background-bms.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="background-l0.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection",
+    "scroll_highlight": true
+  },
+  "toolbar": {
+    "position": "fixed"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

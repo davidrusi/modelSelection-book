@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>9 Gaussian mixture models | High-dimensional model choice. A hands-on take</title>
+  <title>10 Gaussian mixture models | High-dimensional model choice. A hands-on take</title>
   <meta name="description" content="High-dimensional model selection with the modelSelection R package" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="9 Gaussian mixture models | High-dimensional model choice. A hands-on take" />
+  <meta property="og:title" content="10 Gaussian mixture models | High-dimensional model choice. A hands-on take" />
   <meta property="og:type" content="book" />
   <meta property="og:image" content="/bookcover_titled.png" />
   <meta property="og:description" content="High-dimensional model selection with the modelSelection R package" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="9 Gaussian mixture models | High-dimensional model choice. A hands-on take" />
+  <meta name="twitter:title" content="10 Gaussian mixture models | High-dimensional model choice. A hands-on take" />
   
   <meta name="twitter:description" content="High-dimensional model selection with the modelSelection R package" />
   <meta name="twitter:image" content="/bookcover_titled.png" />
@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-09-26" />
+<meta name="date" content="2025-10-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -179,7 +179,7 @@ div.csl-indent {
 <li class="chapter" data-level="2" data-path="background-bms.html"><a href="background-bms.html"><i class="fa fa-check"></i><b>2</b> Bayesian model selection and averaging</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="background-bms.html"><a href="background-bms.html#bms-simple-example"><i class="fa fa-check"></i><b>2.1</b> A simplest example</a></li>
-<li class="chapter" data-level="2.2" data-path="background-bms.html"><a href="background-bms.html#bms-framework"><i class="fa fa-check"></i><b>2.2</b> General framework</a></li>
+<li class="chapter" data-level="2.2" data-path="background-bms.html"><a href="background-bms.html#bms-framework"><i class="fa fa-check"></i><b>2.2</b> Bayesian model selection</a></li>
 <li class="chapter" data-level="2.3" data-path="background-bms.html"><a href="background-bms.html#bma"><i class="fa fa-check"></i><b>2.3</b> Bayesian model averaging</a></li>
 <li class="chapter" data-level="2.4" data-path="background-bms.html"><a href="background-bms.html#bma-prediction"><i class="fa fa-check"></i><b>2.4</b> Prediction problems</a></li>
 <li class="chapter" data-level="2.5" data-path="background-bms.html"><a href="background-bms.html#bms-modelprior"><i class="fa fa-check"></i><b>2.5</b> Prior on models</a>
@@ -195,36 +195,39 @@ div.csl-indent {
 <li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.6.2</b> Non-local priors</a></li>
 <li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.6.3</b> Sensitivity to prior variance</a></li>
 </ul></li>
-<li class="chapter" data-level="2.7" data-path="background-bms.html"><a href="background-bms.html#bms-computation"><i class="fa fa-check"></i><b>2.7</b> Computation</a>
+</ul></li>
+<li class="chapter" data-level="3" data-path="bms-computation.html"><a href="bms-computation.html"><i class="fa fa-check"></i><b>3</b> Bayesian computation</a>
 <ul>
-<li class="chapter" data-level="2.7.1" data-path="background-bms.html"><a href="background-bms.html#bms-marglhood-approx"><i class="fa fa-check"></i><b>2.7.1</b> Marginal likelihoods and model-specific posteriors</a></li>
-<li class="chapter" data-level="2.7.2" data-path="background-bms.html"><a href="background-bms.html#bms-mcmc"><i class="fa fa-check"></i><b>2.7.2</b> Model search</a></li>
-<li class="chapter" data-level="2.7.3" data-path="background-bms.html"><a href="background-bms.html#mcmc-basics"><i class="fa fa-check"></i><b>2.7.3</b> MCMC basics</a></li>
+<li class="chapter" data-level="3.1" data-path="bms-computation.html"><a href="bms-computation.html#bms-marglhood-approx"><i class="fa fa-check"></i><b>3.1</b> Marginal likelihoods and model-specific posteriors</a></li>
+<li class="chapter" data-level="3.2" data-path="bms-computation.html"><a href="bms-computation.html#bms-mcmc"><i class="fa fa-check"></i><b>3.2</b> Model search</a></li>
+<li class="chapter" data-level="3.3" data-path="bms-computation.html"><a href="bms-computation.html#mcmc-basics"><i class="fa fa-check"></i><b>3.3</b> MCMC basics</a></li>
+<li class="chapter" data-level="3.4" data-path="bms-computation.html"><a href="bms-computation.html#gibbs-sampling"><i class="fa fa-check"></i><b>3.4</b> Gibbs sampling</a></li>
+<li class="chapter" data-level="3.5" data-path="bms-computation.html"><a href="bms-computation.html#locally-informed"><i class="fa fa-check"></i><b>3.5</b> Locally-informed proposals</a></li>
+<li class="chapter" data-level="3.6" data-path="bms-computation.html"><a href="bms-computation.html#hmc"><i class="fa fa-check"></i><b>3.6</b> Hamiltonian Monte Carlo</a></li>
+<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="2.8" data-path="background-bms.html"><a href="background-bms.html#exercises"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>3</b> L0 criteria</a>
+<li class="chapter" data-level="4" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>4</b> L0 criteria</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="background-l0.html"><a href="background-l0.html#l0-basics"><i class="fa fa-check"></i><b>3.1</b> Basics</a></li>
-<li class="chapter" data-level="3.2" data-path="background-l0.html"><a href="background-l0.html#l0-theory"><i class="fa fa-check"></i><b>3.2</b> Theoretical considerations</a></li>
-<li class="chapter" data-level="3.3" data-path="background-l0.html"><a href="background-l0.html#l0-modelsearch"><i class="fa fa-check"></i><b>3.3</b> Model search</a>
+<li class="chapter" data-level="4.1" data-path="background-l0.html"><a href="background-l0.html#l0-basics"><i class="fa fa-check"></i><b>4.1</b> Basics</a></li>
+<li class="chapter" data-level="4.2" data-path="background-l0.html"><a href="background-l0.html#l0-theory"><i class="fa fa-check"></i><b>4.2</b> Theoretical considerations</a></li>
+<li class="chapter" data-level="4.3" data-path="background-l0.html"><a href="background-l0.html#l0-modelsearch"><i class="fa fa-check"></i><b>4.3</b> Model search</a>
 <ul>
-<li class="chapter" data-level="3.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>3.3.1</b> Optimization methods</a></li>
-<li class="chapter" data-level="3.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>3.3.2</b> MCMC</a></li>
+<li class="chapter" data-level="4.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>4.3.1</b> Optimization methods</a></li>
+<li class="chapter" data-level="4.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>4.3.2</b> MCMC</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>3.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>4</b> Generalized linear models</a>
+<li class="chapter" data-level="5" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>4.1</b> Approximating the marginal likelihood</a></li>
-<li class="chapter" data-level="4.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>4.2</b> MCMC model search</a></li>
-<li class="chapter" data-level="4.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>4.3</b> Assessing MCMC convergence</a></li>
+<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.1</b> Approximating the marginal likelihood</a></li>
+<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.2</b> MCMC model search</a></li>
+<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.3</b> Assessing MCMC convergence</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>5</b> Generalized additive models</a></li>
-<li class="chapter" data-level="6" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>6</b> Empirical Bayes for transfer learning</a></li>
-<li class="chapter" data-level="7" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>7</b> Survival data</a></li>
-<li class="chapter" data-level="8" data-path="ggm.html"><a href="ggm.html"><i class="fa fa-check"></i><b>8</b> Gaussian graphical models</a></li>
-<li class="chapter" data-level="9" data-path="mixtures.html"><a href="mixtures.html"><i class="fa fa-check"></i><b>9</b> Gaussian mixture models</a></li>
+<li class="chapter" data-level="6" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>6</b> Generalized additive models</a></li>
+<li class="chapter" data-level="7" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>7</b> Empirical Bayes for transfer learning</a></li>
+<li class="chapter" data-level="8" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>8</b> Survival data</a></li>
+<li class="chapter" data-level="9" data-path="ggm.html"><a href="ggm.html"><i class="fa fa-check"></i><b>9</b> Gaussian graphical models</a></li>
+<li class="chapter" data-level="10" data-path="mixtures.html"><a href="mixtures.html"><i class="fa fa-check"></i><b>10</b> Gaussian mixture models</a></li>
 </ul>
 
       </nav>
@@ -242,8 +245,8 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="mixtures" class="section level1 hasAnchor" number="9">
-<h1><span class="header-section-number">9</span> Gaussian mixture models<a href="mixtures.html#mixtures" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="mixtures" class="section level1 hasAnchor" number="10">
+<h1><span class="header-section-number">10</span> Gaussian mixture models<a href="mixtures.html#mixtures" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>To be added.</p>
 
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
@@ -252,6 +255,9 @@ Bertsimas, D., A. King, and A. Mazumder. 2016. <span>“Best Subset Selection vi
 </div>
 <div class="csl-entry">
 Bertsimas, D., and B. Van Parys. 2020. <span>“Sparse High-Dimensional Regression: Exact Scalable Algorithms and Phase Transitions.”</span> <em>Annals of Statistics</em> 48 (1): 300–323.
+</div>
+<div class="csl-entry">
+Besag, Julian. 1994. <span>“Comments on Representations of Knowledge in Complex Systems by u. Grenander and MI Miller.”</span> <em>Journal of the Royal Statistical Society B</em> 56: 591–92.
 </div>
 <div class="csl-entry">
 Bühlmann, P., and S. van de Geer. 2011. <em>Statistics for High-Dimensional Data</em>. New York: Springer.
@@ -284,7 +290,13 @@ Foster, D., H. Karloff, and J. Thaler. 2015. <span>“Variable Selection Is Hard
 Fúquene, J., M. F. J. Steel, and D. Rossell. 2019. <span>“On Choosing Mixture Components via Non-Local Priors.”</span> <em>Journal of the Royal Statistical Society B</em> 81 (5): 809–37.
 </div>
 <div class="csl-entry">
+Gamerman, Dani, and Hedibert F Lopes. 2006. <em>Markov Chain Monte Carlo: Stochastic Simulation for <span>B</span>ayesian Inference</em>. Chapman; Hall/CRC.
+</div>
+<div class="csl-entry">
 Giannone, Domenico, Michele Lenza, and Giorgio E Primiceri. 2021. <span>“Economic Predictions with Big Data: The Illusion of Sparsity.”</span> <em>Econometrica</em> 89 (5): 2409–37.
+</div>
+<div class="csl-entry">
+Girolami, Mark, and Ben Calderhead. 2011. <span>“Riemann Manifold Langevin and Hamiltonian Monte Carlo Methods.”</span> <em>Journal of the Royal Statistical Society B</em> 73 (2): 123–214.
 </div>
 <div class="csl-entry">
 Hazimeh, Hussein, Rahul Mazumder, and Tim Nonet. 2023. <span>“L0learn: A Scalable Package for Sparse Learning Using <span>L</span>0 Regularization.”</span> <em>Journal of Machine Learning Research</em> 24 (205): 1–8.
@@ -321,6 +333,9 @@ Raskutti, G., M. Wainwright, and B. Yu. 2011. <span>“Minimax Rates of Estimati
 </div>
 <div class="csl-entry">
 Robbins, Herbert, and Sutton Monro. 1951. <span>“A Stochastic Approximation Method.”</span> <em>The Annals of Mathematical Statistics</em> 22 (9): 400–407.
+</div>
+<div class="csl-entry">
+Roberts, Gareth O, and Jeffrey S Rosenthal. 1998. <span>“Optimal Scaling of Discrete Approximations to Langevin Diffusions.”</span> <em>Journal of the Royal Statistical Society B</em> 60 (1): 255–68.
 </div>
 <div class="csl-entry">
 Rognon-Vael, Paul, and David Rossell. 2025. <span>“Empirical <span>B</span>ayes for Data Integration.”</span> <em>arXiv</em> 2508.08336: 1–51.
@@ -363,6 +378,9 @@ Tibshirani, R. 1996. <span>“Regression Shrinkage and Selection via the <span>L
 </div>
 <div class="csl-entry">
 Wainwright, Martin J. 2009. <span>“Information-Theoretic Limits on Sparsity Recovery in the High-Dimensional and Noisy Setting.”</span> <em>IEEE Transactions on Information Theory</em> 55 (12): 5728–41.
+</div>
+<div class="csl-entry">
+Xu, Maoran, and Leo L Duan. 2023. <span>“Bayesian Inference with the L1-Ball Prior: Solving Combinatorial Problems with Exact Zeros.”</span> <em>Journal of the Royal Statistical Society B</em> 85 (5): 1538–60.
 </div>
 <div class="csl-entry">
 Yang, Y., M. J. Wainwright, and M. I. Jordan. 2016. <span>“On the Computational Complexity of High-Dimensional <span>B</span>ayesian Variable Selection.”</span> <em>The Annals of Statistics</em> 44 (6): 2497–2532.

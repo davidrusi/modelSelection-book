@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6 Empirical Bayes for transfer learning | High-dimensional model choice. A hands-on take</title>
+  <title>7 Empirical Bayes for transfer learning | High-dimensional model choice. A hands-on take</title>
   <meta name="description" content="High-dimensional model selection with the modelSelection R package" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="6 Empirical Bayes for transfer learning | High-dimensional model choice. A hands-on take" />
+  <meta property="og:title" content="7 Empirical Bayes for transfer learning | High-dimensional model choice. A hands-on take" />
   <meta property="og:type" content="book" />
   <meta property="og:image" content="/bookcover_titled.png" />
   <meta property="og:description" content="High-dimensional model selection with the modelSelection R package" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6 Empirical Bayes for transfer learning | High-dimensional model choice. A hands-on take" />
+  <meta name="twitter:title" content="7 Empirical Bayes for transfer learning | High-dimensional model choice. A hands-on take" />
   
   <meta name="twitter:description" content="High-dimensional model selection with the modelSelection R package" />
   <meta name="twitter:image" content="/bookcover_titled.png" />
@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-09-26" />
+<meta name="date" content="2025-10-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -179,7 +179,7 @@ div.csl-indent {
 <li class="chapter" data-level="2" data-path="background-bms.html"><a href="background-bms.html"><i class="fa fa-check"></i><b>2</b> Bayesian model selection and averaging</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="background-bms.html"><a href="background-bms.html#bms-simple-example"><i class="fa fa-check"></i><b>2.1</b> A simplest example</a></li>
-<li class="chapter" data-level="2.2" data-path="background-bms.html"><a href="background-bms.html#bms-framework"><i class="fa fa-check"></i><b>2.2</b> General framework</a></li>
+<li class="chapter" data-level="2.2" data-path="background-bms.html"><a href="background-bms.html#bms-framework"><i class="fa fa-check"></i><b>2.2</b> Bayesian model selection</a></li>
 <li class="chapter" data-level="2.3" data-path="background-bms.html"><a href="background-bms.html#bma"><i class="fa fa-check"></i><b>2.3</b> Bayesian model averaging</a></li>
 <li class="chapter" data-level="2.4" data-path="background-bms.html"><a href="background-bms.html#bma-prediction"><i class="fa fa-check"></i><b>2.4</b> Prediction problems</a></li>
 <li class="chapter" data-level="2.5" data-path="background-bms.html"><a href="background-bms.html#bms-modelprior"><i class="fa fa-check"></i><b>2.5</b> Prior on models</a>
@@ -195,36 +195,39 @@ div.csl-indent {
 <li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.6.2</b> Non-local priors</a></li>
 <li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.6.3</b> Sensitivity to prior variance</a></li>
 </ul></li>
-<li class="chapter" data-level="2.7" data-path="background-bms.html"><a href="background-bms.html#bms-computation"><i class="fa fa-check"></i><b>2.7</b> Computation</a>
+</ul></li>
+<li class="chapter" data-level="3" data-path="bms-computation.html"><a href="bms-computation.html"><i class="fa fa-check"></i><b>3</b> Bayesian computation</a>
 <ul>
-<li class="chapter" data-level="2.7.1" data-path="background-bms.html"><a href="background-bms.html#bms-marglhood-approx"><i class="fa fa-check"></i><b>2.7.1</b> Marginal likelihoods and model-specific posteriors</a></li>
-<li class="chapter" data-level="2.7.2" data-path="background-bms.html"><a href="background-bms.html#bms-mcmc"><i class="fa fa-check"></i><b>2.7.2</b> Model search</a></li>
-<li class="chapter" data-level="2.7.3" data-path="background-bms.html"><a href="background-bms.html#mcmc-basics"><i class="fa fa-check"></i><b>2.7.3</b> MCMC basics</a></li>
+<li class="chapter" data-level="3.1" data-path="bms-computation.html"><a href="bms-computation.html#bms-marglhood-approx"><i class="fa fa-check"></i><b>3.1</b> Marginal likelihoods and model-specific posteriors</a></li>
+<li class="chapter" data-level="3.2" data-path="bms-computation.html"><a href="bms-computation.html#bms-mcmc"><i class="fa fa-check"></i><b>3.2</b> Model search</a></li>
+<li class="chapter" data-level="3.3" data-path="bms-computation.html"><a href="bms-computation.html#mcmc-basics"><i class="fa fa-check"></i><b>3.3</b> MCMC basics</a></li>
+<li class="chapter" data-level="3.4" data-path="bms-computation.html"><a href="bms-computation.html#gibbs-sampling"><i class="fa fa-check"></i><b>3.4</b> Gibbs sampling</a></li>
+<li class="chapter" data-level="3.5" data-path="bms-computation.html"><a href="bms-computation.html#locally-informed"><i class="fa fa-check"></i><b>3.5</b> Locally-informed proposals</a></li>
+<li class="chapter" data-level="3.6" data-path="bms-computation.html"><a href="bms-computation.html#hmc"><i class="fa fa-check"></i><b>3.6</b> Hamiltonian Monte Carlo</a></li>
+<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="2.8" data-path="background-bms.html"><a href="background-bms.html#exercises"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>3</b> L0 criteria</a>
+<li class="chapter" data-level="4" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>4</b> L0 criteria</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="background-l0.html"><a href="background-l0.html#l0-basics"><i class="fa fa-check"></i><b>3.1</b> Basics</a></li>
-<li class="chapter" data-level="3.2" data-path="background-l0.html"><a href="background-l0.html#l0-theory"><i class="fa fa-check"></i><b>3.2</b> Theoretical considerations</a></li>
-<li class="chapter" data-level="3.3" data-path="background-l0.html"><a href="background-l0.html#l0-modelsearch"><i class="fa fa-check"></i><b>3.3</b> Model search</a>
+<li class="chapter" data-level="4.1" data-path="background-l0.html"><a href="background-l0.html#l0-basics"><i class="fa fa-check"></i><b>4.1</b> Basics</a></li>
+<li class="chapter" data-level="4.2" data-path="background-l0.html"><a href="background-l0.html#l0-theory"><i class="fa fa-check"></i><b>4.2</b> Theoretical considerations</a></li>
+<li class="chapter" data-level="4.3" data-path="background-l0.html"><a href="background-l0.html#l0-modelsearch"><i class="fa fa-check"></i><b>4.3</b> Model search</a>
 <ul>
-<li class="chapter" data-level="3.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>3.3.1</b> Optimization methods</a></li>
-<li class="chapter" data-level="3.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>3.3.2</b> MCMC</a></li>
+<li class="chapter" data-level="4.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>4.3.1</b> Optimization methods</a></li>
+<li class="chapter" data-level="4.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>4.3.2</b> MCMC</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>3.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>4</b> Generalized linear models</a>
+<li class="chapter" data-level="5" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>4.1</b> Approximating the marginal likelihood</a></li>
-<li class="chapter" data-level="4.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>4.2</b> MCMC model search</a></li>
-<li class="chapter" data-level="4.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>4.3</b> Assessing MCMC convergence</a></li>
+<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.1</b> Approximating the marginal likelihood</a></li>
+<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.2</b> MCMC model search</a></li>
+<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.3</b> Assessing MCMC convergence</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>5</b> Generalized additive models</a></li>
-<li class="chapter" data-level="6" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>6</b> Empirical Bayes for transfer learning</a></li>
-<li class="chapter" data-level="7" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>7</b> Survival data</a></li>
-<li class="chapter" data-level="8" data-path="ggm.html"><a href="ggm.html"><i class="fa fa-check"></i><b>8</b> Gaussian graphical models</a></li>
-<li class="chapter" data-level="9" data-path="mixtures.html"><a href="mixtures.html"><i class="fa fa-check"></i><b>9</b> Gaussian mixture models</a></li>
+<li class="chapter" data-level="6" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>6</b> Generalized additive models</a></li>
+<li class="chapter" data-level="7" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>7</b> Empirical Bayes for transfer learning</a></li>
+<li class="chapter" data-level="8" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>8</b> Survival data</a></li>
+<li class="chapter" data-level="9" data-path="ggm.html"><a href="ggm.html"><i class="fa fa-check"></i><b>9</b> Gaussian graphical models</a></li>
+<li class="chapter" data-level="10" data-path="mixtures.html"><a href="mixtures.html"><i class="fa fa-check"></i><b>10</b> Gaussian mixture models</a></li>
 </ul>
 
       </nav>
@@ -242,8 +245,8 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="eBayes" class="section level1 hasAnchor" number="6">
-<h1><span class="header-section-number">6</span> Empirical Bayes for transfer learning<a href="eBayes.html#eBayes" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="eBayes" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">7</span> Empirical Bayes for transfer learning<a href="eBayes.html#eBayes" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>To be added.</p>
 
 </div>
