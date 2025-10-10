@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-10-01" />
+<meta name="date" content="2025-10-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -49,6 +49,7 @@
 
 
 
+<link href="libs/codefolding-lua-1.1/codefolding-lua.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
@@ -191,10 +192,13 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="background-bms.html"><a href="background-bms.html#bms-coefprior"><i class="fa fa-check"></i><b>2.6</b> Prior on coefficients</a>
 <ul>
-<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#bms-localprior"><i class="fa fa-check"></i><b>2.6.1</b> Local priors</a></li>
+<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#bms-paradox"><i class="fa fa-check"></i><b>2.6.1</b> Jeffreys-Lindley-Bartlett paradox</a></li>
 <li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.6.2</b> Non-local priors</a></li>
-<li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.6.3</b> Sensitivity to prior variance</a></li>
+<li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-heavy-tailed"><i class="fa fa-check"></i><b>2.6.3</b> Heavy-tails and finite sample consistency</a></li>
+<li class="chapter" data-level="2.6.4" data-path="background-bms.html"><a href="background-bms.html#bms-obayes"><i class="fa fa-check"></i><b>2.6.4</b> Objective Bayes</a></li>
 </ul></li>
+<li class="chapter" data-level="2.7" data-path="background-bms.html"><a href="background-bms.html#exercises"><i class="fa fa-check"></i><b>2.7</b> Exercises</a></li>
+<li class="chapter" data-level="2.8" data-path="background-bms.html"><a href="background-bms.html#exercise-solutions"><i class="fa fa-check"></i><b>2.8</b> Exercise solutions</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="bms-computation.html"><a href="bms-computation.html"><i class="fa fa-check"></i><b>3</b> Bayesian computation</a>
 <ul>
@@ -204,7 +208,7 @@ div.csl-indent {
 <li class="chapter" data-level="3.4" data-path="bms-computation.html"><a href="bms-computation.html#gibbs-sampling"><i class="fa fa-check"></i><b>3.4</b> Gibbs sampling</a></li>
 <li class="chapter" data-level="3.5" data-path="bms-computation.html"><a href="bms-computation.html#locally-informed"><i class="fa fa-check"></i><b>3.5</b> Locally-informed proposals</a></li>
 <li class="chapter" data-level="3.6" data-path="bms-computation.html"><a href="bms-computation.html#hmc"><i class="fa fa-check"></i><b>3.6</b> Hamiltonian Monte Carlo</a></li>
-<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
+<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises-1"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>4</b> L0 criteria</a>
 <ul>
@@ -215,13 +219,14 @@ div.csl-indent {
 <li class="chapter" data-level="4.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>4.3.1</b> Optimization methods</a></li>
 <li class="chapter" data-level="4.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>4.3.2</b> MCMC</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-2"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.1</b> Approximating the marginal likelihood</a></li>
-<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.2</b> MCMC model search</a></li>
-<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.3</b> Assessing MCMC convergence</a></li>
+<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#prior-on-coefficients"><i class="fa fa-check"></i><b>5.1</b> Prior on coefficients</a></li>
+<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.2</b> Approximating the marginal likelihood</a></li>
+<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.3</b> MCMC model search</a></li>
+<li class="chapter" data-level="5.4" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.4</b> Assessing MCMC convergence</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>6</b> Generalized additive models</a></li>
 <li class="chapter" data-level="7" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>7</b> Empirical Bayes for transfer learning</a></li>
@@ -278,48 +283,62 @@ These examples motivate the use of MCMC for model search, as described in Sectio
 <div class="example">
 <p><span id="exm:variational-simulated" class="example"><strong>Example 3.1  </strong></span>We simulate a dataset with <span class="math inline">\(n=100\)</span>, <span class="math inline">\(p=200\)</span> standard Gaussian covariates with pairwise correlations equal to 0.5.
 Only the last 4 regression are truly non-zero.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="bms-computation.html#cb1-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb1-2"><a href="bms-computation.html#cb1-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>; p <span class="ot">&lt;-</span> <span class="dv">200</span>  </span>
-<span id="cb1-3"><a href="bms-computation.html#cb1-3" tabindex="-1"></a>beta<span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, p <span class="sc">-</span> <span class="dv">4</span>), <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>) <span class="co">#true parameters</span></span>
-<span id="cb1-4"><a href="bms-computation.html#cb1-4" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">length</span>(beta))</span>
-<span id="cb1-5"><a href="bms-computation.html#cb1-5" tabindex="-1"></a>S[<span class="fu">upper.tri</span>(S)] <span class="ot">&lt;-</span> S[<span class="fu">lower.tri</span>(S)] <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb1-6"><a href="bms-computation.html#cb1-6" tabindex="-1"></a>x <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n=</span>n,<span class="at">sigma=</span>S)</span>
-<span id="cb1-7"><a href="bms-computation.html#cb1-7" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb1-8"><a href="bms-computation.html#cb1-8" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span></code></pre></div>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="bms-computation.html#cb61-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb61-2"><a href="bms-computation.html#cb61-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>; p <span class="ot">&lt;-</span> <span class="dv">200</span>  </span>
+<span id="cb61-3"><a href="bms-computation.html#cb61-3" tabindex="-1"></a>beta<span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, p <span class="sc">-</span> <span class="dv">4</span>), <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>) <span class="co">#true parameters</span></span>
+<span id="cb61-4"><a href="bms-computation.html#cb61-4" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">length</span>(beta))</span>
+<span id="cb61-5"><a href="bms-computation.html#cb61-5" tabindex="-1"></a>S[<span class="fu">upper.tri</span>(S)] <span class="ot">&lt;-</span> S[<span class="fu">lower.tri</span>(S)] <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb61-6"><a href="bms-computation.html#cb61-6" tabindex="-1"></a>x <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n=</span>n,<span class="at">sigma=</span>S)</span>
+<span id="cb61-7"><a href="bms-computation.html#cb61-7" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb61-8"><a href="bms-computation.html#cb61-8" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span></code></pre></div>
+</details>
 <p>We obtain MCMC estimates of BMA posterior means <span class="math inline">\(E(\beta_j \mid \mathbf{y})\)</span> and posterior inclusion probabilities <span class="math inline">\(P(\beta_j \neq 0 \mid \mathbf{y})\)</span> using <code>modelSelection</code>, and analogous variational estimates using <code>varbvs</code>. For illustration, in both cases we set a Binomial model prior with 0.1 prior inclusion probability, and a Gaussian shrinkage prior on parameters with unit variance.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="bms-computation.html#cb2-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb2-2"><a href="bms-computation.html#cb2-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
-<span id="cb2-3"><a href="bms-computation.html#cb2-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbinomprior</span>(<span class="fl">0.1</span>)</span>
-<span id="cb2-4"><a href="bms-computation.html#cb2-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb2-5"><a href="bms-computation.html#cb2-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
-<span id="cb2-6"><a href="bms-computation.html#cb2-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="bms-computation.html#cb3-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
-<span id="cb3-2"><a href="bms-computation.html#cb3-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span>x, <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="bms-computation.html#cb4-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">beta=</span> beta,</span>
-<span id="cb4-2"><a href="bms-computation.html#cb4-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
-<span id="cb4-3"><a href="bms-computation.html#cb4-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
-<span id="cb4-4"><a href="bms-computation.html#cb4-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
-<span id="cb4-5"><a href="bms-computation.html#cb4-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="bms-computation.html#cb62-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb62-2"><a href="bms-computation.html#cb62-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
+<span id="cb62-3"><a href="bms-computation.html#cb62-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbinomprior</span>(<span class="fl">0.1</span>)</span>
+<span id="cb62-4"><a href="bms-computation.html#cb62-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb62-5"><a href="bms-computation.html#cb62-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
+<span id="cb62-6"><a href="bms-computation.html#cb62-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
+</details>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="bms-computation.html#cb63-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
+<span id="cb63-2"><a href="bms-computation.html#cb63-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span>x, <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+</details>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="bms-computation.html#cb64-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">beta=</span> beta,</span>
+<span id="cb64-2"><a href="bms-computation.html#cb64-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
+<span id="cb64-3"><a href="bms-computation.html#cb64-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
+<span id="cb64-4"><a href="bms-computation.html#cb64-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
+<span id="cb64-5"><a href="bms-computation.html#cb64-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
+</details>
 <p>Comparing <span class="math inline">\(P(\beta_j \neq 0 \mid \mathbf{y})\)</span> between the two methods shows that they both identify the same set of high posterior inclusion probability variables: 3 have posterior inclusion probability &gt; 0.9, and the associated data-generating <span class="math inline">\(\beta_j \neq 0\)</span> for the 3 of them.
 However, the plot below that the variational inclusion probabilities are much closer to 0 for the remaining variables than their MCMC counterparts.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="bms-computation.html#cb5-1" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(df, pip_mcmc <span class="sc">&gt;</span> <span class="fl">0.9</span>)</span></code></pre></div>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="bms-computation.html#cb65-1" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(df, pip_mcmc <span class="sc">&gt;</span> <span class="fl">0.9</span>)</span></code></pre></div>
+</details>
 <pre><code>##            beta postmean_mcmc  pip_mcmc postmean_vb    pip_vb
-## x197 -0.6666667    -0.5785718 0.9899169  -0.5863032 0.9999994
-## x199  0.6666667     0.6058829 0.9940702   0.6037483 1.0000000
-## x200  1.0000000     1.2520182 1.0000000   1.2422319 1.0000000</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="bms-computation.html#cb7-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
-<span id="cb7-2"><a href="bms-computation.html#cb7-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb7-3"><a href="bms-computation.html#cb7-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb7-4"><a href="bms-computation.html#cb7-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
-<span id="cb7-5"><a href="bms-computation.html#cb7-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span></code></pre></div>
-<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+## x197 -0.6666667    -0.5827377 0.9878851  -0.5863083 0.9999994
+## x199  0.6666667     0.6066641 0.9954122   0.6037431 1.0000000
+## x200  1.0000000     1.2479896 1.0000000   1.2422281 1.0000000</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="bms-computation.html#cb67-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
+<span id="cb67-2"><a href="bms-computation.html#cb67-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb67-3"><a href="bms-computation.html#cb67-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb67-4"><a href="bms-computation.html#cb67-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
+<span id="cb67-5"><a href="bms-computation.html#cb67-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span></code></pre></div>
+</details>
+<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
 <p>We may also compare the BMA posterior means, in this example the variational and MCMC solutions are similar.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="bms-computation.html#cb8-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
-<span id="cb8-2"><a href="bms-computation.html#cb8-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb8-3"><a href="bms-computation.html#cb8-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb8-4"><a href="bms-computation.html#cb8-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
-<span id="cb8-5"><a href="bms-computation.html#cb8-5" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
-<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="bms-computation.html#cb68-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
+<span id="cb68-2"><a href="bms-computation.html#cb68-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb68-3"><a href="bms-computation.html#cb68-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb68-4"><a href="bms-computation.html#cb68-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
+<span id="cb68-5"><a href="bms-computation.html#cb68-5" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
+</details>
+<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
 </div>
 <div class="example">
 <p><span id="exm:variational-tgfb" class="example"><strong>Example 3.2  </strong></span><span class="citation">Calon et al. (<a href="#ref-calon:2012">2012</a>)</span> compared mice where gene TGFB was silenced to mice where it was not, found a list of 172 genes that were associated to TGFB, and showed that TGFB plays a crucial role in colon cancer progression.
@@ -331,51 +350,63 @@ Both TGFB and the other genes were standardized to zero mean and unit variance.<
 <p>We load the data and use <code>modelSelection</code> for MCMC-based inference and <code>varbvs</code> for variational inference.
 In both we use a Gaussian shrinkage prior on parameters with unit variance.
 In <code>varbvs</code> we use a Binomial model prior with prior inclusion probabilty 0.1, and for convenience in <code>modelSelection</code> we use a Beta-Binomial model prior as it runs faster than the Binomial prior, but our subsequent discussion continues to apply if one uses the Binomial prior as well.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="bms-computation.html#cb9-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;data/tgfb.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)</span>
-<span id="cb9-2"><a href="bms-computation.html#cb9-2" tabindex="-1"></a>shortlist <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">read.table</span>(<span class="st">&quot;data/tgfb_mouse_shortlist.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)[,<span class="dv">1</span>])</span>
-<span id="cb9-3"><a href="bms-computation.html#cb9-3" tabindex="-1"></a>y<span class="ot">=</span> x[,<span class="dv">1</span>]   <span class="co">#TGFB expression (outcome)</span></span>
-<span id="cb9-4"><a href="bms-computation.html#cb9-4" tabindex="-1"></a>x<span class="ot">=</span> x[,<span class="sc">-</span><span class="dv">1</span>]  <span class="co">#covariates</span></span>
-<span id="cb9-5"><a href="bms-computation.html#cb9-5" tabindex="-1"></a>inshort<span class="ot">=</span> (<span class="fu">colnames</span>(x) <span class="sc">%in%</span> shortlist)</span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="bms-computation.html#cb10-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb10-2"><a href="bms-computation.html#cb10-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
-<span id="cb10-3"><a href="bms-computation.html#cb10-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbbprior</span>()</span>
-<span id="cb10-4"><a href="bms-computation.html#cb10-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb10-5"><a href="bms-computation.html#cb10-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
-<span id="cb10-6"><a href="bms-computation.html#cb10-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="bms-computation.html#cb11-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
-<span id="cb11-2"><a href="bms-computation.html#cb11-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span><span class="fu">as.matrix</span>(x), <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="bms-computation.html#cb12-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">inshort=</span> inshort,</span>
-<span id="cb12-2"><a href="bms-computation.html#cb12-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
-<span id="cb12-3"><a href="bms-computation.html#cb12-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
-<span id="cb12-4"><a href="bms-computation.html#cb12-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
-<span id="cb12-5"><a href="bms-computation.html#cb12-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="bms-computation.html#cb69-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;data/tgfb.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)</span>
+<span id="cb69-2"><a href="bms-computation.html#cb69-2" tabindex="-1"></a>shortlist <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">read.table</span>(<span class="st">&quot;data/tgfb_mouse_shortlist.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)[,<span class="dv">1</span>])</span>
+<span id="cb69-3"><a href="bms-computation.html#cb69-3" tabindex="-1"></a>y<span class="ot">=</span> x[,<span class="dv">1</span>]   <span class="co">#TGFB expression (outcome)</span></span>
+<span id="cb69-4"><a href="bms-computation.html#cb69-4" tabindex="-1"></a>x<span class="ot">=</span> x[,<span class="sc">-</span><span class="dv">1</span>]  <span class="co">#covariates</span></span>
+<span id="cb69-5"><a href="bms-computation.html#cb69-5" tabindex="-1"></a>inshort<span class="ot">=</span> (<span class="fu">colnames</span>(x) <span class="sc">%in%</span> shortlist)</span></code></pre></div>
+</details>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="bms-computation.html#cb70-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb70-2"><a href="bms-computation.html#cb70-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
+<span id="cb70-3"><a href="bms-computation.html#cb70-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbbprior</span>()</span>
+<span id="cb70-4"><a href="bms-computation.html#cb70-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb70-5"><a href="bms-computation.html#cb70-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
+<span id="cb70-6"><a href="bms-computation.html#cb70-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
+</details>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="bms-computation.html#cb71-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
+<span id="cb71-2"><a href="bms-computation.html#cb71-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span><span class="fu">as.matrix</span>(x), <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+</details>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="bms-computation.html#cb72-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">inshort=</span> inshort,</span>
+<span id="cb72-2"><a href="bms-computation.html#cb72-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
+<span id="cb72-3"><a href="bms-computation.html#cb72-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
+<span id="cb72-4"><a href="bms-computation.html#cb72-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
+<span id="cb72-5"><a href="bms-computation.html#cb72-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
+</details>
 <p>The marginal posterior probabilities estimated from both methods differ drastically: the variational estimates are much closer to 0 or 1 than those from MCMC, significantly underestimating model uncertainty.
 The BMA parameter estimates are also very different.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="bms-computation.html#cb13-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
-<span id="cb13-2"><a href="bms-computation.html#cb13-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb13-3"><a href="bms-computation.html#cb13-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb13-4"><a href="bms-computation.html#cb13-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
-<span id="cb13-5"><a href="bms-computation.html#cb13-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span>
-<span id="cb13-6"><a href="bms-computation.html#cb13-6" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="bms-computation.html#cb13-7" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
-<span id="cb13-8"><a href="bms-computation.html#cb13-8" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb13-9"><a href="bms-computation.html#cb13-9" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb13-10"><a href="bms-computation.html#cb13-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
-<span id="cb13-11"><a href="bms-computation.html#cb13-11" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="bms-computation.html#cb73-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
+<span id="cb73-2"><a href="bms-computation.html#cb73-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb73-3"><a href="bms-computation.html#cb73-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb73-4"><a href="bms-computation.html#cb73-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
+<span id="cb73-5"><a href="bms-computation.html#cb73-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span>
+<span id="cb73-6"><a href="bms-computation.html#cb73-6" tabindex="-1"></a></span>
+<span id="cb73-7"><a href="bms-computation.html#cb73-7" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
+<span id="cb73-8"><a href="bms-computation.html#cb73-8" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb73-9"><a href="bms-computation.html#cb73-9" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb73-10"><a href="bms-computation.html#cb73-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
+<span id="cb73-11"><a href="bms-computation.html#cb73-11" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
+</details>
 <p><img src="modelSelection-book_files/figure-html/two-plots-1.png" width="50%" /><img src="modelSelection-book_files/figure-html/two-plots-2.png" width="50%" /></p>
 <p>From purely a Bayesian point of view this shows variational inference may provide a poor approximation to the desired posterior. This is different from saying that the exact Bayesian solution provides better inference than the variational one, in terms of detecting the genes that are truly associated with TGFB.
 As an additional check in this direction, we compare the average posterior inclusion probability between genes that were inside/outside the mouse list. For the MCMC estimates there is a big difference, roughly 0.023/0.007 = 3.3, which aligns with what’s expected biologically. For the variational estimates the difference is much smaller.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="bms-computation.html#cb14-1" tabindex="-1"></a><span class="fu">group_by</span>(df, inshort) <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="bms-computation.html#cb14-2" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">mean</span>(pip_mcmc), <span class="fu">mean</span>(pip_vb))</span></code></pre></div>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="bms-computation.html#cb74-1" tabindex="-1"></a><span class="fu">group_by</span>(df, inshort) <span class="sc">|&gt;</span></span>
+<span id="cb74-2"><a href="bms-computation.html#cb74-2" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">mean</span>(pip_mcmc), <span class="fu">mean</span>(pip_vb))</span></code></pre></div>
+</details>
 <pre><code>## # A tibble: 2 × 3
 ##   inshort `mean(pip_mcmc)` `mean(pip_vb)`
 ##   &lt;lgl&gt;              &lt;dbl&gt;          &lt;dbl&gt;
-## 1 FALSE            0.00732         0.0208
-## 2 TRUE             0.0240          0.0396</code></pre>
+## 1 FALSE            0.00768         0.0210
+## 2 TRUE             0.0226          0.0313</code></pre>
 </div>
 <div id="bms-marglhood-approx" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Marginal likelihoods and model-specific posteriors<a href="bms-computation.html#bms-marglhood-approx" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The marginal likelihood in <a href="#eq:bms-marglhood">(<strong>??</strong>)</a> has a closed-form expression in some instances, mainly regression with Gaussian errors (e.g., linear regression, non-linear additive regression) with conjugate parameter priors.
+<p>The marginal likelihood in <a href="background-bms.html#eq:bms-marglhood">(2.2)</a> has a closed-form expression in some instances, mainly regression with Gaussian errors (e.g., linear regression, non-linear additive regression) with conjugate parameter priors.
 Recall that the marginal likelihood for model <span class="math inline">\(\boldsymbol{\gamma}\)</span> is
 <span class="math display">\[\begin{align*}
 p(\mathbf{y} \mid \gamma)= \int p(\mathbf{y} \mid \boldsymbol{\theta}_\gamma, \gamma) p(\boldsymbol{\theta}_\gamma \mid \gamma) d\boldsymbol{\theta}_\gamma.
@@ -410,8 +441,8 @@ The Laplace approximation is
 <li><p>Some models that feature many parameters have high posterior probability, and hence they’re visited often by an MCMC model search algorithm</p></li>
 <li><p>The sample size <span class="math inline">\(n\)</span> is large, so evaluating gradients (or hessians) to obtain <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma\)</span> gets costly.</p></li>
 </ul>
-<p>An alternative is to use approximate Laplace approximations (ALA) <span class="citation">(<a href="#ref-rossell:2021">Rossell, Abril, and Bhattacharya 2021</a>)</span>, which are available by using <code>method=='ALA'</code>.
-Briefly, ALA approximates <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma\)</span> by taking a single Newton-Raphson step from an initial estimate <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma^{(0)}\)</span>. By default <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma^{(0)}= 0\)</span> is taken, see <span class="citation">Rossell, Abril, and Bhattacharya (<a href="#ref-rossell:2021">2021</a>)</span> for a study of the theoretical properties of this choice. Alternatively, in <code>modelSelection</code> one may provide other
+<p>An alternative is to use approximate Laplace approximations (ALA) <span class="citation">(<a href="#ref-rossell:2021">D. Rossell, Abril, and Bhattacharya 2021</a>)</span>, which are available by using <code>method=='ALA'</code>.
+Briefly, ALA approximates <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma\)</span> by taking a single Newton-Raphson step from an initial estimate <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma^{(0)}\)</span>. By default <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma^{(0)}= 0\)</span> is taken, see <span class="citation">D. Rossell, Abril, and Bhattacharya (<a href="#ref-rossell:2021">2021</a>)</span> for a study of the theoretical properties of this choice. Alternatively, in <code>modelSelection</code> one may provide other
 <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma^{(0)}\)</span> with the argument <code>initpar</code>.</p>
 <p>Laplace approximations are based on a simple Taylor expansion of <span class="math inline">\(f(\boldsymbol{\theta}_\gamma)\)</span> around <span class="math inline">\(\hat{\boldsymbol{\theta}}_\gamma\)</span>. This expansion also gives a Gaussian approximation to <span class="math inline">\(p(\boldsymbol{\theta}_\gamma \mid \gamma, \mathbf{y})\)</span>. Specifically,
 <span class="math display">\[\begin{align}
@@ -451,7 +482,7 @@ As a welcome present you’re given a glass of beer, but you’re not told the b
 You like that beer so much that you set out to find out which beer it is.
 To do so, you need to sample beers from different taps, and score them according to how similar they are to your target beer.
 The picture below illustrates the situation.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-13"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-44"></span>
 <img src="bookcover.png" alt="Beer search as a high-dimensional model selection problem" width="80%" />
 <p class="caption">
 Figure 3.1: Beer search as a high-dimensional model selection problem
@@ -481,7 +512,7 @@ p(\boldsymbol{\gamma} \mid \mathbf{y}) \propto
 \]</span>
 where <span class="math inline">\(|| \cdot ||_2\)</span> is the Euclidean distance.
 The animation below shows the first 200 MCMC iterations of the RWMH algorithm, initialized at a random <span class="math inline">\(\boldsymbol{\gamma}^{(0)}\)</span>.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-14"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-45"></span>
 <img src="figs/mh_lattice_unimodal.gif" alt="RWMH on a bimodal distribution on the lattice" width="80%" />
 <p class="caption">
 Figure 3.2: RWMH on a bimodal distribution on the lattice
@@ -658,7 +689,7 @@ p(\boldsymbol{\gamma} \mid \mathbf{y}) \propto
 Despite the fact that RWMH now has a harder time to transition from one mode to the other, the approximation is still reasonably accurate.
 If the posterior were more concentrated around each mode however, RWMH would not do a good job at exploring the space (like any other algorithm based on local moves).
 Fortunately, in Bayesian model selection the posterior distribution concentrates on a small set of models as <span class="math inline">\(n \to \infty\)</span>, and often (but not always) these models are contiguous in the model space. When this is the case, MCMC can be a very efficient tool.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-16"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-47"></span>
 <img src="figs/mh_lattice_bimodal.gif" alt="RWMH on a bimodal distribution on the lattice" width="80%" />
 <p class="caption">
 Figure 3.3: RWMH on a bimodal distribution on the lattice
@@ -914,7 +945,8 @@ Locally-informed proposals use (local) information about <span class="math inlin
 For example, for continuous targets one may use the gradient or hessian of <span class="math inline">\(\log p(\boldsymbol{\eta} \mid \mathbf{y})\)</span> at <span class="math inline">\(\boldsymbol{\eta}^{(b)}\)</span> to build the proposal. Popular algorithms along these lines include MALA (<span class="citation">Besag (<a href="#ref-besag:1994">1994</a>)</span>, <span class="citation">Roberts and Rosenthal (<a href="#ref-roberts:1998">1998</a>)</span>, <span class="citation">Girolami and Calderhead (<a href="#ref-girolami:2011">2011</a>)</span>) and Hamiltonian Monte Carlo (Section <a href="bms-computation.html#hmc">3.6</a>), both of which use gradients.</p>
 <p>In model selection problems the state is discrete, i.e. <span class="math inline">\(\boldsymbol{\eta}= \boldsymbol{\gamma}\)</span> where <span class="math inline">\(\boldsymbol{\gamma}\)</span> denotes a model. Here one can use local information by considering models <span class="math inline">\(\boldsymbol{\gamma}\)</span> that lie in a neighborhood <span class="math inline">\(\mathcal{N}(\boldsymbol{\gamma}^{(b)})\)</span> of the current <span class="math inline">\(\boldsymbol{\gamma}^{(b)}\)</span>, and set a proposal that is guided by their posterior probability.
 For example, in variable selection these neighborhoods may be defined by adding or dropping a single parameter to <span class="math inline">\(\boldsymbol{\gamma}^{(b)}\)</span> (birth-death move), or by exchanging a currently zero by a currently non-zero parameter (swap move).
-See <span class="citation">Chang and Zhou (<a href="#ref-chang_hyunwoong:2025">2025</a>)</span> for a theoretical analysis of locally-informed algorithms in discrete spaces, establishing conditions in which they lead to dimension-free mixing (spectral gap bounds that don’t depend on the dimension of <span class="math inline">\(\boldsymbol{\gamma}\)</span>).</p>
+<span class="citation">Zanella (<a href="#ref-zanella:2020">2020</a>)</span> studies locally informed proposals for discrete spaces, showing that basing the MH proposal on certain so-called balancing functions enjoys some optimal asymptotic properties.
+See also <span class="citation">Chang and Zhou (<a href="#ref-chang_hyunwoong:2025">2025</a>)</span> for a theoretical analysis of locally-informed algorithms in discrete spaces, establishing conditions in which they lead to dimension-free mixing (spectral gap bounds that don’t depend on the dimension of <span class="math inline">\(\boldsymbol{\gamma}\)</span>).</p>
 <p>An interesting algorithm building on this idea is the locally-informed thresholded (LIT) algorithm of <span class="citation">Zhou et al. (<a href="#ref-zhou_quan:2022">2022</a>)</span>.
 The key idea is to propose <span class="math inline">\(\boldsymbol{\gamma}^* \in \mathcal{N}(\boldsymbol{\gamma}^{(b)})\)</span> with probability
 <span class="math display">\[
@@ -931,6 +963,10 @@ That is, the probability of proposing <span class="math inline">\(\boldsymbol{\g
 In fact, the dimension-free results in <span class="citation">Zhou et al. (<a href="#ref-zhou_quan:2022">2022</a>)</span> require that the posterior distribution is (rather strongly) concentrated.
 Fortunately, in Bayesian model selection the posterior distribution on models typically becomes quite concentrated as <span class="math inline">\(n \to \infty\)</span>, and it is also quite concentrated on sparse models when <span class="math inline">\(n\)</span> is small. Hence, there is hope for locally-informed algorithms to be effective in many applications.
 This being said, as argued in Example <a href="bms-computation.html#exm:beer-search">3.3</a> if the posterior is strongly multimodal then locally-informed algorithms are expected to work poorly in practice.</p>
+<p>Locally-informed proposals can also be embedded within algorithms that allow for larger moves.
+For example, <span class="citation">X. Liang, Livingstone, and Griffin (<a href="#ref-liang_xitong:2023">2023</a>)</span> proposed such an MCMC algorithm for generalized linear and survival models, where the MH proposal proceeds as follows.
+First, one proposes a new model <span class="math inline">\(\boldsymbol{\gamma}&#39;\)</span> by randomly adding/dropping each individual variable from the current model <span class="math inline">\(\boldsymbol{\gamma}^{(b)}\)</span>, so that <span class="math inline">\(\boldsymbol{\gamma}&#39;\)</span> can differ from <span class="math inline">\(\boldsymbol{\gamma}^{(b)}\)</span> in several included/excluded variables.
+Second, one proposes a sequence of local moves from <span class="math inline">\(\boldsymbol{\gamma}&#39;\)</span> that allow reverting some of the changes in <span class="math inline">\(\boldsymbol{\gamma}&#39;\)</span>. The proposal probabilities for these local moves depend on (possibly approximated) model posterior probabilities and balancing functions, and adaptive MCMC is used to set tuning parameters (e.g. birth-death probabilities used in Step 1).</p>
 </div>
 <div id="hmc" class="section level2 hasAnchor" number="3.6">
 <h2><span class="header-section-number">3.6</span> Hamiltonian Monte Carlo<a href="bms-computation.html#hmc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -940,9 +976,9 @@ Two ways how HMC can be used in model selection are as follows.
 First, once one has approximated the posterior on models <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> (e.g. using another MCMC method), one can sample from <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{\gamma}, \mathbf{y})\)</span> by using HMC to sample the non-zero entries in <span class="math inline">\(\boldsymbol{\theta}\)</span>.
 Second, HMC can sometimes be used to sample directly from the BMA posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \mathbf{y})\)</span>, and subsequently sampling from <span class="math inline">\(p(\boldsymbol{\gamma} \mid \boldsymbol{\theta}, \mathbf{y})\)</span> is trivial because <span class="math inline">\(\boldsymbol{\gamma}\)</span> is a deterministic function of <span class="math inline">\(\boldsymbol{\theta}\)</span>, e.g. <span class="math inline">\(\gamma_j = \mbox{I}(\theta_j \neq 0)\)</span>.
 This second use may seem puzzling, because <span class="math inline">\(p(\boldsymbol{\theta} \mid \mathbf{y})\)</span> is a mixture of continuous and discrete distributions (e.g. the probability that some <span class="math inline">\(\theta_j\)</span>’s are zero is <span class="math inline">\(&gt;0\)</span>).
-<span class="citation">Xu and Duan (<a href="#ref-xu_maoran:2023">2023</a>)</span> proposed a construction that makes the use of HMC possible.
+<span class="citation">M. Xu and Duan (<a href="#ref-xu_maoran:2023">2023</a>)</span> proposed a construction that makes the use of HMC possible.
 Briefly, let <span class="math inline">\(\boldsymbol{\theta}\)</span> be the whole set of parameters across all models, e.g. <span class="math inline">\(p\)</span> regression coefficients.
-<span class="citation">Xu and Duan (<a href="#ref-xu_maoran:2023">2023</a>)</span> proposed running HMC on an augmented continuous parameter space <span class="math inline">\(\tilde{\boldsymbol{\theta}}\)</span>, such that the original parameters <span class="math inline">\(\boldsymbol{\theta}\)</span> are obtained by projecting <span class="math inline">\(\tilde{\boldsymbol{\theta}}\)</span> into <span class="math inline">\(L_1\)</span> balls. This projection gives positive posterior probability of having zeroes in <span class="math inline">\(\boldsymbol{\theta}\)</span>.
+<span class="citation">M. Xu and Duan (<a href="#ref-xu_maoran:2023">2023</a>)</span> proposed running HMC on an augmented continuous parameter space <span class="math inline">\(\tilde{\boldsymbol{\theta}}\)</span>, such that the original parameters <span class="math inline">\(\boldsymbol{\theta}\)</span> are obtained by projecting <span class="math inline">\(\tilde{\boldsymbol{\theta}}\)</span> into <span class="math inline">\(L_1\)</span> balls. This projection gives positive posterior probability of having zeroes in <span class="math inline">\(\boldsymbol{\theta}\)</span>.
 Two appealing properties of this approach is that one may use probabilistic programming languages like STAN or Numpyro, and that one doesn’t need to compute marginal likelihoods <span class="math inline">\(p(\mathbf{y} \mid \boldsymbol{\gamma})\)</span>.
 There is no guarantee that the chain will mix well, however.
 In our experience, if marginal likelihoods are cheap to approximate then it is preferable to sample directly from <span class="math inline">\(p(\boldsymbol{\gamma} \mid \mathbf{y})\)</span> (as discussed in the previous sections), and then from <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{\gamma})\)</span> using whatever sampler is convenient.</p>
@@ -983,8 +1019,8 @@ Regarding <span class="math inline">\(\epsilon\)</span>, it can be shown that as
 Note also that <span class="math inline">\(u\)</span> does not require evaluating the ratio of MH proposals densities, which simplifies calculations, this is because it can be shown that such ratio is equal to 1.
 Regarding <span class="math inline">\(L\)</span>, the most popular HMC algorithm is the so-called <em>no U-turn sampler</em> <span class="citation">(<a href="#ref-hoffman:2014">Hoffman and Gelman 2014</a>)</span>, which sets <span class="math inline">\(L\)</span> automatically, and is used by the STAN and numpyro softwares.</p>
 </div>
-<div id="exercises" class="section level2 hasAnchor" number="3.7">
-<h2><span class="header-section-number">3.7</span> Exercises<a href="bms-computation.html#exercises" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="exercises-1" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> Exercises<a href="bms-computation.html#exercises-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="exercise">
 <p><span id="exr:beerexample" class="exercise"><strong>Exercise 3.1  </strong></span>Consider a MH algorithm that proceeds as the random search algorithm described in <a href="bms-computation.html#exm:beer-search">3.3</a>.
 At the start of iteration <span class="math inline">\(b\)</span> one knows the current model <span class="math inline">\(\boldsymbol{\gamma}^{(b-1)}\)</span>, and proposes <span class="math inline">\(\boldsymbol{\gamma}^*\)</span> randomly from <span class="math inline">\(\mathcal{N}(\boldsymbol{\gamma}^{(b-1)})\)</span>, the set of neighbors of <span class="math inline">\(\boldsymbol{\gamma}^{(b-1)}\)</span>.</p>
@@ -1112,6 +1148,9 @@ Hoffman, Matthew D, and Andrew Gelman. 2014. <span>“The No-<span>U</span>-Turn
 <div id="ref-kass:1990" class="csl-entry">
 Kass, R. E., L. Tierney, and J. B. Kadane. 1990. <span>“The Validity of Posterior Expansions Based on <span>L</span>aplace’s Method.”</span> <em>Bayesian and Likelihood Methods in Statistics and Econometrics</em> 7: 473–88.
 </div>
+<div id="ref-liang_xitong:2023" class="csl-entry">
+Liang, Xitong, Samuel Livingstone, and Jim Griffin. 2023. <span>“Adaptive <span>MCMC</span> for Bayesian Variable Selection in Generalised Linear Models and Survival Models.”</span> <em>Entropy</em> 25 (9): 1310.
+</div>
 <div id="ref-madigan:1994" class="csl-entry">
 Madigan, D., and A. E. Raftery. 1994. <span>“Model Selection and Accounting for Model Uncertainty in Graphical Models Using <span>O</span>ccam’s Window.”</span> <em>Journal of the American Statistical Association</em> 89 (428): 1535–46.
 </div>
@@ -1132,6 +1171,9 @@ Xu, Maoran, and Leo L Duan. 2023. <span>“Bayesian Inference with the L1-Ball P
 </div>
 <div id="ref-yangyun:2016" class="csl-entry">
 Yang, Y., M. J. Wainwright, and M. I. Jordan. 2016. <span>“On the Computational Complexity of High-Dimensional <span>B</span>ayesian Variable Selection.”</span> <em>The Annals of Statistics</em> 44 (6): 2497–2532.
+</div>
+<div id="ref-zanella:2020" class="csl-entry">
+Zanella, Giacomo. 2020. <span>“Informed Proposals for Local <span>MCMC</span> in Discrete Spaces.”</span> <em>Journal of the American Statistical Association</em> 115 (530): 852–65.
 </div>
 <div id="ref-zhou_quan:2022" class="csl-entry">
 Zhou, Quan, Jun Yang, Dootika Vats, Gareth O Roberts, and Jeffrey S Rosenthal. 2022. <span>“Dimension-Free Mixing for High-Dimensional <span>B</span>ayesian Variable Selection.”</span> <em>Journal of the Royal Statistical Society B</em> 84 (5): 1751–84.

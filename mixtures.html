@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-10-01" />
+<meta name="date" content="2025-10-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -49,6 +49,7 @@
 
 
 
+<link href="libs/codefolding-lua-1.1/codefolding-lua.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
@@ -191,10 +192,13 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="background-bms.html"><a href="background-bms.html#bms-coefprior"><i class="fa fa-check"></i><b>2.6</b> Prior on coefficients</a>
 <ul>
-<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#bms-localprior"><i class="fa fa-check"></i><b>2.6.1</b> Local priors</a></li>
+<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#bms-paradox"><i class="fa fa-check"></i><b>2.6.1</b> Jeffreys-Lindley-Bartlett paradox</a></li>
 <li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.6.2</b> Non-local priors</a></li>
-<li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.6.3</b> Sensitivity to prior variance</a></li>
+<li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-heavy-tailed"><i class="fa fa-check"></i><b>2.6.3</b> Heavy-tails and finite sample consistency</a></li>
+<li class="chapter" data-level="2.6.4" data-path="background-bms.html"><a href="background-bms.html#bms-obayes"><i class="fa fa-check"></i><b>2.6.4</b> Objective Bayes</a></li>
 </ul></li>
+<li class="chapter" data-level="2.7" data-path="background-bms.html"><a href="background-bms.html#exercises"><i class="fa fa-check"></i><b>2.7</b> Exercises</a></li>
+<li class="chapter" data-level="2.8" data-path="background-bms.html"><a href="background-bms.html#exercise-solutions"><i class="fa fa-check"></i><b>2.8</b> Exercise solutions</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="bms-computation.html"><a href="bms-computation.html"><i class="fa fa-check"></i><b>3</b> Bayesian computation</a>
 <ul>
@@ -204,7 +208,7 @@ div.csl-indent {
 <li class="chapter" data-level="3.4" data-path="bms-computation.html"><a href="bms-computation.html#gibbs-sampling"><i class="fa fa-check"></i><b>3.4</b> Gibbs sampling</a></li>
 <li class="chapter" data-level="3.5" data-path="bms-computation.html"><a href="bms-computation.html#locally-informed"><i class="fa fa-check"></i><b>3.5</b> Locally-informed proposals</a></li>
 <li class="chapter" data-level="3.6" data-path="bms-computation.html"><a href="bms-computation.html#hmc"><i class="fa fa-check"></i><b>3.6</b> Hamiltonian Monte Carlo</a></li>
-<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
+<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises-1"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>4</b> L0 criteria</a>
 <ul>
@@ -215,13 +219,14 @@ div.csl-indent {
 <li class="chapter" data-level="4.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>4.3.1</b> Optimization methods</a></li>
 <li class="chapter" data-level="4.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>4.3.2</b> MCMC</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-2"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.1</b> Approximating the marginal likelihood</a></li>
-<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.2</b> MCMC model search</a></li>
-<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.3</b> Assessing MCMC convergence</a></li>
+<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#prior-on-coefficients"><i class="fa fa-check"></i><b>5.1</b> Prior on coefficients</a></li>
+<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.2</b> Approximating the marginal likelihood</a></li>
+<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.3</b> MCMC model search</a></li>
+<li class="chapter" data-level="5.4" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.4</b> Assessing MCMC convergence</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>6</b> Generalized additive models</a></li>
 <li class="chapter" data-level="7" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>7</b> Empirical Bayes for transfer learning</a></li>
@@ -251,6 +256,21 @@ div.csl-indent {
 
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div class="csl-entry">
+Bayarri, M. J., J. O. Berger, A. Forte, and G. Garcia-Donato. 2012. <span>“Criteria for Bayesian Model Choice with Application to Variable Selection.”</span> <em>The Annals of Statistics</em> 40: 1550–77.
+</div>
+<div class="csl-entry">
+Bayarri, M. J., and G. Garcia-Donato. 2007. <span>“Extending Conventional Priors for Testing General Hypotheses in Linear Models.”</span> <em>Biometrika</em> 94: 135–52.
+</div>
+<div class="csl-entry">
+Bayarri, M. J., and G. Garcı́a-Donato. 2008. <span>“Generalization of <span>J</span>effreys Divergence-Based Priors for <span>B</span>ayesian Hypothesis Testing.”</span> <em>Journal of the Royal Statistical Society B</em> 70 (5): 981–1003.
+</div>
+<div class="csl-entry">
+Berger, J. O., and R. L Pericchi. 1996. <span>“The Intrinsic <span>B</span>ayes Factor for Model Selection and Prediction.”</span> <em>Journal of the American Statistical Association</em> 91: 109–22.
+</div>
+<div class="csl-entry">
+Berger, J. O., and R. L. Pericchi. 2001. <span>“Objective <span>B</span>ayesian Methods for Model Selection: Introduction and Comparison.”</span> In <em>Model Selection</em>, edited by P. Lahiri, 38:135–207. Institute of Mathematical Statistics lecture notes - Monograph series.
+</div>
+<div class="csl-entry">
 Bertsimas, D., A. King, and A. Mazumder. 2016. <span>“Best Subset Selection via a Modern Optimization Lens.”</span> <em>The Annals of Statistics</em> 44 (2): 813–52.
 </div>
 <div class="csl-entry">
@@ -258,6 +278,9 @@ Bertsimas, D., and B. Van Parys. 2020. <span>“Sparse High-Dimensional Regressi
 </div>
 <div class="csl-entry">
 Besag, Julian. 1994. <span>“Comments on Representations of Knowledge in Complex Systems by u. Grenander and MI Miller.”</span> <em>Journal of the Royal Statistical Society B</em> 56: 591–92.
+</div>
+<div class="csl-entry">
+Brooks, Steve, Andrew Gelman, Galin Jones, and Xiao-Li Meng. 2011. <em>Handbook of Markov Chain Monte Carlo</em>. CRC press.
 </div>
 <div class="csl-entry">
 Bühlmann, P., and S. van de Geer. 2011. <em>Statistics for High-Dimensional Data</em>. New York: Springer.
@@ -278,13 +301,25 @@ Chang, Hyunwoong, and Quan Zhou. 2025. <span>“Dimension-Free Relaxation Times 
 Chen, J., and Z. Chen. 2008. <span>“Extended <span>B</span>ayesian Information Criteria for Model Selection with Large Model Spaces.”</span> <em>Biometrika</em> 95 (3): 759–71.
 </div>
 <div class="csl-entry">
+Clyde, M. 1999. <span>“Bayesian Model Averaging and Model Search Strategies.”</span> In <em>Bayesian Statistics 6</em>, edited by J. M. Bernardo, A. P. Dawid, J. O. Berger, and A. F. M. Smith, 157–85. Oxford University Press.
+</div>
+<div class="csl-entry">
+Consonni, Guido, Dimitris Fouskakis, Brunero Liseo, and Ioannis Ntzoufras. 2018. <span>“Prior Distributions for Objective <span>B</span>ayesian Analysis.”</span> <em>Bayesian Analysis</em> 13 (2): 627–79.
+</div>
+<div class="csl-entry">
 Cover, Thomas M, and Jan M Van Campenhout. 2007. <span>“On the Possible Orderings in the Measurement Selection Problem.”</span> <em>IEEE Transactions on Systems, Man, and Cybernetics</em> 7 (9): 657–61.
+</div>
+<div class="csl-entry">
+Cui, Wen, and Edward I George. 2008. <span>“Empirical <span>B</span>ayes Vs. Fully <span>B</span>ayes Variable Selection.”</span> <em>Journal of Statistical Planning and Inference</em> 138 (4): 888–900.
 </div>
 <div class="csl-entry">
 Fan, J., and R. Li. 2001. <span>“Variable Selection via Nonconcave Penalized Likelihood and Its Oracle Properties.”</span> <em>Journal of the American Statistical Association</em> 96: 1348–60.
 </div>
 <div class="csl-entry">
 Foster, D., H. Karloff, and J. Thaler. 2015. <span>“Variable Selection Is Hard.”</span> In <em>Conference on Learning Theory</em>, 696–709.
+</div>
+<div class="csl-entry">
+Fouskakis, Dimitris, Ioannis Ntzoufras, and Konstantinos Perrakis. 2018. <span>“Power-Expected-Posterior Priors for Generalized Linear Models.”</span> <em>Bayesian Analysis</em> 3 (13): 721–48.
 </div>
 <div class="csl-entry">
 Fúquene, J., M. F. J. Steel, and D. Rossell. 2019. <span>“On Choosing Mixture Components via Non-Local Priors.”</span> <em>Journal of the Royal Statistical Society B</em> 81 (5): 809–37.
@@ -299,10 +334,19 @@ Giannone, Domenico, Michele Lenza, and Giorgio E Primiceri. 2021. <span>“Econo
 Girolami, Mark, and Ben Calderhead. 2011. <span>“Riemann Manifold Langevin and Hamiltonian Monte Carlo Methods.”</span> <em>Journal of the Royal Statistical Society B</em> 73 (2): 123–214.
 </div>
 <div class="csl-entry">
+Gonzalo Garcia-Donato, and Anabel Forte. 2018. <span>“Bayesian Testing, Variable Selection and Model Averaging in Linear Models Using <span>R</span> with <span>BayesVarSel</span>.”</span> <em>The R Journal</em> 10 (1): 329. <a href="https://journal.r-project.org/archive/2018/RJ-2018-021/index.html">https://journal.r-project.org/archive/2018/RJ-2018-021/index.html</a>.
+</div>
+<div class="csl-entry">
 Hazimeh, Hussein, Rahul Mazumder, and Tim Nonet. 2023. <span>“L0learn: A Scalable Package for Sparse Learning Using <span>L</span>0 Regularization.”</span> <em>Journal of Machine Learning Research</em> 24 (205): 1–8.
 </div>
 <div class="csl-entry">
 Hoeting, Jennifer A., David Madigan, Adrian E. Raftery, and Chris T. Volinsky. 1999. <span>“Bayesian Model Averaging: A Tutorial.”</span> <em>Statistical Science</em> 14: 382–401.
+</div>
+<div class="csl-entry">
+Hoffman, Matthew D, and Andrew Gelman. 2014. <span>“The No-<span>U</span>-Turn Sampler: Adaptively Setting Path Lengths in <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo.”</span> <em>Journal of Machine Learning Research</em> 15 (1): 1593–623.
+</div>
+<div class="csl-entry">
+Jeffreys, H. 1961. <em>Theory of Probability</em>. Third. Oxford, England: Oxford University Press.
 </div>
 <div class="csl-entry">
 Johnson, V. E., and D. Rossell. 2010. <span>“On the Use of Non-Local Prior Densities for Default <span>B</span>ayesian Hypothesis Tests.”</span> <em>Journal of the Royal Statistical Society B</em> 72: 143–70.
@@ -317,6 +361,15 @@ Kass, R. E., L. Tierney, and J. B. Kadane. 1990. <span>“The Validity of Poster
 Kiefer, Jack, and Jacob Wolfowitz. 1952. <span>“Stochastic Estimation of the Maximum of a Regression Function.”</span> <em>The Annals of Mathematical Statistics</em> 23 (3): 462–66.
 </div>
 <div class="csl-entry">
+Lempers, Fred B. 1971. Rotterdam University Press.
+</div>
+<div class="csl-entry">
+Liang, F., R. Paulo, G. Molina, M. A. Clyde, and J. O. Berger. 2008. <span>“Mixtures of g-Priors for <span>B</span>ayesian Variable Selection.”</span> <em>Journal of the American Statistical Association</em> 103: 410–23.
+</div>
+<div class="csl-entry">
+Liang, Xitong, Samuel Livingstone, and Jim Griffin. 2023. <span>“Adaptive <span>MCMC</span> for Bayesian Variable Selection in Generalised Linear Models and Survival Models.”</span> <em>Entropy</em> 25 (9): 1310.
+</div>
+<div class="csl-entry">
 Lindley, D. V. 1957. <span>“A Statistical Paradox.”</span> <em>Biometrika</em> 44: 187–92.
 </div>
 <div class="csl-entry">
@@ -326,7 +379,22 @@ Linnainmaa, Seppo. 1970. <span>“The Representation of the Cumulative Rounding 
 Madigan, D., and A. E. Raftery. 1994. <span>“Model Selection and Accounting for Model Uncertainty in Graphical Models Using <span>O</span>ccam’s Window.”</span> <em>Journal of the American Statistical Association</em> 89 (428): 1535–46.
 </div>
 <div class="csl-entry">
+Moreno, E., F. Bertolino, and W. Racugno. 1998. <span>“An Intrinsic Limiting Procedure for Model Selection and Hypotheses Testing.”</span> <em>Journal of the American Statistical Association</em> 93: 1451–60.
+</div>
+<div class="csl-entry">
+Narisetty, N. N., and X. He. 2014. <span>“Bayesian Variable Selection with Shrinking and Diffusing Priors.”</span> <em>The Annals of Statistics</em> 42 (2): 789–817.
+</div>
+<div class="csl-entry">
 Natarajan, B. K. 1995. <span>“Sparse Approximate Solutions to Linear Systems.”</span> <em>SIAM Journal on Computing</em> 24 (2): 227–34.
+</div>
+<div class="csl-entry">
+Neal, Radford. 2011. <span>“<span>MCMC</span> Using <span>H</span>amiltonian Dynamics.”</span> In <em>Handbook of <span>M</span>arkov Chain <span>M</span>onte <span>C</span>arlo</em>, 113–62. Chapman; Hall/CRC.
+</div>
+<div class="csl-entry">
+O’Hagan, A. 1995. <span>“Fractional <span>B</span>ayes Factors for Model Comparison.”</span> <em>Journal of the Royal Statistical Society B</em> 57: 99–118.
+</div>
+<div class="csl-entry">
+Pérez, J. M., and J. O. Berger. 2002. <span>“Expected Posterior Prior Distributions for Model Selection.”</span> <em>Biometrika</em> 89: 491–512.
 </div>
 <div class="csl-entry">
 Raskutti, G., M. Wainwright, and B. Yu. 2011. <span>“Minimax Rates of Estimation for High-Dimensional Linear Regression over Balls.”</span> <em>Information Theory, IEEE Transactions on</em> 57 (10): 6976–94.
@@ -383,7 +451,22 @@ Wainwright, Martin J. 2009. <span>“Information-Theoretic Limits on Sparsity Re
 Xu, Maoran, and Leo L Duan. 2023. <span>“Bayesian Inference with the L1-Ball Prior: Solving Combinatorial Problems with Exact Zeros.”</span> <em>Journal of the Royal Statistical Society B</em> 85 (5): 1538–60.
 </div>
 <div class="csl-entry">
+Xu, X., P. Lu, S. N. MacEachern, and R. Xu. 2019. <span>“Calibrated <span>B</span>ayes Factors for Model Comparison.”</span> <em>Journal of Statistical Computation and Simulation</em> (in press): 1–24.
+</div>
+<div class="csl-entry">
 Yang, Y., M. J. Wainwright, and M. I. Jordan. 2016. <span>“On the Computational Complexity of High-Dimensional <span>B</span>ayesian Variable Selection.”</span> <em>The Annals of Statistics</em> 44 (6): 2497–2532.
+</div>
+<div class="csl-entry">
+Zanella, Giacomo. 2020. <span>“Informed Proposals for Local <span>MCMC</span> in Discrete Spaces.”</span> <em>Journal of the American Statistical Association</em> 115 (530): 852–65.
+</div>
+<div class="csl-entry">
+Zellner, A. 1986. <span>“On Assessing Prior Distributions and Bayesian Regression Analysis with g-Prior Distributions.”</span> In <em>Bayesian Inference and Decision Techniques: Essays in Honor of Bruno de Finetti</em>. Amsterdam; New York: North-Holland/Elsevier.
+</div>
+<div class="csl-entry">
+Zellner, A., and A. Siow. 1980. <span>“Posterior Odds Ratios for Selected Regression Hypotheses.”</span> In <em>Bayesian Statistics: Proceedings of the First International Meeting Held in <span>V</span>alencia (Spain)</em>, edited by J. M. Bernardo, M. H. DeGroot, D. V. Lindley, and A. F. M. Smith. Vol. 1. Valencia: University Press.
+</div>
+<div class="csl-entry">
+———. 1984. <em>Basic Issues in Econometrics</em>. Chicago: University of <span>C</span>hicago Press.
 </div>
 <div class="csl-entry">
 Zhang, Y., M. J. Wainwright, and M. I. Jordan. 2014. <span>“Lower Bounds on the Performance of Polynomial-Time Algorithms for Sparse Linear Regression.”</span> <em>JMLR: Workshop and Conference Proceedings</em> 35: 1–28.

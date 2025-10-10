@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-10-01" />
+<meta name="date" content="2025-10-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -49,6 +49,7 @@
 
 
 
+<link href="libs/codefolding-lua-1.1/codefolding-lua.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
@@ -191,10 +192,13 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="background-bms.html"><a href="background-bms.html#bms-coefprior"><i class="fa fa-check"></i><b>2.6</b> Prior on coefficients</a>
 <ul>
-<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#bms-localprior"><i class="fa fa-check"></i><b>2.6.1</b> Local priors</a></li>
+<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#bms-paradox"><i class="fa fa-check"></i><b>2.6.1</b> Jeffreys-Lindley-Bartlett paradox</a></li>
 <li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.6.2</b> Non-local priors</a></li>
-<li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.6.3</b> Sensitivity to prior variance</a></li>
+<li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-heavy-tailed"><i class="fa fa-check"></i><b>2.6.3</b> Heavy-tails and finite sample consistency</a></li>
+<li class="chapter" data-level="2.6.4" data-path="background-bms.html"><a href="background-bms.html#bms-obayes"><i class="fa fa-check"></i><b>2.6.4</b> Objective Bayes</a></li>
 </ul></li>
+<li class="chapter" data-level="2.7" data-path="background-bms.html"><a href="background-bms.html#exercises"><i class="fa fa-check"></i><b>2.7</b> Exercises</a></li>
+<li class="chapter" data-level="2.8" data-path="background-bms.html"><a href="background-bms.html#exercise-solutions"><i class="fa fa-check"></i><b>2.8</b> Exercise solutions</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="bms-computation.html"><a href="bms-computation.html"><i class="fa fa-check"></i><b>3</b> Bayesian computation</a>
 <ul>
@@ -204,7 +208,7 @@ div.csl-indent {
 <li class="chapter" data-level="3.4" data-path="bms-computation.html"><a href="bms-computation.html#gibbs-sampling"><i class="fa fa-check"></i><b>3.4</b> Gibbs sampling</a></li>
 <li class="chapter" data-level="3.5" data-path="bms-computation.html"><a href="bms-computation.html#locally-informed"><i class="fa fa-check"></i><b>3.5</b> Locally-informed proposals</a></li>
 <li class="chapter" data-level="3.6" data-path="bms-computation.html"><a href="bms-computation.html#hmc"><i class="fa fa-check"></i><b>3.6</b> Hamiltonian Monte Carlo</a></li>
-<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
+<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises-1"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>4</b> L0 criteria</a>
 <ul>
@@ -215,13 +219,14 @@ div.csl-indent {
 <li class="chapter" data-level="4.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>4.3.1</b> Optimization methods</a></li>
 <li class="chapter" data-level="4.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>4.3.2</b> MCMC</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-2"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.1</b> Approximating the marginal likelihood</a></li>
-<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.2</b> MCMC model search</a></li>
-<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.3</b> Assessing MCMC convergence</a></li>
+<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#prior-on-coefficients"><i class="fa fa-check"></i><b>5.1</b> Prior on coefficients</a></li>
+<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.2</b> Approximating the marginal likelihood</a></li>
+<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.3</b> MCMC model search</a></li>
+<li class="chapter" data-level="5.4" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.4</b> Assessing MCMC convergence</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>6</b> Generalized additive models</a></li>
 <li class="chapter" data-level="7" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>7</b> Empirical Bayes for transfer learning</a></li>
@@ -248,14 +253,19 @@ div.csl-indent {
 <div id="glm" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">5</span> Generalized linear models<a href="glm.html#glm" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>To be added.</p>
-<div id="glm-marglhood" class="section level2 hasAnchor" number="5.1">
-<h2><span class="header-section-number">5.1</span> Approximating the marginal likelihood<a href="glm.html#glm-marglhood" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="prior-on-coefficients" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Prior on coefficients<a href="glm.html#prior-on-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Extensions of g-prior mixtures to GLMs include using the observed or expected information matrix
+evaluated at the maximum-likelihood (ML) as the prior covariance (Hansen and Yu, 2003; Wang and George, 2007; Li and Clyde, 2016).</p>
 </div>
-<div id="glm-mcmc" class="section level2 hasAnchor" number="5.2">
-<h2><span class="header-section-number">5.2</span> MCMC model search<a href="glm.html#glm-mcmc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="glm-marglhood" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Approximating the marginal likelihood<a href="glm.html#glm-marglhood" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
-<div id="glm-mcmc-convergence" class="section level2 hasAnchor" number="5.3">
-<h2><span class="header-section-number">5.3</span> Assessing MCMC convergence<a href="glm.html#glm-mcmc-convergence" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="glm-mcmc" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> MCMC model search<a href="glm.html#glm-mcmc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="glm-mcmc-convergence" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Assessing MCMC convergence<a href="glm.html#glm-mcmc-convergence" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
 </div>
 </div>

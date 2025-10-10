@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-10-01" />
+<meta name="date" content="2025-10-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -49,6 +49,7 @@
 
 
 
+<link href="libs/codefolding-lua-1.1/codefolding-lua.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
@@ -191,10 +192,13 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="background-bms.html"><a href="background-bms.html#bms-coefprior"><i class="fa fa-check"></i><b>2.6</b> Prior on coefficients</a>
 <ul>
-<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#bms-localprior"><i class="fa fa-check"></i><b>2.6.1</b> Local priors</a></li>
+<li class="chapter" data-level="2.6.1" data-path="background-bms.html"><a href="background-bms.html#bms-paradox"><i class="fa fa-check"></i><b>2.6.1</b> Jeffreys-Lindley-Bartlett paradox</a></li>
 <li class="chapter" data-level="2.6.2" data-path="background-bms.html"><a href="background-bms.html#bms-nlp"><i class="fa fa-check"></i><b>2.6.2</b> Non-local priors</a></li>
-<li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-priorvar"><i class="fa fa-check"></i><b>2.6.3</b> Sensitivity to prior variance</a></li>
+<li class="chapter" data-level="2.6.3" data-path="background-bms.html"><a href="background-bms.html#bms-heavy-tailed"><i class="fa fa-check"></i><b>2.6.3</b> Heavy-tails and finite sample consistency</a></li>
+<li class="chapter" data-level="2.6.4" data-path="background-bms.html"><a href="background-bms.html#bms-obayes"><i class="fa fa-check"></i><b>2.6.4</b> Objective Bayes</a></li>
 </ul></li>
+<li class="chapter" data-level="2.7" data-path="background-bms.html"><a href="background-bms.html#exercises"><i class="fa fa-check"></i><b>2.7</b> Exercises</a></li>
+<li class="chapter" data-level="2.8" data-path="background-bms.html"><a href="background-bms.html#exercise-solutions"><i class="fa fa-check"></i><b>2.8</b> Exercise solutions</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="bms-computation.html"><a href="bms-computation.html"><i class="fa fa-check"></i><b>3</b> Bayesian computation</a>
 <ul>
@@ -204,7 +208,7 @@ div.csl-indent {
 <li class="chapter" data-level="3.4" data-path="bms-computation.html"><a href="bms-computation.html#gibbs-sampling"><i class="fa fa-check"></i><b>3.4</b> Gibbs sampling</a></li>
 <li class="chapter" data-level="3.5" data-path="bms-computation.html"><a href="bms-computation.html#locally-informed"><i class="fa fa-check"></i><b>3.5</b> Locally-informed proposals</a></li>
 <li class="chapter" data-level="3.6" data-path="bms-computation.html"><a href="bms-computation.html#hmc"><i class="fa fa-check"></i><b>3.6</b> Hamiltonian Monte Carlo</a></li>
-<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
+<li class="chapter" data-level="3.7" data-path="bms-computation.html"><a href="bms-computation.html#exercises-1"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="background-l0.html"><a href="background-l0.html"><i class="fa fa-check"></i><b>4</b> L0 criteria</a>
 <ul>
@@ -215,13 +219,14 @@ div.csl-indent {
 <li class="chapter" data-level="4.3.1" data-path="background-l0.html"><a href="background-l0.html#l0-optimization"><i class="fa fa-check"></i><b>4.3.1</b> Optimization methods</a></li>
 <li class="chapter" data-level="4.3.2" data-path="background-l0.html"><a href="background-l0.html#l0-mcmc"><i class="fa fa-check"></i><b>4.3.2</b> MCMC</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-1"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.4" data-path="background-l0.html"><a href="background-l0.html#exercises-2"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.1</b> Approximating the marginal likelihood</a></li>
-<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.2</b> MCMC model search</a></li>
-<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.3</b> Assessing MCMC convergence</a></li>
+<li class="chapter" data-level="5.1" data-path="glm.html"><a href="glm.html#prior-on-coefficients"><i class="fa fa-check"></i><b>5.1</b> Prior on coefficients</a></li>
+<li class="chapter" data-level="5.2" data-path="glm.html"><a href="glm.html#glm-marglhood"><i class="fa fa-check"></i><b>5.2</b> Approximating the marginal likelihood</a></li>
+<li class="chapter" data-level="5.3" data-path="glm.html"><a href="glm.html#glm-mcmc"><i class="fa fa-check"></i><b>5.3</b> MCMC model search</a></li>
+<li class="chapter" data-level="5.4" data-path="glm.html"><a href="glm.html#glm-mcmc-convergence"><i class="fa fa-check"></i><b>5.4</b> Assessing MCMC convergence</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>6</b> Generalized additive models</a></li>
 <li class="chapter" data-level="7" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>7</b> Empirical Bayes for transfer learning</a></li>
@@ -266,12 +271,14 @@ y_i = \sum_{j=1}^p x_{ij} \theta_j + \epsilon_i,
 for <span class="math inline">\(p=3\)</span> covariates and <span class="math inline">\(i=1,\ldots,100\)</span> individuals.
 We set regression coefficients <span class="math inline">\(\theta_1= 1\)</span>, <span class="math inline">\(\theta_2= 1\)</span>, <span class="math inline">\(\theta_3=0\)</span> and <span class="math inline">\(\epsilon_i \sim N(0,1)\)</span>, and the random number seed for reproducibility.
 It is good practice to store the outcome and covariates into a data frame, as we do below.</p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="quick-start.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(modelSelection)</span>
 <span id="cb1-2"><a href="quick-start.html#cb1-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb1-3"><a href="quick-start.html#cb1-3" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">100</span><span class="sc">*</span><span class="dv">3</span>), <span class="at">nrow=</span><span class="dv">100</span>, <span class="at">ncol=</span><span class="dv">3</span>)</span>
 <span id="cb1-4"><a href="quick-start.html#cb1-4" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>), <span class="at">ncol=</span><span class="dv">1</span>)</span>
 <span id="cb1-5"><a href="quick-start.html#cb1-5" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> theta <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
 <span id="cb1-6"><a href="quick-start.html#cb1-6" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span></code></pre></div>
+</details>
 <div id="l0-criteria" class="section level3 hasAnchor" number="1.1.1">
 <h3><span class="header-section-number">1.1.1</span> L0 criteria<a href="quick-start.html#l0-criteria" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><code>bestBIC</code> obtains the BIC for all models.
@@ -280,14 +287,18 @@ An intercept is added automatically, giving a total of 4 variables and <span cla
 A much faster alternative is to use a heuristic implemented in <code>bestBIC_fast</code>, based on coordinate descent and other tricks, see Section <a href="background-l0.html#background-l0">4</a> (for Gaussian and binary outcomes it relies on package <code>L0Learn</code> <span class="citation">(<a href="#ref-hazimeh:2023">Hazimeh, Mazumder, and Nonet 2023</a>)</span>).
 We set <code>verbose=FALSE</code> to avoid printing progress information and cluttering the book.
 For our simulated data the selected model matches the data-generating truth, which only features the first two covariates.</p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="quick-start.html#cb2-1" tabindex="-1"></a>fit.bic <span class="ot">&lt;-</span> <span class="fu">bestBIC</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
 <span id="cb2-2"><a href="quick-start.html#cb2-2" tabindex="-1"></a><span class="fu">print</span>(fit.bic)</span></code></pre></div>
+</details>
 <pre><code>## icfit object</code></pre>
 <pre><code>## Model with best BIC: X1 X2</code></pre>
 <pre><code>## Use summary(), coef() and predict() to get inference for the top model</code></pre>
 <pre><code>## Use coef(object$msfit) and predict(object$msfit) to get BMA estimates and predictions</code></pre>
 <p>We list the BIC for the top 5 models (index 1 corresponds to the intercept, 2 to <code>x[,1]</code> and so on). We can also use standard functions like <code>summary</code> and <code>coef</code> to view the MLE for the best model, and <code>predict</code> to obtain predictions for new data.</p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="quick-start.html#cb7-1" tabindex="-1"></a>fit.bic<span class="sc">$</span>models[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,]</span></code></pre></div>
+</details>
 <pre><code>## # A tibble: 5 × 2
 ##   modelid   bic
 ##   &lt;chr&gt;   &lt;dbl&gt;
@@ -296,7 +307,9 @@ For our simulated data the selected model matches the data-generating truth, whi
 ## 3 1,2,3    307.
 ## 4 1,2,3,4  311.
 ## 5 3        381.</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="quick-start.html#cb9-1" tabindex="-1"></a><span class="fu">summary</span>(fit.bic)</span></code></pre></div>
+</details>
 <pre><code>## 
 ## Call:
 ## glm(formula = f, family = family2glm(ms$family), data = data)
@@ -315,7 +328,9 @@ For our simulated data the selected model matches the data-generating truth, whi
 ## AIC: 294.32
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="quick-start.html#cb11-1" tabindex="-1"></a><span class="fu">coef</span>(fit.bic)</span></code></pre></div>
+</details>
 <pre><code>##       X1       X2 
 ## 1.150549 1.150920</code></pre>
 </div>
@@ -325,22 +340,28 @@ For our simulated data the selected model matches the data-generating truth, whi
 We use BMS to assess that uncertainty, in a Bayesian sense.
 BMS requires setting a prior distribution on the models and on the parameters for each model.
 For now, we run <code>modelSelection</code> with default priors (Beta-Binomial prior on the models, pMOM prior with default prior precision on the coefficients).</p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="quick-start.html#cb13-1" tabindex="-1"></a>priorCoef <span class="ot">&lt;-</span> <span class="fu">momprior</span>()</span>
 <span id="cb13-2"><a href="quick-start.html#cb13-2" tabindex="-1"></a>priorModel <span class="ot">&lt;-</span> <span class="fu">modelbbprior</span>()</span>
 <span id="cb13-3"><a href="quick-start.html#cb13-3" tabindex="-1"></a>fit.bms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df,</span>
 <span id="cb13-4"><a href="quick-start.html#cb13-4" tabindex="-1"></a>                     <span class="at">priorCoef=</span>priorCoef, <span class="at">priorModel=</span>priorModel,</span>
 <span id="cb13-5"><a href="quick-start.html#cb13-5" tabindex="-1"></a>                     <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+</details>
 <p><code>postProb</code> shows posterior model probabilities (sorted decreasingly), and <code>coef</code> gives BMA point estimates, 0.95 posterior intervals, and marginal posterior inclusion probabilities <span class="math inline">\(P(\theta_j \neq 0 \mid y)\)</span>.
 Below, <code>phi</code> refers to the error variance <span class="math inline">\(\sigma^2\)</span> (which is included with probability 1).
 In our example, BMS selects the right covariates and assigns high posterior probability to that solution, as one would ideally wish.</p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="quick-start.html#cb14-1" tabindex="-1"></a><span class="fu">coef</span>(fit.bms)</span></code></pre></div>
+</details>
 <pre><code>##                estimate        2.5%      97.5%      margpp
 ## (Intercept) 0.007082034 -0.02658464 0.04089499 0.007366249
 ## X1          1.133309621  0.93331088 1.33480178 1.000000000
 ## X2          1.134404673  0.93919629 1.33501531 1.000000000
 ## X3          0.000366013  0.00000000 0.00000000 0.008254065
 ## phi         1.103715115  0.84213596 1.44604848 1.000000000</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="quick-start.html#cb16-1" tabindex="-1"></a><span class="fu">postProb</span>(fit.bms)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,]</span></code></pre></div>
+</details>
 <pre><code>##    modelid family           pp
 ## 7      2,3 normal 9.845428e-01
 ## 8    2,3,4 normal 8.090989e-03
@@ -348,8 +369,10 @@ In our example, BMS selects the right covariates and assigns high posterior prob
 ## 16 1,2,3,4 normal 1.630761e-04
 ## 3        3 normal 3.424188e-17</code></pre>
 <p>Finally, we can use <code>predict</code> to obtain point predictions and 0.95 posterior predictive intervals.</p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="quick-start.html#cb18-1" tabindex="-1"></a>ypred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit.bms)</span>
 <span id="cb18-2"><a href="quick-start.html#cb18-2" tabindex="-1"></a><span class="fu">head</span>(ypred)</span></code></pre></div>
+</details>
 <pre><code>##         mean       2.5%       97.5%
 ## 1 -0.8928148 -1.1160111 -0.66885457
 ## 2 -0.2161415 -0.3514485 -0.08236455
@@ -363,21 +386,26 @@ In our example, BMS selects the right covariates and assigns high posterior prob
 <h2><span class="header-section-number">1.2</span> Logistic regression<a href="quick-start.html#logistic-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>For binary outcomes, we simply specify <code>family='binomial'</code> (and for Poisson we specify <code>family='poisson'</code>).
 We first create a binary version of our simulated outcome.</p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="quick-start.html#cb20-1" tabindex="-1"></a>dfbin <span class="ot">&lt;-</span> <span class="fu">transform</span>(df, <span class="at">ybin =</span> (y <span class="sc">&gt;</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb20-2"><a href="quick-start.html#cb20-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">!</span>y) <span class="co">#drop variable y</span></span></code></pre></div>
+</details>
 <p>We next use <code>bestBIC</code> and <code>modelSelection</code> as before. The selected model is still the correct one, but the posterior probability for (wrongly) including <code>x[,3]</code> is higher than in the linear regression data. This is intuitively expected, binary outcomes carry less information than Gaussian ones, so there is more uncertainty on the chosen model.</p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="quick-start.html#cb21-1" tabindex="-1"></a>fit2.bic <span class="ot">&lt;-</span> <span class="fu">bestBIC</span>(ybin <span class="sc">~</span> ., <span class="at">family=</span><span class="st">&#39;binomial&#39;</span>, <span class="at">data=</span>dfbin, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
 <span id="cb21-2"><a href="quick-start.html#cb21-2" tabindex="-1"></a><span class="fu">print</span>(fit2.bic)</span></code></pre></div>
+</details>
 <pre><code>## icfit object</code></pre>
 <pre><code>## Model with best BIC: X1 X2</code></pre>
 <pre><code>## Use summary(), coef() and predict() to get inference for the top model</code></pre>
 <pre><code>## Use coef(object$msfit) and predict(object$msfit) to get BMA estimates and predictions</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="quick-start.html#cb26-1" tabindex="-1"></a>fit2.bms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(ybin <span class="sc">~</span> ., <span class="at">data=</span>dfbin,</span>
 <span id="cb26-2"><a href="quick-start.html#cb26-2" tabindex="-1"></a>                     <span class="at">priorCoef=</span>priorCoef, <span class="at">priorModel=</span>priorModel,</span>
 <span id="cb26-3"><a href="quick-start.html#cb26-3" tabindex="-1"></a>                     <span class="at">family=</span><span class="st">&#39;binomial&#39;</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
 <span id="cb26-4"><a href="quick-start.html#cb26-4" tabindex="-1"></a><span class="fu">coef</span>(fit2.bms)</span></code></pre></div>
-<pre><code>## Warning in hasPostSampling(object): Exact posterior sampling not implemented,
-## using Normal approx instead</code></pre>
+</details>
+<pre><code>## Warning in hasPostSampling(object): Exact posterior sampling not implemented, using Normal approx instead</code></pre>
 <pre><code>##               estimate       2.5%     97.5%       margpp
 ## (Intercept) 0.16323081 0.03275118 0.2669387 2.730669e-10
 ## X1          1.38893900 0.78354882 2.0102542 1.000000e+00
@@ -392,13 +420,16 @@ The effect of each covariate is decomposed as a linear part plus a deviation fro
 <code>modelSelection</code> considers 3 possibilities for each covariate: excluding it entirely, including only the linear effect, and including both linear and non-linear terms. For further details on this decomposition, see <span class="citation">(<a href="#ref-rossell:2021b">D. Rossell and Rubio 2021</a>)</span>.</p>
 <p>The linear effect coefficients are displayed using the original variable names, and the non-linear coefficients with an <code>.s</code> appended. Here we have 5 columns coding for the non-linear effect, labelled as <code>.s1</code> though <code>.s5</code>.
 In our example, there is strong evidence for (correctly) including the linear effect of <code>X1</code> and <code>X2</code>, excluding their non-linear effects, and exclusing <code>X3</code> entirely.</p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="quick-start.html#cb29-1" tabindex="-1"></a>fit.gam <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df,</span>
 <span id="cb29-2"><a href="quick-start.html#cb29-2" tabindex="-1"></a>                     <span class="at">smooth =</span> <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3,</span>
 <span id="cb29-3"><a href="quick-start.html#cb29-3" tabindex="-1"></a>                     <span class="at">priorCoef=</span>priorCoef,</span>
 <span id="cb29-4"><a href="quick-start.html#cb29-4" tabindex="-1"></a>                     <span class="at">priorModel=</span>priorModel, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+</details>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="quick-start.html#cb30-1" tabindex="-1"></a><span class="fu">coef</span>(fit.gam)</span></code></pre></div>
-<pre><code>## Warning in hasPostSampling(object): Exact posterior sampling not implemented,
-## using Normal approx instead</code></pre>
+</details>
+<pre><code>## Warning in hasPostSampling(object): Exact posterior sampling not implemented, using Normal approx instead</code></pre>
 <pre><code>##                  estimate        2.5%      97.5%       margpp
 ## (Intercept)  8.127021e-03 -0.01028342 0.02684467 7.499102e-03
 ## X1           1.140319e+00  1.02940753 1.25420735 1.000000e+00
