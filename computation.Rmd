@@ -516,7 +516,8 @@ For example, for continuous targets one may use the gradient or hessian of  $\lo
 
 In model selection problems the state is discrete, i.e. $\bfeta= \bgamma$ where $\bgamma$ denotes a model. Here one can use local information by considering models $\bgamma$ that lie in a neighborhood $\mathcal{N}(\bgamma^{(b)})$ of the current $\bgamma^{(b)}$, and set a proposal that is guided by their posterior probability.
 For example, in variable selection these neighborhoods may be defined by adding or dropping a single parameter to $\bgamma^{(b)}$ (birth-death move), or by exchanging a currently zero by a currently non-zero parameter (swap move).
-See @chang_hyunwoong:2025 for a theoretical analysis of locally-informed algorithms in discrete spaces, establishing conditions in which they lead to dimension-free mixing (spectral gap bounds that don't depend on the dimension of $\bgamma$).
+@zanella:2020 studies locally informed proposals for discrete spaces, showing that basing the MH proposal on certain so-called balancing functions enjoys some optimal asymptotic properties.
+See also @chang_hyunwoong:2025 for a theoretical analysis of locally-informed algorithms in discrete spaces, establishing conditions in which they lead to dimension-free mixing (spectral gap bounds that don't depend on the dimension of $\bgamma$).
 
 An interesting algorithm building on this idea is the locally-informed thresholded (LIT) algorithm of @zhou_quan:2022.
 The key idea is to propose $\bgamma^* \in \mathcal{N}(\bgamma^{(b)})$ with probability 
@@ -536,6 +537,10 @@ In fact, the dimension-free results in @zhou_quan:2022 require that the posterio
 Fortunately, in Bayesian model selection the posterior distribution on models typically becomes quite concentrated as $n \to \infty$, and it is also quite concentrated on sparse models when $n$ is small. Hence, there is hope for locally-informed algorithms to be effective in many applications.
 This being said, as argued in Example \@ref(exm:beer-search) if the posterior is strongly multimodal then locally-informed algorithms are expected to work poorly in practice.
 
+Locally-informed proposals can also be embedded within algorithms that allow for larger moves.
+For example, @liang_xitong:2023 proposed such an MCMC algorithm for generalized linear and survival models, where the MH proposal proceeds as follows.
+First, one proposes a new model $\bgamma'$ by randomly adding/dropping each individual variable from the current model $\bgamma^{(b)}$, so that $\bgamma'$ can differ from $\bgamma^{(b)}$ in several included/excluded variables.
+Second, one proposes a sequence of local moves from $\bgamma'$ that allow reverting some of the changes in $\bgamma'$. The proposal probabilities for these local moves depend on (possibly approximated) model posterior probabilities and balancing functions, and adaptive MCMC is used to set tuning parameters (e.g. birth-death probabilities used in Step 1).
 
 
 ## Hamiltonian Monte Carlo {#hmc}

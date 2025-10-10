@@ -2,8 +2,13 @@
 
 To be added.
 
-## Approximating the marginal likelihood {#glm-marglhood}
+## Prior on coefficients
 
+
+Extensions of g-prior mixtures to GLMs include using the observed or expected information matrix
+evaluated at the maximum-likelihood (ML) as the prior covariance (Hansen and Yu, 2003; Wang and George, 2007; Li and Clyde, 2016).
+
+## Approximating the marginal likelihood {#glm-marglhood}
 
 ## MCMC model search {#glm-mcmc}
 

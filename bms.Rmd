@@ -15,6 +15,7 @@ Before proceeding, we load R packages needed by our examples.
 
 ```{r, message=FALSE}
 library(modelSelection)
+library(BayesVarSel)
 library(varbvs)
 library(tidyverse)
 ```
@@ -47,7 +48,7 @@ In Section \@ref(bms-modelprior) we discuss how to set the model prior in more a
 
 For the prior on parameters, both models feature the error variance. A popular choice is setting an inverse gamma prior $\sigma^2 \sim IG(a/2,l/2)$ under both models, for some given $a,l>0$. Typically posterior probabilities are robust to the choice of $(a,l)$, provided they're small values (by default, `modelSelection` sets $a=l=0.01$). 
 To complete the parameter prior under the alternative model we must set a prior on $\mu$ given $\sigma^2$. A popular choice is $p(\mu \mid \sigma^2, \gamma=1)= N(\mu; 0, g \sigma^2)$, for some given $g>0$. Posterior probabilities are sensitive to $g$, but a common default (unit information prior) is $g=1$ and results are typically fairly robust as long as $g$ is not too different from this default.
-In Section \@ref(bms-priorvar) we extend the example to consider a wide range of $g$ values.
+In Section \@ref(bms-paradox) we extend the example to consider a wide range of $g$ values.
 See also Section \@ref(bms-coefprior) for some discussion on parameter priors in more advanced examples.
 
 :::
@@ -193,6 +194,7 @@ Posterior model probabilities in \@ref(eq:bms-pp) are one-to-one functions of Ba
 
 As we just discussed, BMS quantifies uncertainty in model choice via posterior model probabilities.
 Bayesian model averaging (BMA) is a conceptually simple and natural way to account for this uncertainty when one wishes to estimate parameters or some other quantity that's shared by multiple models, and to provide posterior intervals for said parameters.
+See @clyde:1999 or @hoeting:1999 for two excellent introductions.
 
 A canonical example is reporting inference on a regression parameter $\beta_j$. We have considered many models $\bgamma \in \Gamma$, where recall that $\Gamma$ is the set of models. For each model $\bgamma$ we have a posterior distribution $p(\beta_j \mid \bgamma, \by)$ and an associated posterior mean $E(\beta_j \mid \bgamma, \by)$.
 The BMA point estimate follows from the law of total expectation
@@ -366,7 +368,7 @@ We refer the reader to Section \@ref(eBayes) for a more detailed discussion on e
 
 ### Beta-Binomial prior
 
-@scott:2010 argued for setting a uniform prior $\pi \sim U(0,1)$ and $\gamma_j \sim \mbox{Bern}(\pi)$ independently across $j=1,\ldots,p$.
+@cui:2008 and @scott:2010 argued for setting a uniform prior $\pi \sim U(0,1)$ and $\gamma_j \sim \mbox{Bern}(\pi)$ independently across $j=1,\ldots,p$.
 These define $p(\pi)$ and $p(\bgamma \mid \pi)$, which imply the following marginal prior
 \begin{align}
 p(\bgamma) \propto \frac{1}{{p \choose |\bgamma|_0}}
@@ -447,53 +449,627 @@ coef(ms.comp)
 
 ## Prior on coefficients {#bms-coefprior}
 
-### Local priors {#bms-localprior}
+Bayesian model selection requires a prior on parameters $p(\btheta_\gamma \mid \gamma)$ for each model $\gamma$.
+Specifying these priors requires some care, 
+if one wishes the resulting data analysis procedure to enjoy certain properties. This topic has been the subject of a rich literature on so-called objective Bayes methods that we review below.
+Before doing so, we give a short and practical version.
+The three aspects of a prior that have a stronger effect inference are:
+
+1. Prior dispersion. Larger dispersion favors simpler models,
+and one cannot set improper (or extremely vague) priors on the parameters undergoing selection (due to the so-called Jeffreys-Lindley-Bartlett paradox).
+Setting suitable vague priors however can help encourage parsimony in high dimensions [@narisetty:2014].
+
+2. Tail behavior. Thicker-than-normal tails reduce BMA parameter estimation bias [@castillo:2015]. Cauchy-type tails also guarantee a property called information (or finite-sample) consistency.
+
+3. Local vs. non-local prior (model separation principle). Non-local priors accumulate evidence in favor of discarding truly zero parameters at a faster rate than local priors. This results in sparser results and a faster concentration of posterior model probabilities, which is important in high dimensions.
+
+
+Points 1 and 2 typically have a mild effect on Bayes factors and posterior model probabilities for moderately large $n$, provided one avoids extreme prior choices (such as improper priors). We illustrate this with examples in Sections \@ref(bms-paradox) and \@ref(bms-heavy-tailed).
+Point 3 can have a stronger effect, and is discussed in Section \@ref(bms-nlp).
+
+Given the hands-on nature of this book, our prefered strategy will be to choose default priors that are computationally convenient and which have been shown to behave well, both in terms of theory and practice. Specific choices for particular problems will be discussed in subsequent chapters.
+
+
+
+
+### Jeffreys-Lindley-Bartlett paradox {#bms-paradox}
+
+The Jeffreys-Lindley-Bartlett paradox (@jeffreys:1961, @lindley:1957) refers to the following fact. When comparing two nested models $\bgamma \subset \bgamma'$ (i.e. with parameter spaces $\Theta_\gamma \subset \Theta_{\gamma'}$), if one sets an improper prior on the extra parameters that feature in $\bgamma'$ then $P(\bgamma \mid \by)=1$, regardless of the observed data $\by$.
+This has been viewed as a paradox by many: an improper prior should lead to parameter estimates that resemble maximum likelihood estimation, hence an improper prior might seem uninformative, contrary to the fact that $P(\bgamma \mid \by)=1$ regardless of $\by$.
+
+Our view is that this phenomenon is not a big issue, because:
+
+1. Data analysis algorithms often feature hyper-parameters. For example, varying the penalty parameter in penalized likelihood methods gives solutions that range from excluding all parameters to including them all, yet this doesn't stop anyone from using penalized likelihood. They real issue is whether one can set hyper-parameters to sensible defaults, and as discussed in this section there are many strategies for obtaining such defaults.
+
+2. The phenomenon is no paradox. Extremely vague priors are very informative, they imply a prior expectation that the covariates will predict the outcome with perfect accuracy.
+See Example \@ref(exm:lm-propvar-zellner) below for an illustration.
+
+3. In practice, even moderately large changes to the prior dispersion have little effect on posterior model probabilities. Results are usually much more sensitive to the sample size, i.e. for a wide range of prior dispersions inference is driven by the data.
+See Example \@ref(exm:normalmean-sensitivity) for an illustration.
+
+
+::: {.example #lm-propvar-zellner}
+
+Consider a linear regression $y_i= \bx_i^T \bbeta + \epsilon_i$ where $\epsilon_i \sim N(0,\sigma^2)$ and $V(\bx_i)= \Sigma$ for some strictly positive-definite covariance $\Sigma$ with independence across $i=1,\ldots,n$, and where $\epsilon_i$ and $\bx_i$ are also independent.
+
+The total variance of $y_i$ is decomposed as $V(y_i)= \bbeta^T \Sigma \bbeta + \sigma^2$, where the first term is interpreted as the variance explained by $\bx_i$, and $\sigma^2$ as the unexplained variance.
+If the ratio of explained-to-unexplained variances $\bbeta^T \Sigma \bbeta/\sigma^2$
+is large,
+or equivalently if the proportion of explained variance $\rho= \bbeta^T \Sigma \bbeta / (g + \bbeta^T \Sigma \bbeta) \in [0,1]$ is close to 1,
+it means that we expect the covariates to explain all variance in the outcome.
+
+Suppose that one sets the prior $\bbeta \mid \sigma^2 \sim N({\bf 0}, g \sigma^2 \Sigma^{-1})$. Then, using standard multivariate Gaussian results,
+$$
+g \frac{\bbeta^T \Sigma \bbeta}{g \sigma^2} \sim
+g \chi_p^2.
+$$
+Hence, setting large $g$ implies that we expect the covariates to explain all the variance.
+Same thing in different words, as $g \to \infty$ the implied prior on the proportion of explained variance $\rho$ concentrates on 1, i.e. it becomes extremely informative.
+
+A similar argument holds when replacing $\Sigma$ by other prior covariances (Exercise \@ref(exr:lm-propvar-general)), 
+such as $X^T X/n$ used by Zellner's prior,
+and when using non-Gaussian priors (Exercise \@ref(exr:lm-propvar-general2)).
+
+
+:::
+
+
+::: {.example #normalmean-sensitivity}
+
+We return to Example \@ref(exm:normalmean) where $y_i \sim N(\mu, \sigma^2$ and the prior under the alternative hypothesis is $N(0, g \sigma^2)$.
+We assess the robustness of the results as one varies the prior dispersion $g$
+from its default $g=1$ given by Zellner's unit information prior (a default that has good theoretical properties and works well in practice).
+We consider the range $g \in [0.001, 10^5]$, which differs considerably from the default $g=1$.
+
+We first simulate two datasets where truly $\mu=0$, the first with $n=100$ and the second with $n=1000$.
+Next, we simulate two more datasets where truly $\mu \neq 0$, again with $n=100$ and $n=1000$.
+The figure below shows $P(\mu \neq 0 \mid \by)$ for the 4 datasets, versus the prior dispersion $g$.
+
+
+<details>
+<summary>Click to show code</summary>
+
+```{r}
+set.seed(1234)
+df0 <- data.frame(y= rnorm(100))
+df1 <- data.frame(y= rnorm(100, mean=0.5))
+df0_large <- data.frame(y=rnorm(1000))
+df1_large <- data.frame(y= rnorm(1000, mean=0.5))
+
+gseq <- exp(seq(log(0.01), log(10^2), length=100))
+pp0 <- pp1 <- pp0_large <- pp1_large <- double(length(gseq))
+for (i in 1:length(gseq)) {
+  priorCoef <- normalidprior(taustd=gseq[i])
+  ms <- modelSelection(y ~ 1, data=df0, priorCoef=priorCoef, priorModel=priorModel, center=FALSE, verbose=FALSE)  
+  # Small n
+  pp0[i] <- coef(ms)['(Intercept)', 'margpp']
+  ms1 <- modelSelection(y ~ 1, data=df1, priorCoef=priorCoef, priorModel=priorModel, center=FALSE, verbose=FALSE)  
+  pp1[i] <- coef(ms1)['(Intercept)', 'margpp']
+  # Large n
+  ms <- modelSelection(y ~ 1, data=df0_large, priorCoef=priorCoef, priorModel=priorModel, center=FALSE, verbose=FALSE)  
+  pp0_large[i] <- coef(ms)['(Intercept)', 'margpp']
+  ms1 <- modelSelection(y ~ 1, data=df1_large, priorCoef=priorCoef, priorModel=priorModel, center=FALSE, verbose=FALSE)  
+  pp1_large[i] <- coef(ms1)['(Intercept)', 'margpp']
+}
+
+pp <- rbind(data.frame(n=100, g=gseq, pp0, pp1),
+        data.frame(n=1000, g= gseq, pp0=pp0_large, pp1=pp1_large)) |>
+      transform(n= factor(n))
+```
+
+```{r}
+plot1 <- ggplot(pp, aes(x=g)) +
+  geom_line(aes(y=pp0, group=n, col=n, lty=n)) +
+  scale_x_log10(labels = function(x) format(x, scientific = FALSE)) +
+  ylim(0,1) +
+  labs(y= expression(paste("Posterior probability that ", mu != 0)), 
+       title=expression(paste("Truly ", mu , "= 0"))) +
+  theme_grey(base_size = 16) +
+  theme(legend.position = c(0.95, 0.95), legend.justification = c(1, 1))
+
+plot2 <- ggplot(pp, aes(x=g)) +
+  geom_line(aes(y=pp1, group=n, col=n, lty=n)) +
+  scale_x_log10(labels = function(x) format(x, scientific = FALSE)) +
+  ylim(0,1) +
+  labs(y= expression(paste("Posterior probability that ", mu != 0)), 
+       title=expression(paste("Truly ", mu != 0))) +
+  theme_grey(base_size = 16) +
+  theme(legend.position = c(0.95, 0.95), legend.justification = c(1, 1))
+```
+
+</details>
+
+```{r normalmean-gseq, fig.show='hold', out.width='50%', echo=FALSE}
+
+plot1
+
+plot2
+
+```
+
+
+When truly $\mu \neq 0$ the results are very robust to $g$: $P(\mu \neq 0 \mid \by)$ is virtually equal to 1, for both sample sizes and all $g \in [0.01,100]$.
+When truly $\mu=0$, under the default $g=1$ there is little support for $\mu \neq 0$, and the same holds for the fairly wide range $g \in [0.1, 10]$. 
+As $g \to 0$ we have $P(\mu \neq 0 \mid \by)$ approaching 0.5, this is reasonable because for $g=0$ the $N(0, g \sigma^2)$ prior under the alternative model states that $\mu=0$, i.e. the null and alternative hypotheses are equivalent and both receive the same posterior probability.
+This effect can only be appreciated when truly $\mu = 0$, when truly $\mu=0.5$ we would need to consider much smaller $g$. 
+
+:::
+
+
 
 ### Non-local priors {#bms-nlp}
 
-### Sensitivity to prior variance {#bms-priorvar}
+Non-local priors (@johnson:2010, @johnson:2012, @rossell:2017) are based on what one might call the *model separation principle*. Loosely speaking, any two models that one wishes to compare should be well-separated in terms of the data that they might generate. If this principle does not hold, i.e. if there are two models that may generate similar data, then it will be hard to tell them apart using this observed data.
 
-We return to Example \@ref(exm:normalmean),
-and assess the robustness of the results for the original data as one varies the value of the prior dispersion $g$.
-This is interesting because much literature has been devoted to the so-called Jeffreys-Lindley-Bartlett paradox [@lindley:1957]. Briefly, as $g \to \infty$ the posterior probability $P(\mu=0 \mid \by)$ converges to 1, which a number of authors viewed as problematic.
-We contend that this is not so: if one views $g$ as a tuning parameter, then $g= \infty$ is an extreme value and it's therefore unsurprising that one obtains extreme results. For example, an infinite LASSO penalty also leads to $\hat{\mu}=0$, yet this doesn't stop anyone from using LASSO. The question is whether one can set tuning parameters to values that lead to good behavior, and there's abundant theoretical and empirical evidence that $g=1$ does so.
+We start with a motivating example and later proceed by defining non-local priors and mentioning some of their basic properties.
 
-Here we consider the range $g \in [0.1, 10]$, i.e. some of these prior variances are very different from the default $g=1$.
-We do the exercise with the dataset `y` simulated in Example \@ref(exm:normalmean), where truly $\mu=0$, and also with another dataset `y1` where truly $\mu=1$.
+
+::: {.example #nlp-normalmean}
+
+We return to Example \@ref(exm:normalmean) where $y_i \sim N(\mu, \sigma^2)$ and the goal is to test $\mu=0$ versus $\mu \neq 0$.
+We simulate two datasets where $n=100$, in the first truly $\mu=0$ and in the second $\mu=0.5$, and we then repeat the exercise with $n=500$.
+For each of these four datasets we compute $P(\mu \neq 0 \mid \by)$ using $P(\mu = 0)= P(\mu \neq 0)$ and five parameter priors:
+
+- Zellner's unit information prior (default prior variance $g=1$)
+
+- Product MOM prior of @johnson:2012 (default prior variance =1)
+
+- Zellner-Siow prior
+
+- Robust prior of @bayarri:2012
+
+- Hyper-g/n prior of @liang:2008 (with default parameter $a=3$),
+
+For Zellner's and the product MOM we used R package `modelSelection`, for the rest we used package `BayesVarSel` [@garciadonato:2018].
+The product MOM is a non-local prior, all others are local priors.
+The following table shows the results.
+
+<details>
+<summary>Click to show code</summary>
 
 ```{r}
-df1 <- data.frame(y1= rnorm(n, mean=0.5))
-gseq <- seq(0.001, 10^5, length=200)
-pp0.gseq <- pp1.gseq <- double(length(gseq))
-for (i in 1:length(gseq)) {
-  priorCoef <- normalidprior(taustd=gseq[i])
-  ms <- modelSelection(y ~ 1, data=df, priorCoef=priorCoef, priorModel=priorModel, center=FALSE, verbose=FALSE)  
-  pp0.gseq[i] <- coef(ms)['(Intercept)', 'margpp']
-  ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=priorCoef, priorModel=priorModel, center=FALSE, verbose=FALSE)  
-  pp1.gseq[i] <- coef(ms1)['(Intercept)', 'margpp']
+set.seed(1234)
+df0 <- data.frame(y= rnorm(100))
+df1 <- data.frame(y= rnorm(100, mean=0.5))
+df0_large <- data.frame(y=rnorm(500))
+df1_large <- data.frame(y= rnorm(500, mean=0.5))
+```
+
+
+```{r}
+#Function to obtain posterior prob for mu != 0 under all priors
+getpp <- function(df) {
+  # Zellner's unit info prior
+  pp.z  <- modelSelection(y ~ 1, center=FALSE, data=df, priorCoef=zellnerprior(taustd=1), verbose=FALSE) |>
+  postProb() |>
+  dplyr::filter(modelid=="1") |>
+  dplyr::select(pp) |>
+  as.numeric()
+  #
+pp.mom  <- modelSelection(y ~ 1, center=FALSE, data=df, priorCoef=momprior(taustd=1), verbose=FALSE) |>
+  postProb() |>
+  dplyr::filter(modelid=="1") |>
+  dplyr::select(pp) |>
+  as.numeric()
+# Zellner-Siow, Hyper-g, Robust
+  M0 <- as.formula("y ~ -1")
+  M1 <- as.formula("y ~ 1")
+  pp.zs <- Btest(models=c(H0=M0, H1=M1), data=df, prior.betas="ZellnerSiow")$PostProbi['H1']
+  pp.l <- Btest(models=c(H0=M0, H1=M1), data=df, prior.betas="Liangetat")$PostProbi['H1']
+  pp.r <- Btest(models=c(H0=M0, H1=M1), data=df, prior.betas="Robust")$PostProbi['H1']
+#
+  ans <- round(c(pp.z, pp.mom, pp.zs, pp.l, pp.r), 3)
+  names(ans) <- c("Zellner", "MOM", "ZellnerSiow", "Liangetal", "Robust")
+  return(ans)
 }
+
+pp0 <- c(n=100, mu= 0, getpp(df0))
+pp0_large <- c(n=500, mu= 0, getpp(df0_large))
+pp1 <- c(n=100, mu= 0.5, getpp(df1))
+pp1_large <- c(n=500, mu= 0.5, getpp(df1_large))
+
+pp <- rbind(pp0, pp0_large, pp1, pp1_large)
+rownames(pp) <- NULL
 ```
 
-```{r normalmean-gseq, fig.cap='(ref:cap-normalmean-gseq)', fig.show='hold', out.width='50%'}
-plot(gseq, pp0.gseq, xlab='g', ylab='Posterior probability', ylim=c(0,1), type='l')
-plot(gseq, pp1.gseq, xlab='g', ylab='Posterior probability', ylim=c(0,1), type='l')
+</details>
+
+```{r, echo=FALSE}
+kableExtra::kable(pp, 
+      col.names = c("n", "$\\mu$", "Zellner", "MOM", "Zellner-Siow", "Hyper-g", "Robust"),
+      align = "c",
+      escape = FALSE) |>
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 
-(ref:cap-normalmean-gseq) Posterior probability $P(\mu \neq 0 \mid \by)$ vs. prior dispersion $g$ in the Gaussian mean example (n=100). Left: truly $\mu=0$. Right: truly $\mu=0.5$.
+When truly $\mu=0.5$, all priors lead to $P(\mu \neq 0 \mid \by)$ virtually equal to 1.
+This is as we would expect, both sample sizes are large considering that we only have two parameters (mean and variance), and that $\mu$ is not very close to 0.
 
-Figure \@ref(fig:normalmean-gseq) shows the results.
-Although $P(\mu \neq 0 \mid \by)$ decreases as $g$ grows, when truly $\mu=0$ the changes are rather small and when truly $\mu=0.5$ the changes cannot be appreciated. Overall, the conclusions are unaffected by $g$.
-Note that as $g \to 0$ we have $P(\mu \neq 0 \mid \by)$ approaching 0.5, this is reasonable because for $g=0$ the $N(0, g \sigma^2)$ prior under the alternative ($\gamma=1$) states that $\mu=0$, i.e. the null and alternative hypotheses are equivalent and both receive the same posterior probability.
-This effect can only be appreciated when truly $\mu = 0$, when truly $\mu=0.5$ we would need to consider much smaller $g$. 
-Just for fun, below we consider an absurdly small $g=0.001$ and an absurdly large $g=10^6$, and even then we obtain some evidence for $P(\mu \ne 0 \mid \by)$.
+When truly $\mu=0$ and the sample size is $n=100$ there are bigger differences. The results from all priors agree that there isn't much evidence for $\mu \neq 0$, however under the local priors $P(\mu \neq 0 \mid \by)$ is relatively large, one doesn't very strong evidence that $\mu = 0$.
+Even for $n=500$, the evidence is stronger but still not completely conclusive.
+In contrast, the MOM prior assigned much larger posterior probability $P(\mu =0 \mid \by)$ to the data-generating model.
+
+Being unable to assign large $P(\mu =0 \mid \by)$ when truly $\mu=0$
+would be problematic in a sequential clinical trial where researchers wish to stop experimentation early when a treatment effect $\mu$ is zero. Unless $P(\mu = 0 \mid \by)$ is sufficiently large, researchers would continue collecting data, which can have large costs in terms of time, money, and experimenting with humans. In fact, this was the motivating application that led Val Johnson to think of non-local priors.
+More critically for this book's context, this example suggests that local priors may be relatively slow in accumulating evidence for excluding truly zero parameters, i.e. in encouraging sparsity.
+
+We emphasize again that in this simple example one has large $n$ for only two parameters: when one has many parameters, inducing sufficient sparsity can be critical.
+
+:::
+
+
+We next formally define the notion of a non-local prior. 
+Intuitively, a non-local prior under model $\bgamma$ assigns vanishing density to any parameter value $\btheta_\gamma$ that collapses $\bgamma$ onto some submodel $\bgamma'$, i.e. such that the probability distribution of $\by$ under $\btheta_\gamma$ also belongs to $\bgamma'$.
+
+
+::: {.definition #non-local-prior}
+
+A prior on parameters $p(\btheta_\gamma \mid \bgamma)$ is a non-local prior if and only if
+$$
+\lim_{\btheta_\gamma \to {\bf a}} p(\btheta_\gamma \mid \bgamma) = 0
+$$
+for any ${\bf a}$ such that $p(\by \mid \btheta_{\gamma}= a, \bgamma) = p(\by \mid \btheta_{\gamma'}, \bgamma')$ for some submodel $\bgamma' \subset \bgamma$ ($\Theta_{\gamma'} \subset \Theta_\gamma$) and $\btheta_{\gamma'} \in \Theta_{\gamma'}$.
+
+:::
+
+As a simplest example, consider testing $\mu=0$ versus $\mu \neq 0$, i.e. where two models are $\gamma= \mbox{I}(mu \neq 0) \in \{0,1\}$.
+A non-local prior under $\gamma=1$ must satisfy $p(\mu=0 \mid \gamma=1) = 0$.
+The MOM prior is a simple and computationally convenient option (see below), and has density
+$$
+p(\mu \mid \gamma=1, \sigma^2)= \frac{\mu^2}{g \sigma^2} N(\mu; 0, g \sigma^2).
+$$
+A simple yet effective default for the prior dispersion parameter is $g=1/3$. The reasoning is that this value matches the precision in Zellner's unit information prior, a classical minimally-informative default.
+To see this, the prior variance is $V(\mu \mid \gamma=1, \sigma^2)= (g\sigma^2)^{-1} \int \mu^4 N(\mu; 0, g\sigma^2) d\mu= 3 g \sigma^2$, hence setting $g=1/3$ gives that $V(\mu/\sigma \mid \gamma=1, \sigma^2)=1$, and the prior precision to also be 1.
+
+The figure below shows the density function for $g=1/3$ and $\sigma^2=1$ and compares it to a Gaussian where also $\sigma^2=1$. As discussed both distributions have the same variance, but the MOM is bimodal and vanishes at $\mu=0$.
+Philosophically, one might view the Gaussian prior as problematic. It's a prior conditioning on $\mu \neq 0$, i.e. it is supposed to embed the knowledge that $\mu$ cannot be 0, yet the most likely value under the Gaussian is $\mu=0$.
+This prior fails to satisfy the model separation principle.
+If data are truly generated by $\mu=0$, such data will have non-negligible probability not only under $\gamma=0$ but also under $\gamma=1$, because the latter assigns high prior mass to $\mu=0$.
+
+
+```{r, echo=FALSE}
+mu <- seq(-3,3,length=200)
+plot(mu, dmom(mu, tau=1/3), type='l', ylab='Prior density', xlab=expression(mu), cex.lab=1.5, cex.axis=1.5)
+lines(mu, dnorm(mu), col='gray')
+legend("topright", c("Gaussian","MOM"), lty=1, col=c('grey','black'), cex=1.25)
+```
+
+
+The product MOM prior can be stated for multiple parameters, e.g. in regression settings where $\btheta_\gamma= (\bbeta_\gamma, \sigma^2)$, as follows.
+\begin{align}
+p(\bbeta_\bgamma \mid \sigma^2, \bgamma)= \prod_{\gamma_j=1} \frac{\beta_j^2}{g \sigma^2} N(\beta_j; 0, g \sigma^2),
+(\#eq:pmom-prior)
+\end{align}
+again with a default $g=1/3$ to match Zellner's unit information prior.
+
+The philosophical arguments motivating non-local priors have direct consequences on the frequentist properties of the resulting Bayes factors. 
+The short version is that non-local priors induce sparsity at faster rates than local priors.
+More precisely, let $B_{\bgamma \bgamma'}$ be the Bayes factor comparing two nested fixed-dimensional models, with $\bgamma' \subset \bgamma$. 
+Under mild regularity conditions, essentially, guaranteeing the validity of a Laplace approximation to the marginal likelihood, for example in asymptotically Gaussian posteriors, the following holds (@jeffreys:1961, @ohagan:1995).
+If data are truly generated by the simpler model $\bgamma'$, then $B_{\gamma,\gamma'}= O_p(1/n^{(p_\gamma - p_{\gamma'})/2})$ for any local prior with fixed prior dispersion.
+In contrast, if data re truly generated by the larger model $\bgamma$, then $n^{-1} \log B_{\gamma, \gamma'} \stackrel{P}{\longrightarrow} c$ for some $c>0$.
+That is, Bayes factors favor a true larger model at an exponential rate in $n$, but they favor a true smaller model at a slow polynomial rate.
+For non-local priors one also gets exponential rates under a true larger model, and faster rates when data are generated from the smaller model.
+For example for the product MOM prior (also with fixed prior dispersion) one gets triple the rate, i.e. $B_{\gamma,\gamma'}= O_p(1/n^{3(p_\gamma - p_{\gamma'})/2})$ [@johnson:2012].
+Although we focused on the fixed-dimensional case for simplicity, these results can be extended to high-dimensional settings [@rossell:2022].
+
+
+A nice property of non-local priors is that they admit a simple expression for the marginal likelihood, which also sheds light as to how they enforce sparsity.
+Any non-local prior can be written as
+$$
+p(\btheta_\gamma \mid \bgamma)= d_\gamma(\btheta_\gamma) p^L(\btheta_\gamma \mid \bgamma),
+$$
+where $p^L(\btheta_\gamma \mid \bgamma)$ is a local prior and $d(\btheta_\gamma) \to 0$ for any $\btheta_\gamma$ that collapses $\bgamma$ to a submodel $\bgamma'$, as in Definition \@ref(def:non-local-prior). The product MOM prior in \@ref(eq:pmom-prior) is already written in this form, with $d(\btheta_\gamma)= \prod_{\gamma_j=1} \beta_j^2 / [g \sigma^2]$ and $p^L()$ being a Gaussian prior.
+For a general non-local prior $p(\btheta_\gamma \mid \bgamma)$ we can write 
+$\tilde{p}(\btheta_\gamma \mid \bgamma)= d_\gamma(\btheta_\gamma) = p^L(\btheta_\gamma \mid \bgamma)$, where $d_\gamma(\btheta_\gamma)= p(\btheta_\gamma \mid \bgamma) / p^L(\btheta_\gamma \mid \bgamma)$ and $p^L(\btheta_\gamma \mid \bgamma)>0$ for all $\btheta_\gamma$ is a local prior.
+
+@rossell:2017 showed that (see Exercise \@ref(exr:nlp-marginal)) the marginal likelihood under a non-local prior is
+$$
+p(\by \mid \bgamma) = p^L(\by \mid \bgamma) E^L \left[ d_\gamma(\btheta_\gamma) \mid \by, \bgamma  \right]
+$$
+where
+$$
+E^L \left[ d_\gamma(\btheta_\gamma) \mid \by, \bgamma  \right]=
+\int d(\btheta_\gamma) p^L(\btheta_\gamma \mid \bgamma, \by) d\btheta_\gamma
+$$
+is the posterior expectation of $d_\gamma(\btheta_\gamma)$ under the posterior implied by the local prior, i.e. $p^L(\btheta_\gamma \mid \bgamma, \by) \propto p(\by \mid \btheta_\gamma, \bgamma) p^L(\btheta_\gamma \mid \bgamma)$.
+
+The intuition is simple, if the data are truly generated by a submodel $\bgamma' \subset \bgamma$, then $p^L(\btheta_\gamma \mid \bgamma , \by)$ should concentrate on a $\btheta_\gamma= {\bf a}$ such that $d({\bf a})=0$ (by the non-local prior definition) and $E^L$ above should vanish.
+In particular, for the product MOM prior
+$$
+E^L(d_\btheta_\gamma \mid \by, \bgamma)= \int \prod_{\beta_j \neq 0} \frac{\beta_j^2}{g \sigma^2} p^L(\bbeta_\gamma, \sigma^2 \mid \by, \bgamma) d\bbeta_\gamma d\sigma^2.
+$$
+Evaluating this expression is cumbersome: it is the expectation of a product, and Laplace approximations to the integral do not consistently estimate this integral as $n \to \infty$ (@rossell:2017, @rossell:2021). 
+However, @rossell:2021 showed that one may replace the expectation of the product by the product of expectations and obtain essentially the same asymptotic behavior. That is, one may use
+$$
+\prod_{\beta_j \neq 0} \int \frac{\beta_j^2}{g \sigma^2} p^L(\beta_j, \sigma^2 \mid \by, \bgamma) d\bbeta_\gamma d\sigma^2=
+\prod_{\beta_j \neq 0} \frac{1}{g \sigma^2} \left[ (E^L(\beta_j \mid \by, \bgamma))^2 + V^L(\beta_j \mid \by, \bgamma )   \right].
+$$
+The latter expression just requires the posterior mean and variance of $\beta_j$ under the local prior, which is available for the product MOM in Gaussian linear regression and easy to approximate for generalized linear models.
+This last expression is intuitive: if there is any $\beta_j$ such that both its posterior mean and variance are close 0, then the product vanishes.
+
+
+### Heavy-tails and finite sample consistency {#bms-heavy-tailed}
+
+We use a simple example to illustrate the effect of using heavy-tailed priors, and its relation to the finite-sample consistecy property.
+
+
+<details>
+<summary>Click to show code</summary>
 
 ```{r}
-ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=normalidprior(taustd=0.001), priorModel=priorModel, center=FALSE, verbose=FALSE)
-coef(ms1)
+set.seed(1234)
+nseq <- c(5, 10)
+xbarseq <- seq(0.01, 3, length=20)
+pp <- lapply(1:length(nseq), matrix, nrow=length(xbarseq), ncol=7)
+for (i in 1:length(nseq)) {
+  df <- data.frame(y= scale(rnorm(nseq[i])))
+  for (j in 1:length(xbarseq)) {
+    dfplus <- transform(df, y= y + xbarseq[j])
+    pp[[i]][j,] <- c(nseq[i], xbarseq[j], getpp(dfplus))
+  }
+}
+pp <- do.call(rbind, pp) |> data.frame()
+names(pp) <- c("n", "xbar", "Zellner", "MOM", "ZellnerSiow", "Hyper-g", "Robust")
+pplong <- pivot_longer(pp, Zellner:Robust, names_to="prior", values_to="PostProb")|>
+  filter(prior != "Hyper-g") |>  #Remove Hyper-g so that plot's more readable
+  transform(color= ifelse(prior %in% c("Zellner","MOM"), "black", "gray"),
+            line_type = case_when(
+              prior == "Zellner" ~ "solid",
+              prior == "MOM" ~ "dashed",
+              prior == "ZellnerSiow" ~ "solid",
+              prior == "Robust" ~ "dashed"))
+```
 
-ms1 <- modelSelection(y1 ~ 1, data=df1, priorCoef=normalidprior(taustd=10^6), priorModel=priorModel, center=FALSE, verbose=FALSE)
-coef(ms1)
+
+```{r}
+# Create named vectors for the scales
+line_type_values <- distinct(pplong, prior, line_type) |> 
+  deframe()
+
+color_values <- distinct(pplong, prior, color) |>
+  deframe()
+
+# Create plot
+myplot <- ggplot(pplong, aes(x = xbar, y = PostProb)) +
+  geom_line(aes(group = prior, linetype = prior, color = prior)) +
+  scale_linetype_manual(values = line_type_values) +
+  scale_color_manual(values = color_values) +
+  facet_wrap(~ n) +
+  labs(y = expression(paste("Posterior probability that ", mu != 0)), 
+       x = "Sample mean",
+       title = "Sample size") +
+  theme_grey(base_size = 16) +
+  theme(plot.title = element_text(hjust = 0.5),
+        legend.position = "inside", legend.justification = c(1, 0))
+```
+
+
+```{r}
+# Highest posterior probability for each (prior, n)
+tab <- group_by(pplong, prior, n) |>
+  summarize(PostProb= max(PostProb)) |>
+  transform(n = paste('n=',n)) |>
+  pivot_wider(names_from= n, values_from= PostProb)
+```
+
+</details>
+
+```{r, echo=FALSE}
+myplot
+```
+
+
+<details>
+<summary>Click to show code</summary>
+
+```{r}
+nseq <- c(5, 10)
+xbarseq <- 50
+maxpp <- lapply(1:length(nseq), matrix, nrow=length(xbarseq), ncol=6)
+for (i in 1:length(nseq)) {
+  df <- data.frame(y= scale(rnorm(nseq[i])))
+    dfplus <- transform(df, y= y + xbarseq)
+    maxpp[[i]][1,] <- c(nseq[i], getpp(dfplus))
+}
+maxpp <- do.call(rbind, maxpp) |> data.frame()
+names(maxpp) <- c("n", "Zellner", "MOM", "ZellnerSiow", "Hyper-g", "Robust")
+```
+
+</details>
+
+```{r, echo=FALSE}
+kableExtra::kable(maxpp, 
+      align = "c",
+      escape = FALSE) |>
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 
 
 
+
+
+### Objective Bayes {#bms-obayes}
+
+We overview the three most popular objective Bayes strategies, and point readers @consonni:2018 for an excellent deeper discussion.
+The first strategy is to set a default prior which is minimally informative, works well in practice, and satisfies certain desiderata. These are often called conventional priors [@berger:2001].
+The second strategy is to set priors that are based on obtaining the posterior for some minimal training data.
+The third strategy is to set prior, or their prior parameter values, via empirical Bayes. We defer discussing empirical Bayes to Chapter \@ref(eBayes).
+
+Regarding default priors, popular choices include Jeffreys-Zellner-Siow priors (@jeffreys:1961, @zellner:1980, @zellner:1984, @zellner:1986) and extensions thereof, such as conventional priors [@bayarri:2007], mixtures of g-priors [@liang:2008]. 
+These proposals focus on linear and generalized linear models, and are discussed in Section \@ref(glm).
+The main idea behind Zellner's prior is to ensure that the prior is minimally informative (in terms of Fisher information), by default that it contains as much information as a single observation. The mentioned extensions allow the prior to have thicker tails, and propose various ways to set the prior dispersion.
+@bayarri:2008 proposed default priors beyond regression settings based on Kullback-Leibler divergences, and which are applicable whenever one has nested models.
+
+@bayarri:2012 proposed a full list of desiderata that a prior should satisfy, which we list below,
+and applying these principles to regression led them to derive the so-called robust priors.
+
+1. The prior should be proper.
+
+2. Frequentist consistency. Posterior probabilities should identify the data-generating model with probability 1 as $n \to \infty$.
+
+3. Information consistency: the Bayes factor in favor of a more complex model converges to $\infty$ as the likelihood ratio test statistic converges to $\infty$.
+
+4. Prior consistency: although the prior may depend on some aspects of the data such as $n$ or the observed covariate values, as $n \to \infty$ the prior should converge to a limiting proper prior.
+
+5. Predictive matching: if one only has a minimal sample size $n^*$, then the marginal likelihood for competing models should be equal (or very similar).
+
+6. Invariance to the units of measurement and to groups of transformations, such as linear transformations.
+
+Our take is that although all these principles are indeed desirable, they're not all equally important in practice. For example, frequentist consistency is a minimum requirement: if one wishes Bayes factors not only to converge but to do so quickly then one is forced to consider non-local priors. For some (perhaps many) people, this criterion (which is related to the model separation principle discussed in Section \@ref(bms-nlp)) may be more important than desiderata 3-6 above.
+As another example, predictive matching ensures that Bayes factors provide no evidence for minimal training samples $n^*$, but there is no guarantee that Bayes factors are well-calibrated for the actual sample size $n$. Without such calibration, @xu_xinyi:2019 showed that if one compares two models with very different dimensions, Bayes factors may provide overwhelming evidence in favor of the simpler model even when data are truly generated from the larger model.
+Yet another desideratum that one could add to the list is computational convenience.
+That is, there's no universally agreed-upon desiderata and also no universally agreed-upon prior for a given problem. In our view, a world where there were a single possible prior would be a poor world: it's useful that analysts have the flexibility to choose from different principles, and methods, that are at their disposal.
+
+We next review the second strategy mentioned above, namely setting priors using (possibly imaginary) training data.
+Popular strategies include partial Bayes factors (@lempers:1971, Chapter 6), fractional Bayes factors [@ohagan:1995], intrinsic Bayes factors [@berger:1996]
+and expected-posterior priors [@perez:2002].
+The idea is that one wants to set an improper prior and, to avoid running into the Jeffreys-Lindley paradox, one uses a small part of the data (training set) to obtain a proper posterior, and then uses that posterior as a prior for obtaining Bayes factors using rest of the data.
+As discussed in Section \@ref(bms-paradox), our take is that improper priors are not ideal because they are extremely informative, e.g. they state an expectation that covariates explain all of the variance in the outcome. Nevertheless, if one insists on using an improper prior, these approaches provide insightful strategies for doing so.
+
+Consider splitting the data as $\by= (\by_0, \by_1)$ where $\by_0$ is a minimal training set of size $m$.
+The partial Bayes factor is defined as
+$$
+B_{\bgamma, \bgamma'}^P=
+\frac{\int p(\by_1 \mid \btheta_\gamma, \bgamma) p(\btheta_\gamma \mid \bgamma, \by_0) d\btheta_\gamma}{\int p(\by_1 \mid \btheta_{\gamma'}, \bgamma') p(\btheta_{\gamma'} \mid \bgamma', \by_0) d\btheta_{\gamma'}}
+$$
+
+where $p(\btheta_\gamma \mid \bgamma, \by_0) \propto p(\by \mid \btheta_\bgamma, \bgamma) p(\btheta_\gamma \mid \bgamma)$ and $p(\btheta_\gamma \mid \bgamma)$ may be an improper prior.
+$m$ is typically chosen to be the smallest sample size that guarantees that $p(\btheta_\gamma \mid \bgamma, \by_0)$ is proper for each model $\bgamma$.
+An obvious issue is which subset of data to use for training data, among the ${n \choose m}$ possible subsets.
+To address this issue, intrinsic Bayes factors take the mean (or median) across possible training sets.
+Interestingly, intrinsic Bayes factors can be justified as a limiting procedure under certain proper priors [@moreno:1998].
+Another computationally-convenient option is to use fractional Bayes factors, which are defined as
+$B_{\bgamma, \bgamma'}^I= p^I(\by \mid \bgamma) / p^I(\by \mid \bgamma')$, where
+$$
+p^I(\by \mid \bgamma)= \frac{\int p(\by \mid \btheta_\gamma, \bgamma) p(\btheta_\bgamma \mid \bgamma) d\btheta_\bgamma}{\int p(\by \mid \btheta_{\gamma'}, \bgamma')^{m/n} p(\btheta_{\bgamma'} \mid \bgamma') d\btheta_{\bgamma'}}.
+$$
+The idea is that any arbitrary normalizing constants arising from the use of improper priors cancel between the numerator and denominator of $p^I(\by \mid \bgamma)$, and that by raising the likelihood to the power $m/n$ in the denominator, one is effectively using a fraction $(n-m)/n$ of the data in the numerator.
+
+Finally, expected posterior priors are based on using hypothetical, imaginary data samples of a minimal size  to derive the prior. For each specific model, the expected-posterior prior is defined as the expectation of the posterior distribution, where the expectation is with respect to the imaginary training data.
+These imaginary samples are drawn from a common underlying predictive distribution that serves as a reference model, which ensures that the resulting priors are compatible across different competing models.
+@fouskakis:2018 proposed an extension of expected posterior priors called power expected posterior priors. The extension allows one to work with larger training samples, which facilitates their application beyond linear regression via asymptotic approximations, in particular to generalized linear models.
+The prior for model $\bgamma$ is the expected power posterior under imaginary data $\by^* \sim m_0(\by^*)$, where $m_0(\by^*)$ is the prior predictive distribution under the null model with no covariates.
+Specifically,
+$$
+p(\btheta_\gamma \mid \bgamma)= \int p(\btheta_\gamma \mid \by^*, \bgamma) m_0(\by^*) d\by^*
+$$
+where
+$
+p(\btheta_y \mid \by^*, \bgamma) \propto p(\by^* \mid \btheta_\gamma, \bgamma)^\delta.
+$
+The power parameter $\delta$ controls the weight that imaginary data has on the prior.
+Setting $\delta=m$ to be the minimal training sample size required to ensure that $p(\btheta_\gamma \mid \by^*, \bgamma)$ is proper gives a minimally informative prior akin to the unit information prior. In constrast, setting $\delta=n$ results in computational simplifications by allowing one to use asymptotic approximations. The authors argue that inference is reasonably robust to the choice of $\delta$ within this range.
+
+To conclude, we go back to our initial considerations: Bayes factors and posterior probabilities are fairly robust to the prior, provided one restricts the prior dispersion to a reasonable range (or just goes with a default prior dispersion value). They are in fact much more sensitive to the sample size $n$. Hence, from a hands-on perspective, for high-dimensional problems we suggest using simple default choices that are computationally convenient. 
+
+
+## Exercises
+
+
+:::{.exercise #lm-propvar-general}
+
+Consider a linear regression $y_i= \bx_i^T \bbeta + \epsilon_i$ where $V(\bx_i)= \Sigma$ is strictly positive-definite, $\epsilon_i \sim N(0,\sigma^2)$ independently across $i=1,\ldots,n$, and where $\bx_i$ and $\epsilon_i$ are independent. Consider the prior
+$$
+\bbeta \mid \sigma^2 \sim N(0, g \sigma^2 V^{-1}),
+$$
+where $V$ is a strictly positive-definite $p \times p$ matrix.
+
+Prove that the implied prior distribution on $\bbeta^T \Sigma \bbeta/\sigma^2$ converges in probability to $\infty$ as $g \to \infty$
+(equivalently, that $\sigma^2/\bbeta^T \Sigma \bbeta \stackrel{P}{\longrightarrow} 0$ as $g \to \infty$)
+
+**Hint:** Recall that for any strictly positive-definite matrix $A$, it holds that $\bz^T A \bz \geq \lambda \bz^T \bz$ where $\lambda >0$ is the smallest non-zero eigenvalue. Also recall that any inner-product matrix $A^T A$ is positive-definite.
+
+:::
+
+
+
+:::{.exercise #lm-propvar-general2}
+
+For the same setting as in Exercise \@ref(exr:lm-propvar-general), suppose that the (possibly non-Gaussian) prior on $\bbeta \mid \sigma^2$ is such that
+$$
+\frac{g \sigma^2}{\bbeta^T V \bbeta} = O_p(1),
+$$
+where $O_p(1)$ means that the random variable is bounded in probability as $g \to \infty$. Show that
+$\sigma^2/[\bbeta^T \Sigma \bbeta] \stackrel{P}{\longrightarrow} 0$.
+
+**Hint.** You may build on the solution of Exercise \@ref(exr:lm-propvar-general).
+
+:::
+
+
+:::{.exercise #nlp-marginal}
+
+Consider a generic non-local prior under model $\bgamma$ with density
+$$
+p(\btheta_\gamma \mid \bgamma)= d_\gamma(\btheta_\gamma) p^L(\btheta_\gamma \mid \bgamma)
+$$
+where $p^L(\btheta_\gamma \mid \bgamma)>0$ for all $\btheta_\gamma \in \Theta_\gamma$ is a local prior and $d_\gamma(\btheta)$ vanishes as $\btheta_\gamma$ approaches any parameter value that's consistent with a submodel $\bgamma' \subset \bgamma$.
+Show that the marginal likelihood under the non-local prior is
+$$
+p(\by \mid \bgamma)= p^L(\by \mid \bgamma) 
+\int d_\gamma(\btheta_\gamma) p^L(\btheta_\gamma \mid \by, \bgamma) d\btheta_\gamma.
+$$
+
+:::
+
+
+
+
+
+
+## Exercise solutions
+
+:::{.solution-panel}
+<div class="solution-panel-header">Solution to Exercise \@ref(exr:lm-propvar-general)</div>
+
+Since $V$ is strictly positive-definite we have that $V^{1/2}$ and $V^{-1/2}$ exist, and hence
+$$
+\frac{\bbeta^T \Sigma \bbeta}{\sigma^2} =
+\frac{\bbeta^T V^{1/2} V^{-1/2} \Sigma V^{-1/2} V^{1/2} \bbeta}{\sigma^2} 
+\geq
+\lambda g \frac{\bbeta^T V \bbeta}{g \sigma^2} 
+\sim
+\lambda g \chi_p^2,
+$$
+where $\lambda$ is the smallest non-zero eigenvalue of $V^{-1/2} \Sigma V^{-1/2}$. Above we used that $V^{-1/2} \Sigma V^{-1/2}= A^T A$ for $A= \Sigma^{1/2} V^{-1/2}$, i.e. $V^{-1/2} \Sigma V^{-1/2}$ is an inner-product matrix and hence positive-definite.
+
+Hence, $\sigma^2 / \bbeta^T \Sigma \bbeta \leq 1/(\lambda g \chi_p^2)$ where the right-hand side converges in probability to 0 as $g \to \infty$.
+
+:::
+
+
+
+:::{.solution-panel}
+<div class="solution-panel-header">Solution to Exercise \@ref(exr:lm-propvar-general2)</div>
+
+From the solution of Exercise \@ref(exr:lm-propvar-general), we have
+$$
+\frac{\sigma^2}{\bbeta^T \Sigma \bbeta} \leq 
+\frac{1}{\lambda g} \frac{g \sigma^2}{\bbeta^T V \bbeta}
+$$
+
+Since $\frac{g \sigma^2}{\bbeta^T V \bbeta} = O_p(1)$ as $g\to \infty$ by assumption, the right-hand side above converges in probability to 0, and hence $\sigma^2 / (\bbeta^T \Sigma \bbeta) \stackrel{P}{\longrightarrow} 0$ as $g \to \infty$.
+
+:::
+
+
+:::{.solution-panel}
+<div class="solution-panel-header">Solution to Exercise \@ref(exr:nlp-marginal)</div>
+
+We have that
+\begin{align}
+&p(\by \mid \bgamma)=
+\int p(\by \mid \btheta_\gamma, \bgamma) d_\gamma(\btheta_\gamma) p^L(\btheta_\gamma \mid \bgamma) d\btheta_\gamma=
+\nonumber \\
+& p^L(\by \mid \bgamma) \int d_\gamma(\btheta_\gamma) \frac{p(\by \mid \btheta_\gamma, \bgamma) p(\btheta_\gamma \mid \bgamma)}{p^L(\by \mid \bgamma)} d\btheta_\gamma=
+\nonumber \\
+& p^L(\by \mid \bgamma) 
+\int d_\gamma(\btheta_\gamma) p^L(\btheta_\gamma \mid \by, \bgamma) d\btheta_\gamma,
+\end{align}
+as we wished to prove, where
+$$
+p^L(\by \mid \bgamma)= \int p(\by \mid \btheta_\gamma, \bgamma) p(\btheta_\gamma \mid \bgamma) d\btheta_\gamma.
+$$
+
+:::

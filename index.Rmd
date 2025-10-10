@@ -11,6 +11,7 @@ description: "High-dimensional model selection with the modelSelection R package
 cover-image: "bookcover_titled.png"
 output:
   bookdown::gitbook:
+    code_folding: show
     citation_package: natbib
     css: style.css
     pandoc_args: ["--lua-filter=macros.lua"]
