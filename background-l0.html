@@ -539,7 +539,7 @@ Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.<
 <div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="background-l0.html#cb86-1" tabindex="-1"></a><span class="fu">system.time</span>(msfast <span class="ot">&lt;-</span> <span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 </details>
 <pre><code>##    user  system elapsed 
-##   0.480   0.701   0.140</code></pre>
+##   0.402   0.664   0.088</code></pre>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="background-l0.html#cb88-1" tabindex="-1"></a>msfast</span></code></pre></div>
 </details>
@@ -551,7 +551,7 @@ Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.<
 <div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="background-l0.html#cb93-1" tabindex="-1"></a><span class="fu">system.time</span>(ms <span class="ot">&lt;-</span> <span class="fu">bestEBIC</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 </details>
 <pre><code>##    user  system elapsed 
-##   2.255   0.999   1.766</code></pre>
+##   2.079   0.901   1.619</code></pre>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="background-l0.html#cb95-1" tabindex="-1"></a>ms</span></code></pre></div>
 </details>

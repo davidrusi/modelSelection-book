@@ -405,7 +405,8 @@ We first create a binary version of our simulated outcome.</p>
 <span id="cb26-3"><a href="quick-start.html#cb26-3" tabindex="-1"></a>                     <span class="at">family=</span><span class="st">&#39;binomial&#39;</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
 <span id="cb26-4"><a href="quick-start.html#cb26-4" tabindex="-1"></a><span class="fu">coef</span>(fit2.bms)</span></code></pre></div>
 </details>
-<pre><code>## Warning in hasPostSampling(object): Exact posterior sampling not implemented, using Normal approx instead</code></pre>
+<pre><code>## Warning in hasPostSampling(object): Exact posterior sampling not implemented,
+## using Normal approx instead</code></pre>
 <pre><code>##               estimate       2.5%     97.5%       margpp
 ## (Intercept) 0.16323081 0.03275118 0.2669387 2.730669e-10
 ## X1          1.38893900 0.78354882 2.0102542 1.000000e+00
@@ -429,7 +430,8 @@ In our example, there is strong evidence for (correctly) including the linear ef
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="quick-start.html#cb30-1" tabindex="-1"></a><span class="fu">coef</span>(fit.gam)</span></code></pre></div>
 </details>
-<pre><code>## Warning in hasPostSampling(object): Exact posterior sampling not implemented, using Normal approx instead</code></pre>
+<pre><code>## Warning in hasPostSampling(object): Exact posterior sampling not implemented,
+## using Normal approx instead</code></pre>
 <pre><code>##                  estimate        2.5%      97.5%       margpp
 ## (Intercept)  8.127021e-03 -0.01028342 0.02684467 7.499102e-03
 ## X1           1.140319e+00  1.02940753 1.25420735 1.000000e+00
