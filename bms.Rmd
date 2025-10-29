@@ -792,6 +792,16 @@ This last expression is intuitive: if there is any $\beta_j$ such that both its 
 ### Heavy-tails and finite sample consistency {#bms-heavy-tailed}
 
 We use a simple example to illustrate the effect of using heavy-tailed priors, and its relation to the finite-sample consistecy property.
+In the example $y_i \sim N(\mu,\sigma^2)$ and the goal is to test whether a Normal mean is $\mu=0$ versus $\mu \neq 0$.
+We consider two priors that have Gaussian tails, Zellner's prior and the product MOM prior, and two priors with Cauchy-like tails, the Zellner-Siow and the robust prior.
+The finite sample consistency property requires that as $|\bar{y}|$ grows, $P(\mu \neq 0 \mid \by)$ should approach 1.
+We consider two small sample sizes $n=5$ and $n=10$, because as $n$ grows under the four priors we have that $P(\mu \neq 0 \mid \by)$ converges to 1 in probability for any fixed $\mu \neq 0$.
+
+The left panel and the table below show that, when $n=10$, $P(\mu \neq 0 \mid \by)$ converges to 0.973 for Zellner's prior and to 0.96 for the pMOM. In contrast, for Zellner-Siow's prior and the robust prior $P(\mu \neq 0 \mid \by)$ converges to 1, as required by the finite-sample consistency criterion.
+In practice, one could argue that obtaining $P(\mu \neq 0 \mid \by) > 0.95$ is already strong evidence anyway, particularly given that we only have $n=5$ observations. In fact, the right panel and table below show that already with $n=10$ all priors result in $P(\mu \neq 0 \mid \by)$ that's essentially 1 for large enough $\bar{y}$.
+In this simple example, the finite-sample consistency issue seems more an academic consideration than a practical one.
+
+As a side remark, the finite-sample consistency is resolved as long as one uses heavy-tailed priors, and in particular the behavior of the prior at the origin (whether it's local or non-local) has no impact. See @johnson:2010 for a proof showing that the so-called iMOM prior (which has thick tails) enjoys the finite-sample consistency property.
 
 
 <details>

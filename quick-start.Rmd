@@ -1,14 +1,36 @@
 # Quick start {#quick-start}
 
-The main functions for regression-type models are `modelSelection` and `bestBIC` (along with companions like `bestEBIC`, `bestAIC` and `bestIC`).
-Details are in subsequent sections. Below we illustrate how to obtain:
+Before discussing high-dimensional model selection methods, we show some examples that motivate their practical utility and that serve as a quick start for readers who are already familiar with the basics.
+We focus is on sparse inference, mainly Bayesian model selection (BMS) and averaging (BMA) and L0 criteria like the AIC, BIC or EBIC.
+Our examples illustrate how to obtain:
 
-- Information criteria for all models (including those from MCMC exploration)
+- Information criteria for many models (using MCMC model exploration)
 - Posterior model probabilities
 - Marginal posterior inclusion probabilities  
 - BMA point estimates and posterior intervals
 
+For these illustrations we use R package `modelSelection`, which covers several popular models.
+
+- Generalized linear models: linear, logistic and Poisson regression. BMS, BMA and L0 criteria [@johnson:2012; @rossell:2017; @rossell:2021].
+
+- Linear regression with non-normal residuals [@rossell:2018b], including asymmetric Normal, Laplace and asymmetric Laplace residuals.
+
+- Accelerated Failure Time models for right-censored survival data [@rossell:2021b].
+
+- Bayesian inference for Gaussian graphical models
+
+- Bayesian inference for Gaussian mixture models [@fuquene:2019].
+
+The package's C++ implementation is not optimal, but it's designed to be minimally scalable in sparse high-dimensional settings (large $p$).
+On the Bayesian side, `modelSelection` is the main package implementing **non-local priors** (@johnson:2010, @johnson:2012, @rossell:2017, Section \@ref(bms-nlp)) but other popular priors are also implemented, e.g. Zellner's and Normal shrinkage priors in regression, or Gaussian spike-and-slab priors in graphical models.
+The main functions for regression-type models are `modelSelection` and `bestBIC` (along with companions like `bestEBIC`, `bestAIC` and `bestIC`).
+`modelSelection_eBayes` provides an empirical Bayes counterpart to `modelSelection`. 
 See `modelSelectionGGM` for Gaussian graphical models and `bfnormmix` for Gaussian mixture models.
+A lot of work went into coding and maintaining the package, if you use it please cite the corresponding papers.
+
+
+
+
 
 ## Linear regression
 
