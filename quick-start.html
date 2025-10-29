@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-10-10" />
+<meta name="date" content="2025-10-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -252,16 +252,30 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="quick-start" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">1</span> Quick start<a href="quick-start.html#quick-start" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>The main functions for regression-type models are <code>modelSelection</code> and <code>bestBIC</code> (along with companions like <code>bestEBIC</code>, <code>bestAIC</code> and <code>bestIC</code>).
-Details are in subsequent sections. Below we illustrate how to obtain:</p>
+<p>Before discussing high-dimensional model selection methods, we show some examples that motivate their practical utility and that serve as a quick start for readers who are already familiar with the basics.
+We focus is on sparse inference, mainly Bayesian model selection (BMS) and averaging (BMA) and L0 criteria like the AIC, BIC or EBIC.
+Our examples illustrate how to obtain:</p>
 <ul>
-<li>Information criteria for all models (including those from MCMC exploration)</li>
+<li>Information criteria for many models (using MCMC model exploration)</li>
 <li>Posterior model probabilities</li>
 <li>Marginal posterior inclusion probabilities<br />
 </li>
 <li>BMA point estimates and posterior intervals</li>
 </ul>
-<p>See <code>modelSelectionGGM</code> for Gaussian graphical models and <code>bfnormmix</code> for Gaussian mixture models.</p>
+<p>For these illustrations we use R package <code>modelSelection</code>, which covers several popular models.</p>
+<ul>
+<li><p>Generalized linear models: linear, logistic and Poisson regression. BMS, BMA and L0 criteria <span class="citation">(<a href="#ref-johnson:2012">Johnson and Rossell 2012</a>; <a href="#ref-rossell:2017">D. Rossell and Telesca 2017</a>; <a href="#ref-rossell:2021">D. Rossell, Abril, and Bhattacharya 2021</a>)</span>.</p></li>
+<li><p>Linear regression with non-normal residuals <span class="citation">(<a href="#ref-rossell:2018b">D. Rossell and Rubio 2018</a>)</span>, including asymmetric Normal, Laplace and asymmetric Laplace residuals.</p></li>
+<li><p>Accelerated Failure Time models for right-censored survival data <span class="citation">(<a href="#ref-rossell:2021b">D. Rossell and Rubio 2021</a>)</span>.</p></li>
+<li><p>Bayesian inference for Gaussian graphical models</p></li>
+<li><p>Bayesian inference for Gaussian mixture models <span class="citation">(<a href="#ref-fuquene:2019">Fúquene, Steel, and Rossell 2019</a>)</span>.</p></li>
+</ul>
+<p>The package’s C++ implementation is not optimal, but it’s designed to be minimally scalable in sparse high-dimensional settings (large <span class="math inline">\(p\)</span>).
+On the Bayesian side, <code>modelSelection</code> is the main package implementing <strong>non-local priors</strong> (<span class="citation">Johnson and Rossell (<a href="#ref-johnson:2010">2010</a>)</span>, <span class="citation">Johnson and Rossell (<a href="#ref-johnson:2012">2012</a>)</span>, <span class="citation">D. Rossell and Telesca (<a href="#ref-rossell:2017">2017</a>)</span>, Section <a href="background-bms.html#bms-nlp">2.6.2</a>) but other popular priors are also implemented, e.g. Zellner’s and Normal shrinkage priors in regression, or Gaussian spike-and-slab priors in graphical models.
+The main functions for regression-type models are <code>modelSelection</code> and <code>bestBIC</code> (along with companions like <code>bestEBIC</code>, <code>bestAIC</code> and <code>bestIC</code>).
+<code>modelSelection_eBayes</code> provides an empirical Bayes counterpart to <code>modelSelection</code>.
+See <code>modelSelectionGGM</code> for Gaussian graphical models and <code>bfnormmix</code> for Gaussian mixture models.
+A lot of work went into coding and maintaining the package, if you use it please cite the corresponding papers.</p>
 <div id="linear-regression" class="section level2 hasAnchor" number="1.1">
 <h2><span class="header-section-number">1.1</span> Linear regression<a href="quick-start.html#linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We simulate linear regression data
@@ -458,11 +472,29 @@ In our example, there is strong evidence for (correctly) including the linear ef
 </div>
 <h3>References</h3>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-fuquene:2019" class="csl-entry">
+Fúquene, J., M. F. J. Steel, and D. Rossell. 2019. <span>“On Choosing Mixture Components via Non-Local Priors.”</span> <em>Journal of the Royal Statistical Society B</em> 81 (5): 809–37.
+</div>
 <div id="ref-hazimeh:2023" class="csl-entry">
 Hazimeh, Hussein, Rahul Mazumder, and Tim Nonet. 2023. <span>“L0learn: A Scalable Package for Sparse Learning Using <span>L</span>0 Regularization.”</span> <em>Journal of Machine Learning Research</em> 24 (205): 1–8.
 </div>
+<div id="ref-johnson:2010" class="csl-entry">
+Johnson, V. E., and D. Rossell. 2010. <span>“On the Use of Non-Local Prior Densities for Default <span>B</span>ayesian Hypothesis Tests.”</span> <em>Journal of the Royal Statistical Society B</em> 72: 143–70.
+</div>
+<div id="ref-johnson:2012" class="csl-entry">
+———. 2012. <span>“Bayesian Model Selection in High-Dimensional Settings.”</span> <em>Journal of the American Statistical Association</em> 24 (498): 649–60.
+</div>
+<div id="ref-rossell:2021" class="csl-entry">
+Rossell, D., O. Abril, and A. Bhattacharya. 2021. <span>“Approximate <span>L</span>aplace Approximations for Scalable Model Selection.”</span> <em>Journal of the Royal Statistical Society B</em> 83 (4): 853–79.
+</div>
+<div id="ref-rossell:2018b" class="csl-entry">
+Rossell, D., and F. J. Rubio. 2018. <span>“Tractable Bayesian Variable Selection: Beyond Normality.”</span> <em>Journal of the American Statistical Association</em> 113 (524): 1742–58.
+</div>
 <div id="ref-rossell:2021b" class="csl-entry">
 ———. 2021. <span>“Additive <span>B</span>ayesian Variable Selection Under Censoring and Misspecification.”</span> <em>Statistical Science</em> 38 (1): 13–29.
+</div>
+<div id="ref-rossell:2017" class="csl-entry">
+Rossell, D., and D. Telesca. 2017. <span>“Non-Local Priors for High-Dimensional Estimation.”</span> <em>Journal of the American Statistical Association</em> 112: 254–65.
 </div>
 </div>
             </section>

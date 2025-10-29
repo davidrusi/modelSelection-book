@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-10-10" />
+<meta name="date" content="2025-10-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -253,54 +253,34 @@ div.csl-indent {
 <div id="header">
 <h1 class="title">High-dimensional model choice. A hands-on take</h1>
 <p class="author"><em>David Rossell</em></p>
-<p class="date"><em>2025-10-10</em></p>
+<p class="date"><em>2025-10-29</em></p>
 </div>
 <div id="preface" class="section level1 unnumbered hasAnchor">
 <h1>Preface<a href="index.html#preface" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p><img src="bookcover_titled.png" width="50%" /></p>
-<p>The motivation for writing this book was dual: provide supporting material for undergraduate and graduate students to whom I introduce fundamental notions behind high-dimensional model selection,
-and serve as documentation for the R package <code>modelSelection</code> (previously called <code>mombf</code>) which I have been developing over the years.
-With these two goals in mind, the book evolved into a hands-on guide to model selection.</p>
-<p>The book focuses on sparse inference, mainly Bayesian model selection (BMS) and averaging (BMA), for a number of popular models listed below. It also implements L0 criteria like the AIC, BIC or EBIC (as well as more general information criteria).
-The R package’s C++ implementation is not optimal, but it’s designed to be minimally scalable in sparse high-dimensional settings (large <span class="math inline">\(p\)</span>).
-A lot of work went into coding and maintaining the package, if you use it please cite at least one of the papers indicated below.</p>
-<p>For a quick start guide with <code>modelSelection</code>, see Section <a href="quick-start.html#quick-start">1</a>. The main models handled by the package are:</p>
-<ul>
-<li><p>Generalized linear models: linear, logistic and Poisson regression. BMS, BMA and L0 criteria <span class="citation">(<a href="#ref-johnson:2012">Johnson and Rossell 2012</a>; <a href="#ref-rossell:2017">D. Rossell and Telesca 2017</a>; <a href="#ref-rossell:2021">D. Rossell, Abril, and Bhattacharya 2021</a>)</span>.</p></li>
-<li><p>Linear regression with non-normal residuals <span class="citation">(<a href="#ref-rossell:2018b">D. Rossell and Rubio 2018</a>)</span>, including asymmetric Normal, Laplace and asymmetric Laplace residuals.</p></li>
-<li><p>Accelerated Failure Time models for right-censored survival data <span class="citation">(<a href="#ref-rossell:2021b">D. Rossell and Rubio 2021</a>)</span>.</p></li>
-<li><p>Bayesian inference for Gaussian graphical models</p></li>
-<li><p>Bayesian for Gaussian mixture models <span class="citation">(<a href="#ref-fuquene:2019">Fúquene, Steel, and Rossell 2019</a>)</span>.</p></li>
-</ul>
-<p>On the Bayesian side, <code>modelSelection</code> is the main package implementing <strong>non-local priors</strong> (NLPs) but other popular priors are also implemented, e.g. Zellner’s and Normal shrinkage priors in regression, or Gaussian spike-and-slab priors in graphical models.
-NLPs are briefly reviewed in this book, see <span class="citation">Johnson and Rossell (<a href="#ref-johnson:2010">2010</a>)</span> and <span class="citation">Johnson and Rossell (<a href="#ref-johnson:2012">2012</a>)</span> for their model selection properties,
-<span class="citation">D. Rossell and Telesca (<a href="#ref-rossell:2017">2017</a>)</span> for parameter estimation,
-and <span class="citation">D. Rossell, Abril, and Bhattacharya (<a href="#ref-rossell:2021">2021</a>)</span> for computational approximations to marginal likelihoods.</p>
+<p>Model selection (which I will also refer to as structural learning) is a fundamental problem in data analysis. It is therefore surprising that it’s plagued with misconceptions, and that the basic principles distinguishing it from estimation or forecasting problems are too often misunderstood.
+I heard too many times to count that finding good solutions to this problem is too hard. That it’s challenging to formulate in an exactly satisfying manner, that it requires prohibitive computations that one can solve exactly, and that one should give up and adopt alternative strategies that are computationally simpler, even if they give poorer solutions.
+Yet, in my applied experience I found the problem to be much simpler. In practice the exact formulation usually has a moderate effect on the results, provided one follows simple principles, and simple computational strategies are surprisingly effective.
+This book’s leitmotiv is well-captured by this quote from statistician John Tukey: “An approximate answer to the right problem is worth a good deal more than an exact answer to an approximate problem”.
+Its goal is to introduce the reader to the main theoretical and methodological concepts, always keeping in mind and illustrating their impact in actual applications. It therefore offers a hands-on take that should hopefully be useful to applied data analysts, while also discussing nuances that should be of interest to more methodologically-oriented readers.</p>
+<p>A brief story of how I got interested in this problem follows.
+When doing my PhD at Rice University I asked my supervisor, Peter Mueller, how do Bayesians test hypotheses? He answered that there’s no universal agreement, and that one needed to be careful of certain pitfalls (such as Jeffreys-Lindley paradox) to avoid getting non-sensical solutions.
+I was stunned by the answer, how was it possible that Bayesians didn’t agree on a solution for such a simple, fundamental task?
+This took me down the rabbit hole.
+I started reading the large literature on Bayesian tests, objective Bayes, associated mathematical statistics etc, and went deeper into the topic during my time as a postdoc with Val Johnson at MD Anderson Cancer Center.
+I gradually got the feeling that the literature on Bayesian tests was over-complicated. The complications arose from coming up with a formulation that adhered perfectly to certain principles (minimally informative, predictive matching, etc.), which is hard to do exactly except in simple settings, and assumes that there’s a universal agreement on these being the only possible correct principles.
+From my applied experience, as long as one is aware of some key ideas, most sensible Bayesian tests give a fairly similar answer, and contrary to public opinion the results are quite robust to the prior.
+I also fell in love with the fact that Bayesian tests can be seamlessly generalized to Bayesian model selection, providing an effective toolkit to encourage parsimonious solutions for challenging high-dimensional problems, particularly when it comes to structural learning.
+And I enjoyed learning about the close connections between Bayesian model selection and L0 criteria such as the BIC and later extensions like the EBIC.
+This was not just an academic affair, I saw these methods work well in many applications that I became involved in during the years, particularly when working in biomedical and social sciences problems where the goal was to understand a phenomenon (as opposed to pure forecasting, for which a black-box method could suffice).</p>
+<p>A second rabbit hole had to do with computational aspects.
+For example, there’s a large literature claiming that Bayesian model selection and L0 criteria are computationally unfeasible. They certainly are in a worst-case scenario, to be more precise they have been shown to be NP-hard in the worst-case. But why should one take decisions based on worst-case scenarios? If I leave my home the worst-case scenario is that I get run over by a car, does this mean that I should just stay in my couch? A more practically-relevant question is how often is the problem feasible for the data that one has at hand, i.e. does this happen with high probability?
+There is theory showing that computations are indeed feasible with high probability, under certain (somewhat restrictive) conditions. More importantly from a hands-on take, in my experience simple algorithms do surprisingly well at finding good approximate solutions (remember John Tukey’s mantra).</p>
+<p>In summary, a main motivation for this book was to introduce the fundamental notions behind high-dimensional model selection / structural learning, trying to dispel common misconceptions along the way. While methodological details are discussed, there is always a hands-on perspective.
+Another motivation was to provide supporting material for applied data analysts, undergraduate and graduate students,
+including serving as documentation for some of the R packages that one can use for this task.
+There is a blatant emphasis on my R package <code>modelSelection</code> (previously called <code>mombf</code>) which I have been developing over the years, mainly because it’s well-suited to emphasizing the main notions that I intend to convey. There is other excellent software that is used in this book, and of course yet further software that is not covered here.</p>
 
-</div>
-<h3>References</h3>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-fuquene:2019" class="csl-entry">
-Fúquene, J., M. F. J. Steel, and D. Rossell. 2019. <span>“On Choosing Mixture Components via Non-Local Priors.”</span> <em>Journal of the Royal Statistical Society B</em> 81 (5): 809–37.
-</div>
-<div id="ref-johnson:2010" class="csl-entry">
-Johnson, V. E., and D. Rossell. 2010. <span>“On the Use of Non-Local Prior Densities for Default <span>B</span>ayesian Hypothesis Tests.”</span> <em>Journal of the Royal Statistical Society B</em> 72: 143–70.
-</div>
-<div id="ref-johnson:2012" class="csl-entry">
-———. 2012. <span>“Bayesian Model Selection in High-Dimensional Settings.”</span> <em>Journal of the American Statistical Association</em> 24 (498): 649–60.
-</div>
-<div id="ref-rossell:2021" class="csl-entry">
-Rossell, D., O. Abril, and A. Bhattacharya. 2021. <span>“Approximate <span>L</span>aplace Approximations for Scalable Model Selection.”</span> <em>Journal of the Royal Statistical Society B</em> 83 (4): 853–79.
-</div>
-<div id="ref-rossell:2018b" class="csl-entry">
-Rossell, D., and F. J. Rubio. 2018. <span>“Tractable Bayesian Variable Selection: Beyond Normality.”</span> <em>Journal of the American Statistical Association</em> 113 (524): 1742–58.
-</div>
-<div id="ref-rossell:2021b" class="csl-entry">
-———. 2021. <span>“Additive <span>B</span>ayesian Variable Selection Under Censoring and Misspecification.”</span> <em>Statistical Science</em> 38 (1): 13–29.
-</div>
-<div id="ref-rossell:2017" class="csl-entry">
-Rossell, D., and D. Telesca. 2017. <span>“Non-Local Priors for High-Dimensional Estimation.”</span> <em>Journal of the American Statistical Association</em> 112: 254–65.
-</div>
 </div>
             </section>
 

@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-10-10" />
+<meta name="date" content="2025-10-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -284,59 +284,59 @@ These examples motivate the use of MCMC for model search, as described in Sectio
 <p><span id="exm:variational-simulated" class="example"><strong>Example 3.1  </strong></span>We simulate a dataset with <span class="math inline">\(n=100\)</span>, <span class="math inline">\(p=200\)</span> standard Gaussian covariates with pairwise correlations equal to 0.5.
 Only the last 4 regression are truly non-zero.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="bms-computation.html#cb61-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb61-2"><a href="bms-computation.html#cb61-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>; p <span class="ot">&lt;-</span> <span class="dv">200</span>  </span>
-<span id="cb61-3"><a href="bms-computation.html#cb61-3" tabindex="-1"></a>beta<span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, p <span class="sc">-</span> <span class="dv">4</span>), <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>) <span class="co">#true parameters</span></span>
-<span id="cb61-4"><a href="bms-computation.html#cb61-4" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">length</span>(beta))</span>
-<span id="cb61-5"><a href="bms-computation.html#cb61-5" tabindex="-1"></a>S[<span class="fu">upper.tri</span>(S)] <span class="ot">&lt;-</span> S[<span class="fu">lower.tri</span>(S)] <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb61-6"><a href="bms-computation.html#cb61-6" tabindex="-1"></a>x <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n=</span>n,<span class="at">sigma=</span>S)</span>
-<span id="cb61-7"><a href="bms-computation.html#cb61-7" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb61-8"><a href="bms-computation.html#cb61-8" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="bms-computation.html#cb59-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb59-2"><a href="bms-computation.html#cb59-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>; p <span class="ot">&lt;-</span> <span class="dv">200</span>  </span>
+<span id="cb59-3"><a href="bms-computation.html#cb59-3" tabindex="-1"></a>beta<span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, p <span class="sc">-</span> <span class="dv">4</span>), <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>) <span class="co">#true parameters</span></span>
+<span id="cb59-4"><a href="bms-computation.html#cb59-4" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">length</span>(beta))</span>
+<span id="cb59-5"><a href="bms-computation.html#cb59-5" tabindex="-1"></a>S[<span class="fu">upper.tri</span>(S)] <span class="ot">&lt;-</span> S[<span class="fu">lower.tri</span>(S)] <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb59-6"><a href="bms-computation.html#cb59-6" tabindex="-1"></a>x <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n=</span>n,<span class="at">sigma=</span>S)</span>
+<span id="cb59-7"><a href="bms-computation.html#cb59-7" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb59-8"><a href="bms-computation.html#cb59-8" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span></code></pre></div>
 </details>
 <p>We obtain MCMC estimates of BMA posterior means <span class="math inline">\(E(\beta_j \mid \mathbf{y})\)</span> and posterior inclusion probabilities <span class="math inline">\(P(\beta_j \neq 0 \mid \mathbf{y})\)</span> using <code>modelSelection</code>, and analogous variational estimates using <code>varbvs</code>. For illustration, in both cases we set a Binomial model prior with 0.1 prior inclusion probability, and a Gaussian shrinkage prior on parameters with unit variance.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="bms-computation.html#cb62-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb62-2"><a href="bms-computation.html#cb62-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
-<span id="cb62-3"><a href="bms-computation.html#cb62-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbinomprior</span>(<span class="fl">0.1</span>)</span>
-<span id="cb62-4"><a href="bms-computation.html#cb62-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb62-5"><a href="bms-computation.html#cb62-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
-<span id="cb62-6"><a href="bms-computation.html#cb62-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="bms-computation.html#cb60-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb60-2"><a href="bms-computation.html#cb60-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
+<span id="cb60-3"><a href="bms-computation.html#cb60-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbinomprior</span>(<span class="fl">0.1</span>)</span>
+<span id="cb60-4"><a href="bms-computation.html#cb60-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb60-5"><a href="bms-computation.html#cb60-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
+<span id="cb60-6"><a href="bms-computation.html#cb60-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
 </details>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="bms-computation.html#cb63-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
-<span id="cb63-2"><a href="bms-computation.html#cb63-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span>x, <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="bms-computation.html#cb61-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
+<span id="cb61-2"><a href="bms-computation.html#cb61-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span>x, <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 </details>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="bms-computation.html#cb64-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">beta=</span> beta,</span>
-<span id="cb64-2"><a href="bms-computation.html#cb64-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
-<span id="cb64-3"><a href="bms-computation.html#cb64-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
-<span id="cb64-4"><a href="bms-computation.html#cb64-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
-<span id="cb64-5"><a href="bms-computation.html#cb64-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="bms-computation.html#cb62-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">beta=</span> beta,</span>
+<span id="cb62-2"><a href="bms-computation.html#cb62-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
+<span id="cb62-3"><a href="bms-computation.html#cb62-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
+<span id="cb62-4"><a href="bms-computation.html#cb62-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
+<span id="cb62-5"><a href="bms-computation.html#cb62-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
 </details>
 <p>Comparing <span class="math inline">\(P(\beta_j \neq 0 \mid \mathbf{y})\)</span> between the two methods shows that they both identify the same set of high posterior inclusion probability variables: 3 have posterior inclusion probability &gt; 0.9, and the associated data-generating <span class="math inline">\(\beta_j \neq 0\)</span> for the 3 of them.
 However, the plot below that the variational inclusion probabilities are much closer to 0 for the remaining variables than their MCMC counterparts.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="bms-computation.html#cb65-1" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(df, pip_mcmc <span class="sc">&gt;</span> <span class="fl">0.9</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="bms-computation.html#cb63-1" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(df, pip_mcmc <span class="sc">&gt;</span> <span class="fl">0.9</span>)</span></code></pre></div>
 </details>
 <pre><code>##            beta postmean_mcmc  pip_mcmc postmean_vb    pip_vb
 ## x197 -0.6666667    -0.5827377 0.9878851  -0.5863083 0.9999994
 ## x199  0.6666667     0.6066641 0.9954122   0.6037431 1.0000000
 ## x200  1.0000000     1.2479896 1.0000000   1.2422281 1.0000000</code></pre>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="bms-computation.html#cb67-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
-<span id="cb67-2"><a href="bms-computation.html#cb67-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb67-3"><a href="bms-computation.html#cb67-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb67-4"><a href="bms-computation.html#cb67-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
-<span id="cb67-5"><a href="bms-computation.html#cb67-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="bms-computation.html#cb65-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
+<span id="cb65-2"><a href="bms-computation.html#cb65-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb65-3"><a href="bms-computation.html#cb65-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb65-4"><a href="bms-computation.html#cb65-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
+<span id="cb65-5"><a href="bms-computation.html#cb65-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span></code></pre></div>
 </details>
 <p><img src="modelSelection-book_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
 <p>We may also compare the BMA posterior means, in this example the variational and MCMC solutions are similar.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="bms-computation.html#cb68-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
-<span id="cb68-2"><a href="bms-computation.html#cb68-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb68-3"><a href="bms-computation.html#cb68-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb68-4"><a href="bms-computation.html#cb68-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
-<span id="cb68-5"><a href="bms-computation.html#cb68-5" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="bms-computation.html#cb66-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
+<span id="cb66-2"><a href="bms-computation.html#cb66-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb66-3"><a href="bms-computation.html#cb66-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb66-4"><a href="bms-computation.html#cb66-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
+<span id="cb66-5"><a href="bms-computation.html#cb66-5" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
 </details>
 <p><img src="modelSelection-book_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
 </div>
@@ -351,52 +351,52 @@ Both TGFB and the other genes were standardized to zero mean and unit variance.<
 In both we use a Gaussian shrinkage prior on parameters with unit variance.
 In <code>varbvs</code> we use a Binomial model prior with prior inclusion probabilty 0.1, and for convenience in <code>modelSelection</code> we use a Beta-Binomial model prior as it runs faster than the Binomial prior, but our subsequent discussion continues to apply if one uses the Binomial prior as well.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="bms-computation.html#cb69-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;data/tgfb.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)</span>
-<span id="cb69-2"><a href="bms-computation.html#cb69-2" tabindex="-1"></a>shortlist <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">read.table</span>(<span class="st">&quot;data/tgfb_mouse_shortlist.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)[,<span class="dv">1</span>])</span>
-<span id="cb69-3"><a href="bms-computation.html#cb69-3" tabindex="-1"></a>y<span class="ot">=</span> x[,<span class="dv">1</span>]   <span class="co">#TGFB expression (outcome)</span></span>
-<span id="cb69-4"><a href="bms-computation.html#cb69-4" tabindex="-1"></a>x<span class="ot">=</span> x[,<span class="sc">-</span><span class="dv">1</span>]  <span class="co">#covariates</span></span>
-<span id="cb69-5"><a href="bms-computation.html#cb69-5" tabindex="-1"></a>inshort<span class="ot">=</span> (<span class="fu">colnames</span>(x) <span class="sc">%in%</span> shortlist)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="bms-computation.html#cb67-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;data/tgfb.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)</span>
+<span id="cb67-2"><a href="bms-computation.html#cb67-2" tabindex="-1"></a>shortlist <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">read.table</span>(<span class="st">&quot;data/tgfb_mouse_shortlist.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)[,<span class="dv">1</span>])</span>
+<span id="cb67-3"><a href="bms-computation.html#cb67-3" tabindex="-1"></a>y<span class="ot">=</span> x[,<span class="dv">1</span>]   <span class="co">#TGFB expression (outcome)</span></span>
+<span id="cb67-4"><a href="bms-computation.html#cb67-4" tabindex="-1"></a>x<span class="ot">=</span> x[,<span class="sc">-</span><span class="dv">1</span>]  <span class="co">#covariates</span></span>
+<span id="cb67-5"><a href="bms-computation.html#cb67-5" tabindex="-1"></a>inshort<span class="ot">=</span> (<span class="fu">colnames</span>(x) <span class="sc">%in%</span> shortlist)</span></code></pre></div>
 </details>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="bms-computation.html#cb70-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb70-2"><a href="bms-computation.html#cb70-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
-<span id="cb70-3"><a href="bms-computation.html#cb70-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbbprior</span>()</span>
-<span id="cb70-4"><a href="bms-computation.html#cb70-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb70-5"><a href="bms-computation.html#cb70-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
-<span id="cb70-6"><a href="bms-computation.html#cb70-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="bms-computation.html#cb68-1" tabindex="-1"></a>priorvar <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb68-2"><a href="bms-computation.html#cb68-2" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">normalidprior</span>(priorvar)</span>
+<span id="cb68-3"><a href="bms-computation.html#cb68-3" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">modelbbprior</span>()</span>
+<span id="cb68-4"><a href="bms-computation.html#cb68-4" tabindex="-1"></a>fit_ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(<span class="at">y=</span>y, <span class="at">x=</span>x, <span class="at">priorCoef=</span>pc, <span class="at">priorModel=</span>pm, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb68-5"><a href="bms-computation.html#cb68-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_ms)</span>
+<span id="cb68-6"><a href="bms-computation.html#cb68-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> b[<span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>)),]</span></code></pre></div>
 </details>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="bms-computation.html#cb71-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
-<span id="cb71-2"><a href="bms-computation.html#cb71-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span><span class="fu">as.matrix</span>(x), <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="bms-computation.html#cb69-1" tabindex="-1"></a>logodds <span class="ot">&lt;-</span> <span class="fu">log10</span>(<span class="fl">0.1</span><span class="sc">/</span><span class="fl">0.9</span>)</span>
+<span id="cb69-2"><a href="bms-computation.html#cb69-2" tabindex="-1"></a>fit_vb <span class="ot">&lt;-</span> <span class="fu">varbvs</span>(<span class="at">X=</span><span class="fu">as.matrix</span>(x), <span class="at">Z=</span><span class="cn">NULL</span>, <span class="at">y=</span>y, <span class="at">family=</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">sa=</span>priorvar, <span class="at">logodds=</span>logodds, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 </details>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="bms-computation.html#cb72-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">inshort=</span> inshort,</span>
-<span id="cb72-2"><a href="bms-computation.html#cb72-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
-<span id="cb72-3"><a href="bms-computation.html#cb72-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
-<span id="cb72-4"><a href="bms-computation.html#cb72-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
-<span id="cb72-5"><a href="bms-computation.html#cb72-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="bms-computation.html#cb70-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">inshort=</span> inshort,</span>
+<span id="cb70-2"><a href="bms-computation.html#cb70-2" tabindex="-1"></a>                 <span class="at">postmean_mcmc=</span> b[,<span class="st">&#39;estimate&#39;</span>], </span>
+<span id="cb70-3"><a href="bms-computation.html#cb70-3" tabindex="-1"></a>                 <span class="at">pip_mcmc=</span> b[,<span class="st">&#39;margpp&#39;</span>],</span>
+<span id="cb70-4"><a href="bms-computation.html#cb70-4" tabindex="-1"></a>                 <span class="at">postmean_vb=</span> fit_vb<span class="sc">$</span>beta,</span>
+<span id="cb70-5"><a href="bms-computation.html#cb70-5" tabindex="-1"></a>                 <span class="at">pip_vb=</span> fit_vb<span class="sc">$</span>pip)</span></code></pre></div>
 </details>
 <p>The marginal posterior probabilities estimated from both methods differ drastically: the variational estimates are much closer to 0 or 1 than those from MCMC, significantly underestimating model uncertainty.
 The BMA parameter estimates are also very different.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="bms-computation.html#cb73-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
-<span id="cb73-2"><a href="bms-computation.html#cb73-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb73-3"><a href="bms-computation.html#cb73-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb73-4"><a href="bms-computation.html#cb73-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
-<span id="cb73-5"><a href="bms-computation.html#cb73-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span>
-<span id="cb73-6"><a href="bms-computation.html#cb73-6" tabindex="-1"></a></span>
-<span id="cb73-7"><a href="bms-computation.html#cb73-7" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
-<span id="cb73-8"><a href="bms-computation.html#cb73-8" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb73-9"><a href="bms-computation.html#cb73-9" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb73-10"><a href="bms-computation.html#cb73-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
-<span id="cb73-11"><a href="bms-computation.html#cb73-11" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="bms-computation.html#cb71-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>pip_mcmc, <span class="at">y=</span>pip_vb)) <span class="sc">+</span></span>
+<span id="cb71-2"><a href="bms-computation.html#cb71-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb71-3"><a href="bms-computation.html#cb71-3" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb71-4"><a href="bms-computation.html#cb71-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;Posterior inclusion probability (MCMC)&#39;</span>,</span>
+<span id="cb71-5"><a href="bms-computation.html#cb71-5" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&#39;Posterior inclusion probability (VB)&#39;</span>)</span>
+<span id="cb71-6"><a href="bms-computation.html#cb71-6" tabindex="-1"></a></span>
+<span id="cb71-7"><a href="bms-computation.html#cb71-7" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>postmean_mcmc, <span class="at">y=</span>postmean_vb)) <span class="sc">+</span></span>
+<span id="cb71-8"><a href="bms-computation.html#cb71-8" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb71-9"><a href="bms-computation.html#cb71-9" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb71-10"><a href="bms-computation.html#cb71-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (MCMC)),</span>
+<span id="cb71-11"><a href="bms-computation.html#cb71-11" tabindex="-1"></a>       <span class="at">y=</span> <span class="fu">bquote</span>(<span class="fu">E</span>(beta[j] <span class="sc">~</span> <span class="st">&quot;|&quot;</span> <span class="sc">~</span> y) (variational)))</span></code></pre></div>
 </details>
 <p><img src="modelSelection-book_files/figure-html/two-plots-1.png" width="50%" /><img src="modelSelection-book_files/figure-html/two-plots-2.png" width="50%" /></p>
 <p>From purely a Bayesian point of view this shows variational inference may provide a poor approximation to the desired posterior. This is different from saying that the exact Bayesian solution provides better inference than the variational one, in terms of detecting the genes that are truly associated with TGFB.
 As an additional check in this direction, we compare the average posterior inclusion probability between genes that were inside/outside the mouse list. For the MCMC estimates there is a big difference, roughly 0.023/0.007 = 3.3, which aligns with what’s expected biologically. For the variational estimates the difference is much smaller.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="bms-computation.html#cb74-1" tabindex="-1"></a><span class="fu">group_by</span>(df, inshort) <span class="sc">|&gt;</span></span>
-<span id="cb74-2"><a href="bms-computation.html#cb74-2" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">mean</span>(pip_mcmc), <span class="fu">mean</span>(pip_vb))</span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="bms-computation.html#cb72-1" tabindex="-1"></a><span class="fu">group_by</span>(df, inshort) <span class="sc">|&gt;</span></span>
+<span id="cb72-2"><a href="bms-computation.html#cb72-2" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">mean</span>(pip_mcmc), <span class="fu">mean</span>(pip_vb))</span></code></pre></div>
 </details>
 <pre><code>## # A tibble: 2 × 3
 ##   inshort `mean(pip_mcmc)` `mean(pip_vb)`
