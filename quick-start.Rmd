@@ -1,88 +1,184 @@
 # Quick start {#quick-start}
 
-Before discussing high-dimensional model selection methods, we show some examples that motivate their practical utility and that serve as a quick start for readers who are already familiar with the basics.
-We focus is on sparse inference, mainly Bayesian model selection (BMS) and averaging (BMA) and L0 criteria like the AIC, BIC or EBIC.
-Our examples illustrate how to obtain:
+Before properly discussing high-dimensional model selection methods, we show some examples to motivate their utility and to provide a quick start for readers who are already familiar with the basics.
+The examples also illustrate potential pitfalls that are not always sufficiently appreciated.
 
-- Information criteria for many models (using MCMC model exploration)
-- Posterior model probabilities
-- Marginal posterior inclusion probabilities  
-- BMA point estimates and posterior intervals
-
-For these illustrations we use R package `modelSelection`, which covers several popular models.
-
-- Generalized linear models: linear, logistic and Poisson regression. BMS, BMA and L0 criteria [@johnson:2012; @rossell:2017; @rossell:2021].
-
-- Linear regression with non-normal residuals [@rossell:2018b], including asymmetric Normal, Laplace and asymmetric Laplace residuals.
-
-- Accelerated Failure Time models for right-censored survival data [@rossell:2021b].
-
-- Bayesian inference for Gaussian graphical models
-
-- Bayesian inference for Gaussian mixture models [@fuquene:2019].
-
-The package's C++ implementation is not optimal, but it's designed to be minimally scalable in sparse high-dimensional settings (large $p$).
-On the Bayesian side, `modelSelection` is the main package implementing **non-local priors** (@johnson:2010, @johnson:2012, @rossell:2017, Section \@ref(bms-nlp)) but other popular priors are also implemented, e.g. Zellner's and Normal shrinkage priors in regression, or Gaussian spike-and-slab priors in graphical models.
+We focus on sparse inference methods, mainly Bayesian model selection (BMS) and averaging (BMA), L0 criteria like the BIC or EBIC, L1 (LASSO) and adaptive LASSO.
+For the illustrations we use R package modelSelection.
 The main functions for regression-type models are `modelSelection` and `bestBIC` (along with companions like `bestEBIC`, `bestAIC` and `bestIC`).
 `modelSelection_eBayes` provides an empirical Bayes counterpart to `modelSelection`. 
 See `modelSelectionGGM` for Gaussian graphical models and `bfnormmix` for Gaussian mixture models.
-A lot of work went into coding and maintaining the package, if you use it please cite the corresponding papers.
 
 
 
+## Popular methods may fail  {#quick-lasso-failure}
 
+We consider a deceivingly simple setting with $p=3$ covariates and a moderately large sample size $n=200$, where popular high-dimensional methods fail to recover the truly active covariates.
+Suppose that data are truly generated as follows:
+\begin{align*}
+ x_{i1} & \sim N(0,1) \\
+ x_{i2} & \sim N(0,1) \\
+ x_{i3} & \sim N(x_{i1} - x_{i2}, \sigma=0.2) \\
+ y_i    & \sim N(x_{i1} - x_{i2}, \sigma=0.5)
+\end{align*}
+with independence across $i=1,\ldots,n$.
+That is, $y_i$ truly depends on $x_{i1}$ and $x_{i2}$ but not on $x_{i3}$.
+The complicating issue is that $x_{i3}$ is a near-copy of the mean of $y_i$, and hence the marginal correlation between $x_{i3}$ and $y_i$ is high.
 
-## Linear regression
-
-We simulate linear regression data 
-$$
-y_i = \sum_{j=1}^p x_{ij} \theta_j + \epsilon_i,
-$$
-for $p=3$ covariates and $i=1,\ldots,100$ individuals.
-We set regression coefficients $\theta_1= 1$, $\theta_2= 1$, $\theta_3=0$ and $\epsilon_i \sim N(0,1)$, and the random number seed for reproducibility.
-It is good practice to store the outcome and covariates into a data frame, as we do below.
-
-```{r quickstart-simdata, message=FALSE}
+```{r, message=FALSE}
 library(modelSelection)
-set.seed(1234)
-x <- matrix(rnorm(100*3), nrow=100, ncol=3)
-theta <- matrix(c(1,1,0), ncol=1)
-y <- x %*% theta + rnorm(100)
-df <- data.frame(y, x)
+library(glmnet)
+library(tidyverse)
+set.seed(1234) 
+n <- 200
+x1 <- rnorm(n)
+x2 <- rnorm(n)
+x3 <- x1 - x2 + rnorm(n,sd=.2)
+x <- cbind(x1, x2, x3)
+y <- x1 - x2 + rnorm(n)
+df <- data.frame(y, x1, x2, x3)
 ```
 
-### L0 criteria
+To show that this is actually an easy exercise, we fit via least-squares the model that includes all covariates. The results correctly suggest that the third covariate could be conceivably dropped, whereas covariates 1-2 are highly statistically significant.
 
-`bestBIC` obtains the BIC for all models. 
-As usual in R we can use formulas like `y ~ X1 + X2 + X3` (provided the variables are stored in a data frame), or simply `y ~ .` to consider all the variables in the data (other than `y`) as covariates.
-An intercept is added automatically, giving a total of 4 variables and $2^4=16$ possible models (the intercept can be removed by adding -1 to the formula, as usual). `bestBIC` enumerates these 16 models and finds the model with best (lowest) BIC (when there are many covariates, MCMC is used to explore the model space). 
-A much faster alternative is to use a heuristic implemented in `bestBIC_fast`, based on coordinate descent and other tricks, see Section \@ref(background-l0) (for Gaussian and binary outcomes it relies on package `L0Learn` [@hazimeh:2023]). 
+```{r}
+summary(lm(y ~ -1 + ., data=df))
+```
+
+The issue is that when the number of covariates $p$ is large, possibly larger than the sample size $n$, fitting a model that includes all parameters is less reliable (the parameter estimates are less precise).
+High-dimensional methods use other strategies to identify the truly active covariates.
+A popular strategy is the LASSO (or $L_1$ regularization) of [@tibshirani:1996], which can quickly obtain parameter estimates for a sequence of so-called regularization hyper-parameter values.
+Let us obtain the sequence of LASSO solutions in our data. None of these models are the data-generating truth.
+As one increases the LASSO penalization parameter, the path of solutions moves from the model excluding all covariates to first including $x_{i3}$ (the variable most correlated with $y_i$), and subsequently to adding $x_{i1}$ and $x_{i2}$, without ever dropping $x_{i3}$. That is, the true model is not recovered by any value of the penalization parameter.
+
+
+```{r}
+fit <- glmnet(x=x, y=y, family='gaussian', alpha=1, intercept=FALSE)
+models <- unique(t(as.matrix(coef(fit)) != 0))
+models
+```
+In contrast, the Bayesian information criterion (BIC) of @schwarz:1978, defined in Section \@ref(l0-basics), correctly identifies the true model for these data.
+`bestBIC` enumerates all $2^3=8$ models resulting from the inclusion/exclusion of the 3 covaraites, and finds the model with best (lowest) BIC (when there are many covariates, MCMC is used to explore the model space). 
+We use the R formula like `y ~ -1 + .` to consider all the variables in the data (other than `y`) as covariates,
+and set `-1` to exclude the intercept, which is not needed in this example).
+A much faster alternative is to use heuristics implemented in `bestBIC_fast`, based on the LASSO and adaptive LASSO solution paths, coordinate descent and other tricks, see Section \@ref(background-l0) (for Gaussian and binary outcomes it relies on package `L0Learn` [@hazimeh:2023]). 
 We set `verbose=FALSE` to avoid printing progress information and cluttering the book.
-For our simulated data the selected model matches the data-generating truth, which only features the first two covariates.
-
-```{r quickstart-bestbic}
-fit.bic <- bestBIC(y ~ ., data=df, verbose=FALSE)
-print(fit.bic)
-```
-
-We list the BIC for the top 5 models (index 1 corresponds to the intercept, 2 to `x[,1]` and so on). We can also use standard functions like `summary` and `coef` to view the MLE for the best model, and `predict` to obtain predictions for new data.
-
-```{r}
-fit.bic$models[1:5,]
-```
-
 
 
 ```{r}
-summary(fit.bic)
+fit <- bestBIC(y ~ -1 + ., data=df, verbose=FALSE)
+print(fit)
 ```
 
+Fitting the selected model via least-squares shows that both truly active covariates are highly statistically significant.
 
 ```{r}
-coef(fit.bic)
+summary(fit)
 ```
 
-### Bayesian model selection
+
+
+
+Above we used a single simulated dataset for illustration, but this phenomenon occurs more generally.
+The table below shows the proportion of times that each covariate was selected among 1,000 simulations, for $n=200$ and $n=1000$, when using the BIC, LASSO and adaptive LASSO (penalization parameter chosen by BIC).
+It also shows results for the fast model search heuristic of @hazimeh:2023 (R package L0Learn). 
+The code to reproduce these results can be unfolded by clicking below.
+
+
+
+<details>
+<summary>Click to show code</summary>
+
+```{r, eval=FALSE}
+#Function to simulate one dataset of size n
+simdata <- function(n) {
+  x1 <- rnorm(n)
+  x2 <- rnorm(n)
+  x3 <- x1 - x2 + rnorm(n,sd=.2)
+  x <- cbind(x1, x2, x3)
+  y <- x1 - x2 + rnorm(n)
+  df <- data.frame(y, x1, x2, x3)
+  return(df)
+}
+
+#Function to simulate nsims datasets of size n and obtain
+#the proportion of times that each covariate is selected
+proportionSelected <- function(nsims, n) {
+  sel.L0Learn <- sel.L1 <- sel.adaL1 <- sel.bic <- matrix(NA, nrow=nsims, ncol=3)
+  for (i in 1:nsims) {
+    df <- simdata(n)
+    fit.L0Learn <- bestBIC_fast(y ~ -1 + ., data=df, fastmethod='L0Learn', verbose=FALSE)
+    fit.L1 <- bestBIC_fast(y ~ -1 + ., data=df, fastmethod='L1', verbose=FALSE)
+    fit.adaL1 <- bestBIC_fast(y ~ -1 + ., data=df, fastmethod='adaptiveL1', verbose=FALSE)
+    fit.bic <- bestBIC(y ~ -1 + ., data=df, verbose=FALSE)
+    sel.L0Learn[i,] <- fit.L0Learn$varnames %in% fit.L0Learn$topmodel  
+    sel.L1[i,] <- fit.L1$varnames %in% fit.L1$topmodel  
+    sel.adaL1[i,] <- fit.adaL1$varnames %in% fit.adaL1$topmodel  
+    sel.bic[i,] <- fit.bic$varnames %in% fit.bic$topmodel  
+  }
+  nn <- c('BIC', 'LASSO BIC', 'ALASSO BIC', 'L0Learn')
+  propsel <- rbind(colMeans(sel.bic), colMeans(sel.L1), colMeans(sel.adaL1), colMeans(sel.L0Learn))
+  propsel <- data.frame(Method=nn, propsel)
+  return(propsel)
+}
+
+propsel.n200 <- proportionSelected(nsims=1000, n=200)
+propsel.n1000 <- proportionSelected(nsims=1000, n=1000)
+propsel.n200$n <- 200
+propsel.n1000$n <- 1000
+
+propsel <- rbind(propsel.n200, propsel.n1000)
+write.table(propsel, "tables/lassofailure.txt", row.names=FALSE, col.names=TRUE, sep="\t")
+
+```
+
+</details>
+
+
+
+
+```{r, echo=FALSE}
+propsel <- read.table("tables/lassofailure.txt", header=TRUE, sep="\t")
+
+tab1 <- propsel |>
+  dplyr::filter(n == 200) |>
+  dplyr::select(-n)
+
+tab2 <- propsel |>
+  dplyr::filter(n == 1000) |>
+  dplyr::select(-n) 
+
+combined_tab <- dplyr::full_join(tab1, tab2, by = colnames(propsel)[1])
+
+combined_tab |>
+  kableExtra::kable(
+    col.names = c("Method", "X1", "X2", "X3", "X1", "X2", "X3"),
+    align = "c",
+    escape = FALSE
+  ) |>
+  # Add the grouped header row (must be named vector)
+  # The names are the text you want to display, the values are the number of columns they span
+  kableExtra::add_header_above(
+    header = c(" " = 1, "n = 200" = 3, "n = 1,000" = 3),
+    bold = TRUE
+  ) |>
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+
+BIC is the best method, including the truly active covariates 1-2 and excluding the truly inactive covariate 3 more frequently than the other methods.
+LASSO-BIC and L0Learn wrongly include the third covariate in 50% of the simulations or more, and the situation does not improve as $n$ grows.
+Interestingly, adaptive LASSO performs similarly to LASSO for $n=200$ and similarly to BIC for $n=1,000$.
+
+**Remark:** LASSO-BIC uses BIC to select the best model, it's just that it only evaluates the BIC for models visited by the LASSO path, and the latter may not visit the data-generating model. For this reason, similar issues are encountered when setting the LASSO penalty with cross-validation (results not shown).
+
+These findings are not a coincidence. There is theory for LASSO explaining that it can be expected to select a super-set of the truly active variables (the so-called screening property), but that this may contain false positives when the covariates are correlated in challenging ways (see Section \@ref(l0-theory)).
+The adaptive LASSO consistently identifies the truly active covariates under less stringent conditions than LASSO, as illustrated in our findings for $n=1,000$ (with $n=200$ its performance leaves much to be desired).
+In contrast, L0 criteria like the BIC have better theoretical properties in such settings.
+
+
+
+## Model uncertainty via Bayesian model selection {#quick-bms}
 
 A limitation of L0 criteria is that they ignore the uncertainty in the selected model, i.e. we're not completely sure that it's the correct one.
 We use BMS to assess that uncertainty, in a Bayesian sense.
@@ -117,7 +213,7 @@ ypred <- predict(fit.bms)
 head(ypred)
 ```
 
-## Logistic regression
+## Logistic regression {#quick-logistic}
 
 For binary outcomes, we simply specify `family='binomial'` (and for Poisson we specify `family='poisson'`).
 We first create a binary version of our simulated outcome.
@@ -142,7 +238,7 @@ fit2.bms <- modelSelection(ybin ~ ., data=dfbin,
 coef(fit2.bms)
 ```
 
-## Non-Linear effects via Generalized Additive Models (GAMs)
+## Non-linear effects via Generalized Additive Models (GAMs) {#quick-gam}
 
 Non-linear effects can be modeled via cubic splines using the `smooth` argument (the default is 9 knots, producing 5 columns in design matrix for each non-linear covariate).
 When using the smooth argument we cannot use the `~ .` notation for including all covarites, rather we must list those for which we wish to include a non-linear effect (see the example below).
@@ -155,7 +251,7 @@ In our example, there is strong evidence for (correctly) including the linear ef
 
 ```{r quickstart-gam}
 fit.gam <- modelSelection(y ~ ., data=df,
-                     smooth = ~ X1 + X2 + X3,
+                     smooth = ~ x1 + x2 + x3,
                      priorCoef=priorCoef,
                      priorModel=priorModel, verbose=FALSE)
 ```

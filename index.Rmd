@@ -57,6 +57,23 @@ There is theory showing that computations are indeed feasible with high probabil
 In summary, a main motivation for this book was to introduce the fundamental notions behind high-dimensional model selection / structural learning, trying to dispel common misconceptions along the way. While methodological details are discussed, there is always a hands-on perspective. 
 Another motivation was to provide supporting material for applied data analysts, undergraduate and graduate students,
 including serving as documentation for some of the R packages that one can use for this task.
-There is a blatant emphasis on my R package `modelSelection` (previously called `mombf`) which I have been developing over the years, mainly because it's well-suited to emphasizing the main notions that I intend to convey. There is other excellent software that is used in this book, and of course yet further software that is not covered here.
+
+A final note on software. There is a blatant emphasis on my R package modelSelection (which superseeds a previous package called `mombf`) which I have been developing over the years, mainly because it's well-suited to emphasizing the main notions that I intend to convey. 
+There is other excellent software that is used in this book, and of course yet further software that is not covered here.
+The package covers the following models:
+
+- Generalized linear models (GLMs, Chapter \@ref(glm) and generalized additive models (GAMs, Chapter \@ref(gam)). [@johnson:2012; @rossell:2017; @rossell:2021; @rossell:2021b].
+
+- Linear regression with non-normal residuals [@rossell:2018b], including asymmetric Normal, Laplace and asymmetric Laplace residuals.
+
+- Accelerated failure time models for right-censored survival data [@rossell:2021b].
+
+- Gaussian graphical models under spike-and-slab priors [@sulem:2025].
+
+- Bayesian inference for Gaussian mixture models [@fuquene:2019].
+
+A lot of work went into coding and maintaining the modelSelection package, if you use it please cite this book or the corresponding papers.
+The package's C++ implementation is not optimal, but it's designed to be minimally scalable in sparse high-dimensional settings (large $p$).
+On the Bayesian side, `modelSelection` is the main package implementing **non-local priors** (@johnson:2010, @johnson:2012, @rossell:2017, Section \@ref(bms-nlp)) but other popular priors are also implemented, e.g. Zellner's and Normal shrinkage priors in regression, or Gaussian spike-and-slab priors in graphical models.
 
 
