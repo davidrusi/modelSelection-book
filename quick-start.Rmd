@@ -7,13 +7,14 @@ We focus on sparse inference methods, mainly Bayesian model selection (BMS) and 
 For the illustrations we use R package modelSelection.
 The main functions for regression-type models are `modelSelection` and `bestBIC` (along with companions like `bestEBIC`, `bestAIC` and `bestIC`).
 `modelSelection_eBayes` provides an empirical Bayes counterpart to `modelSelection`. 
-See `modelSelectionGGM` for Gaussian graphical models and `bfnormmix` for Gaussian mixture models.
 
 
 
 ## Popular methods may fail  {#quick-lasso-failure}
 
-We consider a deceivingly simple setting with $p=3$ covariates and a moderately large sample size $n=200$, where popular high-dimensional methods fail to recover the truly active covariates.
+We consider a simple setting with $p=3$ covariates and a moderately large sample size $n=200$, where popular high-dimensional methods fail to recover the truly active covariates.
+It may feel underwhelming to start a book on high-dimensional model selection with a $p=3$ example: the message is that if things can go wrong here, they are bound to get worse for larger $p$. By understanding what can go wrong in such a manageable example, the hope is that we learn lessons that can be valuable in harder ones, and we better understand what different methods can bring to the table.
+
 Suppose that data are truly generated as follows:
 \begin{align*}
  x_{i1} & \sim N(0,1) \\
@@ -29,6 +30,7 @@ The complicating issue is that $x_{i3}$ is a near-copy of the mean of $y_i$, and
 library(modelSelection)
 library(glmnet)
 library(tidyverse)
+library(mvtnorm)
 set.seed(1234) 
 n <- 200
 x1 <- rnorm(n)
@@ -45,11 +47,10 @@ To show that this is actually an easy exercise, we fit via least-squares the mod
 summary(lm(y ~ -1 + ., data=df))
 ```
 
-The issue is that when the number of covariates $p$ is large, possibly larger than the sample size $n$, fitting a model that includes all parameters is less reliable (the parameter estimates are less precise).
+The issue is that when the number of covariates $p$ is large, possibly larger than the sample size $n$, fitting a model that includes all parameters is often less reliable (the parameter estimates are less precise).
 High-dimensional methods use other strategies to identify the truly active covariates.
-A popular strategy is the LASSO (or $L_1$ regularization) of [@tibshirani:1996], which can quickly obtain parameter estimates for a sequence of so-called regularization hyper-parameter values.
-Let us obtain the sequence of LASSO solutions in our data. None of these models are the data-generating truth.
-As one increases the LASSO penalization parameter, the path of solutions moves from the model excluding all covariates to first including $x_{i3}$ (the variable most correlated with $y_i$), and subsequently to adding $x_{i1}$ and $x_{i2}$, without ever dropping $x_{i3}$. That is, the true model is not recovered by any value of the penalization parameter.
+A popular strategy is the LASSO (or $L_1$ regularization) of [@tibshirani:1996], which can quickly obtain parameter estimates for all values of its regularization (or penalty) hyper-parameter.
+As one increases the penalty, the LASSO solution moves from the model excluding all covariates to first including $x_{i3}$ (the variable most correlated with $y_i$), and subsequently to adding $x_{i1}$ and $x_{i2}$, without ever dropping $x_{i3}$. That is, the data-generating model is not recovered by any value of the penalization parameter.
 
 
 ```{r}
@@ -57,12 +58,15 @@ fit <- glmnet(x=x, y=y, family='gaussian', alpha=1, intercept=FALSE)
 models <- unique(t(as.matrix(coef(fit)) != 0))
 models
 ```
-In contrast, the Bayesian information criterion (BIC) of @schwarz:1978, defined in Section \@ref(l0-basics), correctly identifies the true model for these data.
-`bestBIC` enumerates all $2^3=8$ models resulting from the inclusion/exclusion of the 3 covaraites, and finds the model with best (lowest) BIC (when there are many covariates, MCMC is used to explore the model space). 
-We use the R formula like `y ~ -1 + .` to consider all the variables in the data (other than `y`) as covariates,
-and set `-1` to exclude the intercept, which is not needed in this example).
-A much faster alternative is to use heuristics implemented in `bestBIC_fast`, based on the LASSO and adaptive LASSO solution paths, coordinate descent and other tricks, see Section \@ref(background-l0) (for Gaussian and binary outcomes it relies on package `L0Learn` [@hazimeh:2023]). 
+In contrast, the Bayesian information criterion (BIC) of @schwarz:1978 (see Section \@ref(l0-basics)), correctly identifies the data-generating model.
+`bestBIC` enumerates all $2^3=8$ models resulting from the inclusion/exclusion of the 3 covariates, and finds the model with best (lowest) BIC.
+We use the R formula `y ~ -1 + .` to consider all variables in the data (other than `y`) as covariates,
+and set `-1` to exclude the intercept, since it's not needed in this example).
 We set `verbose=FALSE` to avoid printing progress information and cluttering the book.
+
+In cases where $p$ is large, `bestBIC` uses MCMC to explore the model space. 
+A computationally faster alternative is to use heuristics, for example finding the model with best BIC among those visited in the LASSO or adaptive LASSO path (@zou:2006), using a coordinate descent algorithm or local combinatorial searches (@hazimeh:2023, R package L0Learn), see Section \@ref(background-l0).
+Function `bestBIC_fast` in modelSelection implements such heuristics.
 
 
 ```{r}
@@ -70,7 +74,7 @@ fit <- bestBIC(y ~ -1 + ., data=df, verbose=FALSE)
 print(fit)
 ```
 
-Fitting the selected model via least-squares shows that both truly active covariates are highly statistically significant.
+Fitting the selected model via least-squares shows that both covariates are highly statistically significant.
 
 ```{r}
 summary(fit)
@@ -167,34 +171,46 @@ combined_tab |>
 
 
 BIC is the best method, including the truly active covariates 1-2 and excluding the truly inactive covariate 3 more frequently than the other methods.
-LASSO-BIC and L0Learn wrongly include the third covariate in 50% of the simulations or more, and the situation does not improve as $n$ grows.
+LASSO-BIC and L0Learn wrongly include the third covariate in 50% of the simulations or more, that is they incur a very high false positive rate, and the situation does not improve as $n$ grows.
 Interestingly, adaptive LASSO performs similarly to LASSO for $n=200$ and similarly to BIC for $n=1,000$.
 
-**Remark:** LASSO-BIC uses BIC to select the best model, it's just that it only evaluates the BIC for models visited by the LASSO path, and the latter may not visit the data-generating model. For this reason, similar issues are encountered when setting the LASSO penalty with cross-validation (results not shown).
+**Remark:** LASSO-BIC uses BIC to select the best model, so how can its results be so different from BIC? The reason is that LASSO-BIC only evaluates the BIC for models visited by the LASSO path, and the latter may not include the data-generating model. Similar issues are encountered when setting the LASSO penalty with cross-validation (results not shown).
 
-These findings are not a coincidence. There is theory for LASSO explaining that it can be expected to select a super-set of the truly active variables (the so-called screening property), but that this may contain false positives when the covariates are correlated in challenging ways (see Section \@ref(l0-theory)).
-The adaptive LASSO consistently identifies the truly active covariates under less stringent conditions than LASSO, as illustrated in our findings for $n=1,000$ (with $n=200$ its performance leaves much to be desired).
-In contrast, L0 criteria like the BIC have better theoretical properties in such settings.
+These findings are not a coincidence. There is theory for LASSO explaining that it can be expected to select a super-set of the truly active variables (the so-called screening property), but that this may contain false positives when the covariates are correlated in challenging ways (more precisely, when the so-called irrepresantability condition is not met, see Section \@ref(l0-theory)).
+The adaptive LASSO consistently identifies the truly active covariates under less stringent conditions than LASSO, as illustrated in our findings for $n=1,000$. Alas, in this example, when $n=200$ its performance leaves much to be desired.
+
+In contrast, L0 criteria like the BIC have better theoretical properties in such settings, and the same holds for Bayesian model selection methods. 
+Admittedly computation is harder, but given the potential improvements in variable selection we argue that one should at least try. As we shall see, finding a (possibly approximate) solution is often feasible. Following Tukey's motto, we argue that an approximate solution to the right problem is preferable to an exact solution to the wrong problem.
 
 
 
-## Model uncertainty via Bayesian model selection {#quick-bms}
+## Model uncertainty {#quick-bms}
 
 A limitation of L0 criteria is that they ignore the uncertainty in the selected model, i.e. we're not completely sure that it's the correct one.
-We use BMS to assess that uncertainty, in a Bayesian sense.
+We use Bayesian model selection (BMS) to assess that uncertainty, in a Bayesian sense.
 BMS requires setting a prior distribution on the models and on the parameters for each model.
-For now, we run `modelSelection` with default priors (Beta-Binomial prior on the models, pMOM prior with default prior precision on the coefficients).
+For now, we run `modelSelection` with default priors (Beta-Binomial prior on the models, product MOM prior with default prior precision on the coefficients).
 
 
 ```{r quickstart-bma}
 priorCoef <- momprior()
 priorModel <- modelbbprior()
-fit.bms <- modelSelection(y ~ ., data=df,
+fit.bms <- modelSelection(y ~ -1 + ., data=df,
                      priorCoef=priorCoef, priorModel=priorModel,
                      verbose=FALSE)
 ```
 
-`postProb` shows posterior model probabilities (sorted decreasingly), and `coef` gives BMA point estimates, 0.95 posterior intervals, and marginal posterior inclusion probabilities $P(\theta_j \neq 0 \mid y)$.
+BMS provides posterior model probabilities, a Bayesian measure of the certainty that each model is the correct one.
+Below we show the five models with highest posterior probability. 
+Only two models have a non-negligible posterior probability. The top model includes covariates 1-2 (the data-generating trugh) and has posterior probability 0.64, whereas the second model includes all 3 covariates and has posterior probability 0.34.
+Given that covariate 3 is a near-copy of the outcome, and that we have a limited amount of data ($n=200$), it seems reasonable that we are not completely sure about which of these two models is the correct one.
+
+```{r}
+postProb(fit.bms)[1:5,]
+```
+
+
+`coef` gives Bayesian model averaging (BMA) point estimates, 0.95 posterior intervals, and marginal posterior inclusion probabilities $P(\theta_j \neq 0 \mid y)$.
 Below, `phi` refers to the error variance $\sigma^2$ (which is included with probability 1).
 In our example, BMS selects the right covariates and assigns high posterior probability to that solution, as one would ideally wish.
 
@@ -202,9 +218,6 @@ In our example, BMS selects the right covariates and assigns high posterior prob
 coef(fit.bms)
 ```
 
-```{r}
-postProb(fit.bms)[1:5,]
-```
 
 Finally, we can use `predict` to obtain point predictions and 0.95 posterior predictive intervals.
 
@@ -213,12 +226,135 @@ ypred <- predict(fit.bms)
 head(ypred)
 ```
 
+## Are computations always hard?
+
+A common objection to Bayesian model selection and $L_0$ criteria is that they're computationally unfeasible as the number of covariates $p$ grows.
+It is true that the problem is worst-case NP-hard even in canonical linear regression (see for example @natarajan:1995, @cover:2007, @foster:2015), in the sense that one can always design a dataset such that finding the best model according to these criteria has an exponential cost in $p$.
+However this is in a worst-case scenario, in practice one may be able to solve the problem quickly, in particular as $n$ grows and under so-called sparsity constraints. These issues are discussed in Chapters \@ref(background-l0) and \ref(background-bms), for now we provide an example where $p=200$ and $n=200$.
+The first six covariates have non-zero effects $\beta_1=0.5$, $\beta_2=0.6$, ..., $\beta_{6}=1$, whereas $\beta_7=\ldots = \beta_p=0$.
+The covariates are generated from a multivariate Gaussian with unit variances and 0.7 pairwise correlations, which is a moderately strong correlation structure.
+
+```{r}
+n <- p <- 200
+sigma <- diag(p)
+sigma[upper.tri(sigma)] = sigma[lower.tri(sigma)] = 0.7
+x <- rmvnorm(n, sigma=sigma)
+beta <- matrix(c(seq(0.5,1,by=0.1), rep(0,p-6)), ncol=1)
+y <- rnorm(n, x %*% beta)
+df <- data.frame(y=y, x)
+```
+
+Given that $p$ is large here we use the EBIC (@chen:2008), an extension of the BIC that's better suited for high-dimensional problems.
+As shown below, optimization heuristics return an answer in $<$0.5 seconds in my Ubuntu laptop.
+The selected model selects all the truly active covariates 1-6 and also covariate 104, which is a false positive. This is a fairly good answer.
+
+```{r}
+system.time(fit.ebicfast <- bestEBIC_fast(y ~ ., data=df, verbose=FALSE))['elapsed']
+```
+
+```{r}
+fit.ebicfast
+```
+
+For comparison, the model with best EBIC within the LASSO path misses truly active covariates 1-2, and includes two false positives (covariates 62 and 68).
+
+```{r}
+bestEBIC_fast(y ~ ., data=df, fastmethod='L1', verbose=FALSE)
+```
+
+Bayesian model selection via MCMC took longer to run, but still below 3 seconds. The highest posterior probability model matches that selected by the EBIC. We also see that its posterior probability is small, that is there isn't strong Bayesian evidence that this is the correct model. This seems reasonable, given that $p$ is large and that covariates are strongly correlated.
+
+```{r}
+system.time(ms <- modelSelection(y ~ -1 + ., data=df, verbose=FALSE))['elapsed']
+```
+```{r}
+head(postProb(ms))
+```
+
+BMA returns point estimates and 0.95 posterior probability intervals, plotted below. The posterior interval of each $\beta_j$ contains the data-generating $\beta_j$ in this example, and the point estimates for the truly zero $\beta_j$'s are quite close to zero.
+
+<details>
+<summary>Click to show code</summary>
+
+```{r}
+b <- coef(ms)
+sel <- !(rownames(b) %in% c('intercept','phi'))
+b <- data.frame(b[sel,]) |>
+  transform(Covariate = 1:p, beta=beta) |>
+  rename(cilow=X2.5., ciup=X97.5.)
+
+ggplot(b, aes(x=beta, y=estimate)) +
+  geom_point() +
+  geom_segment(aes(x=beta, y=cilow, yend=ciup)) +
+  labs(y='BMA estimate') +
+  geom_abline(slope=1)
+```
+
+Before we get too excited, let's illustrate the Achilles heel of standard high-dimensional model selection methods. Their philosophy is to be conservative in terms of adding parameters to the model, with the hope that truly most parameters are zero (a sparsity assumption) and that the truly non-zero parameters are large enough (a so-called betamin assumption), or alternatively that the sample size $n$ is large enough. If these assumptions are met, one hopes to be protected against false positive findings. The trade-off is that this conservative nature may result in low statistical power to detect parameters that are truly non-zero but small. We discuss these issues and some empirical Bayes strategies to ameliorate them in Chapter \@ref(eBayes).
+
+For now, we repeat the previous example but now the size of the non-zero $\beta_j$'s is divided by two.
+The consequence is that covariates 1-2 are no longer selected, neither by EBIC, LASSO-EBIC nor BMA. 
+For BMA this is particularly problematic, because the posterior probability assigned to $\beta_1 \neq 0$ and $\beta_2 \neq 0$ is very close to zero, that is there is strong Bayesian evidence that neither covariate has an effect.
+This example illustrates that BMA results should be interpreted as a conservative analysis where small evidence for inclusion may simply be due to low statistical power.
+
+```{r}
+beta <- beta/2
+y <- rnorm(n, x %*% beta)
+df <- data.frame(y=y, x)
+bestEBIC_fast(y ~ ., data=df, verbose=FALSE)
+```
+
+```{r}
+bestEBIC_fast(y ~ ., data=df, fastmethod='L1', verbose=FALSE)
+```
+
+```{r}
+ms <- modelSelection(y ~ -1 + ., data=df, verbose=FALSE)
+head(postProb(ms))
+```
+
+```{r}
+b <- coef(ms)
+head(b)
+```
+
+
+<details>
+<summary>Click to show code</summary>
+
+```{r}
+sel <- !(rownames(b) %in% c('intercept','phi'))
+b <- data.frame(b[sel,]) |>
+  transform(Covariate = 1:p, beta=beta) |>
+  rename(cilow=X2.5., ciup=X97.5.)
+
+ggplot(b, aes(x=beta, y=estimate)) +
+  geom_point() +
+  geom_segment(aes(x=beta, y=cilow, yend=ciup)) +
+  labs(y='BMA estimate') +
+  geom_abline(slope=1)
+```
+
+
+
+
+</details>
+
+
 ## Logistic regression {#quick-logistic}
 
 For binary outcomes, we simply specify `family='binomial'` (and for Poisson we specify `family='poisson'`).
 We first create a binary version of our simulated outcome.
 
 ```{r}
+n <- 200
+x1 <- rnorm(n)
+x2 <- rnorm(n)
+x3 <- x1 - x2 + rnorm(n,sd=.2)
+x <- cbind(x1, x2, x3)
+y <- x1 - x2 + rnorm(n)
+df <- data.frame(y, x1, x2, x3)
+
 dfbin <- transform(df, ybin = (y > 0)) |>
   dplyr::select(!y) #drop variable y
 ```
