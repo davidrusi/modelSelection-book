@@ -22,9 +22,9 @@ exr:nlp-marginal
 exm:variational-simulated
 exm:variational-tgfb
 exm:beer-search
-fig:unnamed-chunk-48
-fig:unnamed-chunk-49
-fig:unnamed-chunk-51
+fig:unnamed-chunk-60
+fig:unnamed-chunk-61
+fig:unnamed-chunk-63
 def:irreducible
 thm:mcmc-unique-stationary
 thm:ergodic-theorem
@@ -40,6 +40,7 @@ exr:aicbic-consistency
 quick-start
 quick-lasso-failure
 quick-bms
+are-computations-always-hard
 quick-logistic
 quick-gam
 background-bms
