@@ -1,6 +1,10 @@
 # Generalized additive models {#gam}
 
-To be added.
+In modelSelection, non-linear effects can be modeled via cubic splines using the `smooth` argument (the default is 9 knots, producing 5 columns in design matrix for each non-linear covariate).
+When using the smooth argument we cannot use the `~ .` notation for including all covariates, rather we must list those for which we wish to include a non-linear effect (see the example below).
+non-linear terms. 
+
+The linear effect coefficients are displayed using the original variable names, and the non-linear coefficients with an `.s` appended. Here we have 5 columns coding for the non-linear effect, labelled as `.s1` though `.s5`. 
 
 
 

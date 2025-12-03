@@ -245,7 +245,7 @@ df <- data.frame(y=y, x)
 ```
 
 Given that $p$ is large here we use the EBIC (@chen:2008), an extension of the BIC that's better suited for high-dimensional problems.
-As shown below, optimization heuristics return an answer in $<$0.5 seconds in my Ubuntu laptop.
+As shown below, optimization heuristics return an answer in less than 0.5 seconds in my Ubuntu laptop.
 The selected model selects all the truly active covariates 1-6 and also covariate 104, which is a false positive. This is a fairly good answer.
 
 ```{r}
@@ -283,17 +283,37 @@ b <- data.frame(b[sel,]) |>
   transform(Covariate = 1:p, beta=beta) |>
   rename(cilow=X2.5., ciup=X97.5.)
 
-ggplot(b, aes(x=beta, y=estimate)) +
+myplot <- ggplot(b, aes(x=beta, y=estimate)) +
   geom_point() +
   geom_segment(aes(x=beta, y=cilow, yend=ciup)) +
   labs(y='BMA estimate') +
   geom_abline(slope=1)
 ```
 
-Before we get too excited, let's illustrate the Achilles heel of standard high-dimensional model selection methods. Their philosophy is to be conservative in terms of adding parameters to the model, with the hope that truly most parameters are zero (a sparsity assumption) and that the truly non-zero parameters are large enough (a so-called betamin assumption), or alternatively that the sample size $n$ is large enough. If these assumptions are met, one hopes to be protected against false positive findings. The trade-off is that this conservative nature may result in low statistical power to detect parameters that are truly non-zero but small. We discuss these issues and some empirical Bayes strategies to ameliorate them in Chapter \@ref(eBayes).
+```{r}
+myplot
+```
+
+
+</details>
+
+
+```{r, echo=FALSE}
+myplot
+```
+
+## The Achilles heel {#quick-achilles}
+
+Before we get too excited, let's illustrate the Achilles heel of standard high-dimensional model selection methods: sparsity and betamin assumptions. The philosophy of these methods is to be conservative in terms of adding parameters, that is avoid using unnecessarily complex models. Intuitively, this strategy seems reasonable when:
+
+1. Truly most parameters are zero (a sparsity assumption). By being conservative, one avoids false positives (type I errors, in statistical jargon), and since most parameters are zero this is a primary concern.
+
+2. The truly non-zero parameters are large enough (a betamin assumption), or alternatively the sample size $n$ is large enough.
+
+If these two assumptions are not met, taking a conservative approach may result in low statistical power to detect parameters that are truly non-zero but small. We discuss these issues and some empirical Bayes strategies to ameliorate them in Chapter \@ref(eBayes).
 
 For now, we repeat the previous example but now the size of the non-zero $\beta_j$'s is divided by two.
-The consequence is that covariates 1-2 are no longer selected, neither by EBIC, LASSO-EBIC nor BMA. 
+The consequence is that covariates 1 and 3 are no longer selected, neither by EBIC, LASSO-EBIC (which also misses covariate 2) nor BMA. 
 For BMA this is particularly problematic, because the posterior probability assigned to $\beta_1 \neq 0$ and $\beta_2 \neq 0$ is very close to zero, that is there is strong Bayesian evidence that neither covariate has an effect.
 This example illustrates that BMA results should be interpreted as a conservative analysis where small evidence for inclusion may simply be due to low statistical power.
 
@@ -301,21 +321,21 @@ This example illustrates that BMA results should be interpreted as a conservativ
 beta <- beta/2
 y <- rnorm(n, x %*% beta)
 df <- data.frame(y=y, x)
-bestEBIC_fast(y ~ ., data=df, verbose=FALSE)
+bestEBIC_fast(y ~ ., data=df, verbose=FALSE)$topmodel
 ```
 
 ```{r}
-bestEBIC_fast(y ~ ., data=df, fastmethod='L1', verbose=FALSE)
+bestEBIC_fast(y ~ ., data=df, fastmethod='L1', verbose=FALSE)$topmodel
 ```
 
 ```{r}
 ms <- modelSelection(y ~ -1 + ., data=df, verbose=FALSE)
-head(postProb(ms))
+postProb(ms)[1,] #top model
 ```
 
 ```{r}
 b <- coef(ms)
-head(b)
+head(b, n=7)
 ```
 
 
@@ -328,72 +348,67 @@ b <- data.frame(b[sel,]) |>
   transform(Covariate = 1:p, beta=beta) |>
   rename(cilow=X2.5., ciup=X97.5.)
 
-ggplot(b, aes(x=beta, y=estimate)) +
+myplot <- ggplot(b, aes(x=beta, y=estimate)) +
   geom_point() +
   geom_segment(aes(x=beta, y=cilow, yend=ciup)) +
   labs(y='BMA estimate') +
   geom_abline(slope=1)
 ```
 
-
-
+```{r, eval=FALSE}
+myplot
+```
 
 </details>
 
+```{r, echo=FALSE}
+myplot
+```
 
-## Logistic regression {#quick-logistic}
 
-For binary outcomes, we simply specify `family='binomial'` (and for Poisson we specify `family='poisson'`).
-We first create a binary version of our simulated outcome.
+
+## Beyond linear models {#quick-gam}
+
+The ideas discussed so far extend well beyond linear and generalized liner models, they can actually be extended more general model selection questions in a relatively seamless manner. 
+For example, one may wish to learn whether covariates have a linear or non-linear effect, or no effect at all. Other common tasks discussed in this book are covariance models, such as learning conditional independences in graphical models or sparse factor models, or choosing the number of components in mixture models.
+
+For now we provide a brief illustration of Generalize additive models (GAMs), a popular extension of linear and generalized linear models to capture non-linear covariate effects.
+For Gaussian outcomes, the canonical GAM assumes that
+$$
+y_i = \beta_0 + \sum_{j=1}^p \beta_j x_{ij} + \sum_{j=1}^p f_j(x_{ij}) + \epsilon_i
+$$
+where $\epsilon_i \sim N(0,\sigma^2)$ and the $f_j$'s must satisfy certain add-to-zero constraints for the model to be identifiable. The interpretation is that $f_j$ captures deviations from linearity. Note that one could define $\tilde{f}_j(x_{ij})= \beta_j x_{ij} + f_j(x_{ij})$ and estimate $\tilde{f}_j$ directly, but then testing whether $\tilde{f}_j(z)=0$ for all $z$ just tells us whether covariate $j$ has a effect, rather than whether it is linear or non-linear.
+A popular strategy to parameterize $f_j$ is via B-spline functions, and that's what we use here.
+See Chapter \@ref(gam) and @rossell:2021b for further details. 
+
 
 ```{r}
-n <- 200
-x1 <- rnorm(n)
-x2 <- rnorm(n)
-x3 <- x1 - x2 + rnorm(n,sd=.2)
-x <- cbind(x1, x2, x3)
-y <- x1 - x2 + rnorm(n)
-df <- data.frame(y, x1, x2, x3)
-
-dfbin <- transform(df, ybin = (y > 0)) |>
-  dplyr::select(!y) #drop variable y
+n <- p <- 200
+beta <- matrix(c(seq(0.5,1,by=0.1), rep(0,p-6)), ncol=1)
+mu <- x %*% beta + cos(pi * x[,7])
+y <- rnorm(n, mu, sd=.01)
+df <- data.frame(y=y, x)
 ```
 
-We next use `bestBIC` and `modelSelection` as before. The selected model is still the correct one, but the  posterior probability for (wrongly) including `x[,3]` is higher than in the linear regression data. This is intuitively expected, binary outcomes carry less information than Gaussian ones, so there is more uncertainty on the chosen model.
-
-```{r quickstart-logreg-bic}
-fit2.bic <- bestBIC(ybin ~ ., family='binomial', data=dfbin, verbose=FALSE)
-print(fit2.bic)
+```{r}
+x1seq <- seq(min(x[,7]), max(x[,7]), length=200)
+plot(x1seq, cos(pi * x1seq), type='l')
+plot(x[,7], mu)
+plot(x[,7], y)
 ```
 
-
-```{r quickstart2}
-fit2.bms <- modelSelection(ybin ~ ., data=dfbin,
-                     priorCoef=priorCoef, priorModel=priorModel,
-                     family='binomial', verbose=FALSE)
-coef(fit2.bms)
-```
-
-## Non-linear effects via Generalized Additive Models (GAMs) {#quick-gam}
-
-Non-linear effects can be modeled via cubic splines using the `smooth` argument (the default is 9 knots, producing 5 columns in design matrix for each non-linear covariate).
-When using the smooth argument we cannot use the `~ .` notation for including all covarites, rather we must list those for which we wish to include a non-linear effect (see the example below).
-The effect of each covariate is decomposed as a linear part plus a deviation from linearity (which is forced to be orthogonal to the linear term). This is useful to identify covariates for which a linear effect is sufficient, and covariates for which there are non-linearities.
-`modelSelection` considers 3 possibilities for each covariate: excluding it entirely, including only the linear effect, and including both linear and non-linear terms. For further details on this decomposition, see [@rossell:2021b].
-
-The linear effect coefficients are displayed using the original variable names, and the non-linear coefficients with an `.s` appended. Here we have 5 columns coding for the non-linear effect, labelled as `.s1` though `.s5`. 
-In our example, there is strong evidence for (correctly) including the linear effect of `X1` and `X2`, excluding their non-linear effects, and exclusing `X3` entirely.
 
 
 ```{r quickstart-gam}
-fit.gam <- modelSelection(y ~ ., data=df,
-                     smooth = ~ x1 + x2 + x3,
+dfsel <- df[,1:10]
+fit.gam <- modelSelection(y ~ ., data=dfsel,
+                     smooth = ~ X1 + X2 + X3 + X4 + X5 + X6 + X7,
                      priorCoef=priorCoef,
                      priorModel=priorModel, verbose=FALSE)
 ```
 
 
-```{r}
+```{r, warning=FALSE}
 coef(fit.gam)
 ```
 

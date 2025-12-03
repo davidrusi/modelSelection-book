@@ -1,6 +1,11 @@
 # Empirical Bayes for transfer learning {#eBayes}
 
-To be added.
+In Section \@ref(quick-achilles) we discussed that the Achilles heel of high-dimensional model selection methods are their requiring sparsity and betamin assumptions.
+Whether this Achilles heel is a problem in practice or not is problem-specific. For example, in many biomedical applications huge amounts of data are available, such as patient history, genomic and genetic data etc. Because many biological processes operate in a relatively simple manner, one often expects that most of these recorded data are not really relevant for the studied phenomenon, say disease progression. We simply have large datasets because it's now cheap to record them, and we aren't sure which of the recorded variables may be useful.
+In contrast, Economics and the Social Sciences often study complex phenomena, whose behavior depends on a large number of variables, each of which may have a small effect per se, see \@giannone:2021 for a detailed discussion.
+
+
+*Chapter to be added.*
 
 
 
