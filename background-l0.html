@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-11-13" />
+<meta name="date" content="2025-12-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,8 +172,8 @@ div.csl-indent {
 <li class="chapter" data-level="1.1" data-path="quick-start.html"><a href="quick-start.html#quick-lasso-failure"><i class="fa fa-check"></i><b>1.1</b> Popular methods may fail</a></li>
 <li class="chapter" data-level="1.2" data-path="quick-start.html"><a href="quick-start.html#quick-bms"><i class="fa fa-check"></i><b>1.2</b> Model uncertainty</a></li>
 <li class="chapter" data-level="1.3" data-path="quick-start.html"><a href="quick-start.html#are-computations-always-hard"><i class="fa fa-check"></i><b>1.3</b> Are computations always hard?</a></li>
-<li class="chapter" data-level="1.4" data-path="quick-start.html"><a href="quick-start.html#quick-logistic"><i class="fa fa-check"></i><b>1.4</b> Logistic regression</a></li>
-<li class="chapter" data-level="1.5" data-path="quick-start.html"><a href="quick-start.html#quick-gam"><i class="fa fa-check"></i><b>1.5</b> Non-linear effects via Generalized Additive Models (GAMs)</a></li>
+<li class="chapter" data-level="1.4" data-path="quick-start.html"><a href="quick-start.html#quick-achilles"><i class="fa fa-check"></i><b>1.4</b> The Achilles heel</a></li>
+<li class="chapter" data-level="1.5" data-path="quick-start.html"><a href="quick-start.html#quick-gam"><i class="fa fa-check"></i><b>1.5</b> Beyond linear models</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="background-bms.html"><a href="background-bms.html"><i class="fa fa-check"></i><b>2</b> Bayesian model selection and averaging</a>
 <ul>
@@ -355,30 +355,30 @@ However, for illustration suppose that we use the BIC to choose the best model.<
 <p>We simulate a dataset that reflects practical difficulties that one may encounter. Suppose that truly both age and gender are associated to blood pressure (as occurs in real life) but that age and gender are correlated in a challenging way.
 Specifically, suppose that women are older than men by 5 years on average (as occurs in real life, where in developed countries women live roughly 5 years more than mean).</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="background-l0.html#cb90-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4321</span>)</span>
-<span id="cb90-2"><a href="background-l0.html#cb90-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb90-3"><a href="background-l0.html#cb90-3" tabindex="-1"></a>sex <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&#39;Female&#39;</span>,<span class="st">&#39;Male&#39;</span>), <span class="at">each=</span>n<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb90-4"><a href="background-l0.html#cb90-4" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">75</span>,<span class="dv">70</span>), <span class="at">each=</span>n<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb90-5"><a href="background-l0.html#cb90-5" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, mu)</span>
-<span id="cb90-6"><a href="background-l0.html#cb90-6" tabindex="-1"></a>bp <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> (sex<span class="sc">==</span><span class="st">&#39;Male&#39;</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb90-7"><a href="background-l0.html#cb90-7" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(bp, age, sex)</span></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="background-l0.html#cb89-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4321</span>)</span>
+<span id="cb89-2"><a href="background-l0.html#cb89-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb89-3"><a href="background-l0.html#cb89-3" tabindex="-1"></a>sex <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&#39;Female&#39;</span>,<span class="st">&#39;Male&#39;</span>), <span class="at">each=</span>n<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb89-4"><a href="background-l0.html#cb89-4" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">75</span>,<span class="dv">70</span>), <span class="at">each=</span>n<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb89-5"><a href="background-l0.html#cb89-5" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, mu)</span>
+<span id="cb89-6"><a href="background-l0.html#cb89-6" tabindex="-1"></a>bp <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> age <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> (sex<span class="sc">==</span><span class="st">&#39;Male&#39;</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb89-7"><a href="background-l0.html#cb89-7" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(bp, age, sex)</span></code></pre></div>
 </details>
 <p>The scatterplot below shows that, if one fits a model with both age and sex, it should be clear that both are associated to blood pressure.
 However, if one were to ignore sex then blood pressure and age would appear uncorrelated. More precisely, the marginal correlation between blood pressure and age alone is 0.02.
 Likewise, if one were to ignore age, then it would appear that blood pressure is unrelated to gender (the mean blood pressure is 75.1 for females and 70.1 for males).</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="background-l0.html#cb91-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>age, <span class="at">y=</span>bp, <span class="at">col=</span>sex)) <span class="sc">+</span></span>
-<span id="cb91-2"><a href="background-l0.html#cb91-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">pch=</span>sex)) <span class="sc">+</span></span>
-<span id="cb91-3"><a href="background-l0.html#cb91-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">group=</span>sex), <span class="at">method=</span><span class="st">&#39;lm&#39;</span>, <span class="at">se=</span><span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb91-4"><a href="background-l0.html#cb91-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span> <span class="st">&quot;Systolic blood pressure&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="background-l0.html#cb90-1" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>age, <span class="at">y=</span>bp, <span class="at">col=</span>sex)) <span class="sc">+</span></span>
+<span id="cb90-2"><a href="background-l0.html#cb90-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">pch=</span>sex)) <span class="sc">+</span></span>
+<span id="cb90-3"><a href="background-l0.html#cb90-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">group=</span>sex), <span class="at">method=</span><span class="st">&#39;lm&#39;</span>, <span class="at">se=</span><span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb90-4"><a href="background-l0.html#cb90-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span> <span class="st">&quot;Systolic blood pressure&quot;</span>)</span></code></pre></div>
 </details>
-<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-67-1.png" width="672" /></p>
+<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
 <p>Since there are only four models we can easily obtain the BIC for each. We use <code>includevars</code> to force the inclusion of the intercept, i.e. do not consider models that exclude the intercept.
 As shown below, the best model according to the BIC includes both age and sex, recovering the data-generating truth.
 The second best model however is the intercept-only model, as we expect given that blood pressure has little marginal association to either age or sex alone.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="background-l0.html#cb92-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">bestBIC</span>(bp <span class="sc">~</span> age <span class="sc">+</span> sex, <span class="at">data=</span>df, <span class="at">includevars=</span><span class="fu">c</span>(<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">FALSE</span>), <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb92-2"><a href="background-l0.html#cb92-2" tabindex="-1"></a>fit<span class="sc">$</span>models</span></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="background-l0.html#cb91-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">bestBIC</span>(bp <span class="sc">~</span> age <span class="sc">+</span> sex, <span class="at">data=</span>df, <span class="at">includevars=</span><span class="fu">c</span>(<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">FALSE</span>), <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb91-2"><a href="background-l0.html#cb91-2" tabindex="-1"></a>fit<span class="sc">$</span>models</span></code></pre></div>
 </details>
 <pre><code>## # A tibble: 4 × 2
 ##   modelid   bic
@@ -407,28 +407,28 @@ More recently <span class="citation">Hazimeh, Mazumder, and Nonet (<a href="#ref
 <p><span id="exm:ebic-csdata" class="example"><strong>Example 4.2  </strong></span>We simulate a dataset where <span class="math inline">\(n=100\)</span>, <span class="math inline">\(p=200\)</span>, the covariate values arise from a multivariate Gaussian with zero mean, unit variances and all pairwise correlations equal to 0.5.
 Out of the <span class="math inline">\(p=200\)</span> covariates, only the last 4 truly have an effect, with regression coefficients <span class="math inline">\(\beta_{197}=-2/3\)</span>, <span class="math inline">\(\beta_{198}=1/3\)</span>, <span class="math inline">\(\beta_{199}=2/3\)</span> and <span class="math inline">\(\beta_{200}=1\)</span>.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="background-l0.html#cb94-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb94-2"><a href="background-l0.html#cb94-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>  </span>
-<span id="cb94-3"><a href="background-l0.html#cb94-3" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">200</span>  </span>
-<span id="cb94-4"><a href="background-l0.html#cb94-4" tabindex="-1"></a>rho<span class="ot">=</span> <span class="fl">0.5</span>  <span class="co"># pairwise correlation across features</span></span>
-<span id="cb94-5"><a href="background-l0.html#cb94-5" tabindex="-1"></a>beta<span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, p <span class="sc">-</span> <span class="dv">4</span>), <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>) <span class="co">#true parameters</span></span>
-<span id="cb94-6"><a href="background-l0.html#cb94-6" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">length</span>(beta))</span>
-<span id="cb94-7"><a href="background-l0.html#cb94-7" tabindex="-1"></a>S[<span class="fu">upper.tri</span>(S)] <span class="ot">&lt;-</span> S[<span class="fu">lower.tri</span>(S)] <span class="ot">&lt;-</span> rho</span>
-<span id="cb94-8"><a href="background-l0.html#cb94-8" tabindex="-1"></a>x <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n=</span>n,<span class="at">sigma=</span>S)</span>
-<span id="cb94-9"><a href="background-l0.html#cb94-9" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb94-10"><a href="background-l0.html#cb94-10" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="background-l0.html#cb93-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb93-2"><a href="background-l0.html#cb93-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>  </span>
+<span id="cb93-3"><a href="background-l0.html#cb93-3" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">200</span>  </span>
+<span id="cb93-4"><a href="background-l0.html#cb93-4" tabindex="-1"></a>rho<span class="ot">=</span> <span class="fl">0.5</span>  <span class="co"># pairwise correlation across features</span></span>
+<span id="cb93-5"><a href="background-l0.html#cb93-5" tabindex="-1"></a>beta<span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, p <span class="sc">-</span> <span class="dv">4</span>), <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>) <span class="co">#true parameters</span></span>
+<span id="cb93-6"><a href="background-l0.html#cb93-6" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">length</span>(beta))</span>
+<span id="cb93-7"><a href="background-l0.html#cb93-7" tabindex="-1"></a>S[<span class="fu">upper.tri</span>(S)] <span class="ot">&lt;-</span> S[<span class="fu">lower.tri</span>(S)] <span class="ot">&lt;-</span> rho</span>
+<span id="cb93-8"><a href="background-l0.html#cb93-8" tabindex="-1"></a>x <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n=</span>n,<span class="at">sigma=</span>S)</span>
+<span id="cb93-9"><a href="background-l0.html#cb93-9" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb93-10"><a href="background-l0.html#cb93-10" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span></code></pre></div>
 </details>
 <p>The heuristic search in <code>bestEBIC_fast</code> and the longer model search in <code>bestEIC</code> return the same solution: a model that includes variables 197, 199 and 200 but not 198 (which was truly active but had a smaller coefficient).
 It’s easy to check that this model has better EBIC than the data-generating truth, intuitively the sample size is not large enough to detect this covariate.
 These observations that the algorithms likely returned the global mode, or at least a high-quality local mode.
 Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="background-l0.html#cb95-1" tabindex="-1"></a><span class="fu">system.time</span>(msfast <span class="ot">&lt;-</span> <span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="background-l0.html#cb94-1" tabindex="-1"></a><span class="fu">system.time</span>(msfast <span class="ot">&lt;-</span> <span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 </details>
 <pre><code>##    user  system elapsed 
-##   0.576   0.971   0.108</code></pre>
+##   0.608   0.971   0.109</code></pre>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="background-l0.html#cb97-1" tabindex="-1"></a>msfast</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="background-l0.html#cb96-1" tabindex="-1"></a>msfast</span></code></pre></div>
 </details>
 <pre><code>## icfit object
 ## 
@@ -437,12 +437,12 @@ Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.<
 ## Use summary(), coef() and predict() to get inference for the top model
 ## Use coef(object$msfit) and predict(object$msfit) to get BMA estimates and predictions</code></pre>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="background-l0.html#cb99-1" tabindex="-1"></a><span class="fu">system.time</span>(ms <span class="ot">&lt;-</span> <span class="fu">bestEBIC</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="background-l0.html#cb98-1" tabindex="-1"></a><span class="fu">system.time</span>(ms <span class="ot">&lt;-</span> <span class="fu">bestEBIC</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 </details>
 <pre><code>##    user  system elapsed 
-##   2.188   0.943   1.590</code></pre>
+##   2.079   1.018   1.555</code></pre>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="background-l0.html#cb101-1" tabindex="-1"></a>ms</span></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="background-l0.html#cb100-1" tabindex="-1"></a>ms</span></code></pre></div>
 </details>
 <pre><code>## icfit object
 ## 

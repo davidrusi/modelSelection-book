@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-11-13" />
+<meta name="date" content="2025-12-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,8 +172,8 @@ div.csl-indent {
 <li class="chapter" data-level="1.1" data-path="quick-start.html"><a href="quick-start.html#quick-lasso-failure"><i class="fa fa-check"></i><b>1.1</b> Popular methods may fail</a></li>
 <li class="chapter" data-level="1.2" data-path="quick-start.html"><a href="quick-start.html#quick-bms"><i class="fa fa-check"></i><b>1.2</b> Model uncertainty</a></li>
 <li class="chapter" data-level="1.3" data-path="quick-start.html"><a href="quick-start.html#are-computations-always-hard"><i class="fa fa-check"></i><b>1.3</b> Are computations always hard?</a></li>
-<li class="chapter" data-level="1.4" data-path="quick-start.html"><a href="quick-start.html#quick-logistic"><i class="fa fa-check"></i><b>1.4</b> Logistic regression</a></li>
-<li class="chapter" data-level="1.5" data-path="quick-start.html"><a href="quick-start.html#quick-gam"><i class="fa fa-check"></i><b>1.5</b> Non-linear effects via Generalized Additive Models (GAMs)</a></li>
+<li class="chapter" data-level="1.4" data-path="quick-start.html"><a href="quick-start.html#quick-achilles"><i class="fa fa-check"></i><b>1.4</b> The Achilles heel</a></li>
+<li class="chapter" data-level="1.5" data-path="quick-start.html"><a href="quick-start.html#quick-gam"><i class="fa fa-check"></i><b>1.5</b> Beyond linear models</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="background-bms.html"><a href="background-bms.html"><i class="fa fa-check"></i><b>2</b> Bayesian model selection and averaging</a>
 <ul>
@@ -250,7 +250,10 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="eBayes" class="section level1 hasAnchor" number="7">
 <h1><span class="header-section-number">7</span> Empirical Bayes for transfer learning<a href="eBayes.html#eBayes" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>To be added.</p>
+<p>In Section <a href="quick-start.html#quick-achilles">1.4</a> we discussed that the Achilles heel of high-dimensional model selection methods are their requiring sparsity and betamin assumptions.
+Whether this Achilles heel is a problem in practice or not is problem-specific. For example, in many biomedical applications huge amounts of data are available, such as patient history, genomic and genetic data etc. Because many biological processes operate in a relatively simple manner, one often expects that most of these recorded data are not really relevant for the studied phenomenon, say disease progression. We simply have large datasets because it’s now cheap to record them, and we aren’t sure which of the recorded variables may be useful.
+In contrast, Economics and the Social Sciences often study complex phenomena, whose behavior depends on a large number of variables, each of which may have a small effect per se, see @giannone:2021 for a detailed discussion.</p>
+<p><em>Chapter to be added.</em></p>
 
 </div>
             </section>
