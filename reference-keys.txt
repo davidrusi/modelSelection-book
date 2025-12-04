@@ -83,5 +83,7 @@ glm-mcmc-convergence
 gam
 eBayes
 survival
+covariance-models
 ggm
+factor-models
 mixtures

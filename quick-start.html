@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-12-03" />
+<meta name="date" content="2025-12-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,7 @@ div.csl-indent {
 <li class="chapter" data-level="1.1" data-path="quick-start.html"><a href="quick-start.html#quick-lasso-failure"><i class="fa fa-check"></i><b>1.1</b> Popular methods may fail</a></li>
 <li class="chapter" data-level="1.2" data-path="quick-start.html"><a href="quick-start.html#quick-bms"><i class="fa fa-check"></i><b>1.2</b> Model uncertainty</a></li>
 <li class="chapter" data-level="1.3" data-path="quick-start.html"><a href="quick-start.html#are-computations-always-hard"><i class="fa fa-check"></i><b>1.3</b> Are computations always hard?</a></li>
-<li class="chapter" data-level="1.4" data-path="quick-start.html"><a href="quick-start.html#quick-achilles"><i class="fa fa-check"></i><b>1.4</b> The Achilles heel</a></li>
+<li class="chapter" data-level="1.4" data-path="quick-start.html"><a href="quick-start.html#quick-achilles"><i class="fa fa-check"></i><b>1.4</b> An Achilles heel</a></li>
 <li class="chapter" data-level="1.5" data-path="quick-start.html"><a href="quick-start.html#quick-gam"><i class="fa fa-check"></i><b>1.5</b> Beyond linear models</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="background-bms.html"><a href="background-bms.html"><i class="fa fa-check"></i><b>2</b> Bayesian model selection and averaging</a>
@@ -229,7 +229,11 @@ div.csl-indent {
 <li class="chapter" data-level="6" data-path="gam.html"><a href="gam.html"><i class="fa fa-check"></i><b>6</b> Generalized additive models</a></li>
 <li class="chapter" data-level="7" data-path="eBayes.html"><a href="eBayes.html"><i class="fa fa-check"></i><b>7</b> Empirical Bayes for transfer learning</a></li>
 <li class="chapter" data-level="8" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>8</b> Survival data</a></li>
-<li class="chapter" data-level="9" data-path="ggm.html"><a href="ggm.html"><i class="fa fa-check"></i><b>9</b> Gaussian graphical models</a></li>
+<li class="chapter" data-level="9" data-path="covariance-models.html"><a href="covariance-models.html"><i class="fa fa-check"></i><b>9</b> Covariance models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="covariance-models.html"><a href="covariance-models.html#ggm"><i class="fa fa-check"></i><b>9.1</b> Gaussian graphical models</a></li>
+<li class="chapter" data-level="9.2" data-path="covariance-models.html"><a href="covariance-models.html#factor-models"><i class="fa fa-check"></i><b>9.2</b> Factor models</a></li>
+</ul></li>
 <li class="chapter" data-level="10" data-path="mixtures.html"><a href="mixtures.html"><i class="fa fa-check"></i><b>10</b> Gaussian mixture models</a></li>
 </ul>
 
@@ -629,7 +633,7 @@ The selected model selects all the truly active covariates 1-6 and also covariat
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="quick-start.html#cb19-1" tabindex="-1"></a><span class="fu">system.time</span>(fit.ebicfast <span class="ot">&lt;-</span> <span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))[<span class="st">&#39;elapsed&#39;</span>]</span></code></pre></div>
 </details>
 <pre><code>## elapsed 
-##   0.325</code></pre>
+##   0.315</code></pre>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="quick-start.html#cb21-1" tabindex="-1"></a>fit.ebicfast</span></code></pre></div>
 </details>
@@ -654,7 +658,7 @@ The selected model selects all the truly active covariates 1-6 and also covariat
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="quick-start.html#cb25-1" tabindex="-1"></a><span class="fu">system.time</span>(ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))[<span class="st">&#39;elapsed&#39;</span>]</span></code></pre></div>
 </details>
 <pre><code>## elapsed 
-##   2.808</code></pre>
+##    2.75</code></pre>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="quick-start.html#cb27-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">postProb</span>(ms))</span></code></pre></div>
 </details>
@@ -691,157 +695,293 @@ Click to show code
 <p><img src="modelSelection-book_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 </div>
 <div id="quick-achilles" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> The Achilles heel<a href="quick-start.html#quick-achilles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2><span class="header-section-number">1.4</span> An Achilles heel<a href="quick-start.html#quick-achilles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Before we get too excited, let’s illustrate the Achilles heel of standard high-dimensional model selection methods: sparsity and betamin assumptions. The philosophy of these methods is to be conservative in terms of adding parameters, that is avoid using unnecessarily complex models. Intuitively, this strategy seems reasonable when:</p>
 <ol style="list-style-type: decimal">
 <li><p>Truly most parameters are zero (a sparsity assumption). By being conservative, one avoids false positives (type I errors, in statistical jargon), and since most parameters are zero this is a primary concern.</p></li>
 <li><p>The truly non-zero parameters are large enough (a betamin assumption), or alternatively the sample size <span class="math inline">\(n\)</span> is large enough.</p></li>
 </ol>
 <p>If these two assumptions are not met, taking a conservative approach may result in low statistical power to detect parameters that are truly non-zero but small. We discuss these issues and some empirical Bayes strategies to ameliorate them in Chapter <a href="eBayes.html#eBayes">7</a>.</p>
-<p>For now, we repeat the previous example but now the size of the non-zero <span class="math inline">\(\beta_j\)</span>’s is divided by two.
-The consequence is that covariates 1 and 3 are no longer selected, neither by EBIC, LASSO-EBIC (which also misses covariate 2) nor BMA.
-For BMA this is particularly problematic, because the posterior probability assigned to <span class="math inline">\(\beta_1 \neq 0\)</span> and <span class="math inline">\(\beta_2 \neq 0\)</span> is very close to zero, that is there is strong Bayesian evidence that neither covariate has an effect.
-This example illustrates that BMA results should be interpreted as a conservative analysis where small evidence for inclusion may simply be due to low statistical power.</p>
-<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="quick-start.html#cb31-1" tabindex="-1"></a>beta <span class="ot">&lt;-</span> beta<span class="sc">/</span><span class="dv">2</span></span>
-<span id="cb31-2"><a href="quick-start.html#cb31-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, x <span class="sc">%*%</span> beta)</span>
-<span id="cb31-3"><a href="quick-start.html#cb31-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y=</span>y, x)</span>
-<span id="cb31-4"><a href="quick-start.html#cb31-4" tabindex="-1"></a><span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>)<span class="sc">$</span>topmodel</span></code></pre></div>
-</details>
-<pre><code>## [1] &quot;X2&quot; &quot;X4&quot; &quot;X5&quot; &quot;X6&quot;</code></pre>
-<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="quick-start.html#cb33-1" tabindex="-1"></a><span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">fastmethod=</span><span class="st">&#39;L1&#39;</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)<span class="sc">$</span>topmodel</span></code></pre></div>
-</details>
-<pre><code>## [1] &quot;X4&quot; &quot;X5&quot; &quot;X6&quot;</code></pre>
-<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="quick-start.html#cb35-1" tabindex="-1"></a>ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
-<span id="cb35-2"><a href="quick-start.html#cb35-2" tabindex="-1"></a><span class="fu">postProb</span>(ms)[<span class="dv">1</span>,] <span class="co">#top model</span></span></code></pre></div>
-</details>
-<pre><code>##   modelid family       pp
-## 1 2,4,5,6 normal 0.132907</code></pre>
-<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="quick-start.html#cb37-1" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(ms)</span>
-<span id="cb37-2"><a href="quick-start.html#cb37-2" tabindex="-1"></a><span class="fu">head</span>(b, <span class="at">n=</span><span class="dv">7</span>)</span></code></pre></div>
-</details>
-<pre><code>##                estimate        2.5%       97.5%      margpp
-## intercept -0.0375930630 -0.08706008 0.008621087 1.000000000
-## X1         0.0101992975  0.00000000 0.261326126 0.031640715
-## X2         0.2219554513  0.00000000 0.686080193 0.419708119
-## X3         0.0001352324  0.00000000 0.000000000 0.003587509
-## X4         0.5580736261  0.00000000 0.858255775 0.915832362
-## X5         0.2362663946  0.00000000 0.767583782 0.429613908
-## X6         0.7212145959  0.49003878 0.961058556 0.999972192</code></pre>
+<p>For now, we repeat the previous example but now the non-zero <span class="math inline">\(\beta_j\)</span>’s are divided by three.
+Below we report results averaged across 200 independent simulations, both for the larger and the smaller <span class="math inline">\(\beta\)</span> settings.</p>
+<p>The left panel in the figure below shows that for small <span class="math inline">\(\beta_j\)</span> there is low statistical power, that is a probability of selecting the corresponding covariates, and that this is an issue for EBIC, LASSO-EBIC and BMA.
+For BMA this is particularly problematic: the Bayesian uncertainty quantification is off, from a frequentist standpoint.
+Small <span class="math inline">\(\beta_j\)</span>’s are assigned a high <span class="math inline">\(P(\beta_j = 0 \mid y)\)</span>, and taking the latter posterior probability at face value would give strong Bayesian evidence that the corresponding covariates have no effect.
+This example illustrates that BMA results should be interpreted as a conservative analysis where small evidence for inclusion may simply be due to low statistical power, rather than conclusive evidence that the effects are zero.</p>
 <details>
 <summary>
 Click to show code
 </summary>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="quick-start.html#cb39-1" tabindex="-1"></a>sel <span class="ot">&lt;-</span> <span class="sc">!</span>(<span class="fu">rownames</span>(b) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;intercept&#39;</span>,<span class="st">&#39;phi&#39;</span>))</span>
-<span id="cb39-2"><a href="quick-start.html#cb39-2" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(b[sel,]) <span class="sc">|&gt;</span></span>
-<span id="cb39-3"><a href="quick-start.html#cb39-3" tabindex="-1"></a>  <span class="fu">transform</span>(<span class="at">Covariate =</span> <span class="dv">1</span><span class="sc">:</span>p, <span class="at">beta=</span>beta) <span class="sc">|&gt;</span></span>
-<span id="cb39-4"><a href="quick-start.html#cb39-4" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">cilow=</span>X2.<span class="fl">5.</span>, <span class="at">ciup=</span>X97.<span class="fl">5.</span>)</span>
-<span id="cb39-5"><a href="quick-start.html#cb39-5" tabindex="-1"></a></span>
-<span id="cb39-6"><a href="quick-start.html#cb39-6" tabindex="-1"></a>myplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(b, <span class="fu">aes</span>(<span class="at">x=</span>beta, <span class="at">y=</span>estimate)) <span class="sc">+</span></span>
-<span id="cb39-7"><a href="quick-start.html#cb39-7" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb39-8"><a href="quick-start.html#cb39-8" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x=</span>beta, <span class="at">y=</span>cilow, <span class="at">yend=</span>ciup)) <span class="sc">+</span></span>
-<span id="cb39-9"><a href="quick-start.html#cb39-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&#39;BMA estimate&#39;</span>) <span class="sc">+</span></span>
-<span id="cb39-10"><a href="quick-start.html#cb39-10" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope=</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="quick-start.html#cb31-1" tabindex="-1"></a>runsims <span class="ot">&lt;-</span> <span class="cf">function</span>(n, beta, nsims) {</span>
+<span id="cb31-2"><a href="quick-start.html#cb31-2" tabindex="-1"></a>  varnames <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;X&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(pp), <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb31-3"><a href="quick-start.html#cb31-3" tabindex="-1"></a>  pp <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow=</span>nsims, <span class="at">ncol=</span><span class="fu">length</span>(beta))</span>
+<span id="cb31-4"><a href="quick-start.html#cb31-4" tabindex="-1"></a>  <span class="fu">colnames</span>(pp) <span class="ot">&lt;-</span> varnames</span>
+<span id="cb31-5"><a href="quick-start.html#cb31-5" tabindex="-1"></a>  sel.ebicfast <span class="ot">&lt;-</span> sel.lassoebic <span class="ot">&lt;-</span> sel.ms <span class="ot">&lt;-</span> pp </span>
+<span id="cb31-6"><a href="quick-start.html#cb31-6" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsims) {</span>
+<span id="cb31-7"><a href="quick-start.html#cb31-7" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, x <span class="sc">%*%</span> beta)</span>
+<span id="cb31-8"><a href="quick-start.html#cb31-8" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y=</span>y, x)</span>
+<span id="cb31-9"><a href="quick-start.html#cb31-9" tabindex="-1"></a>    <span class="co"># EBIC (fast heuristics)</span></span>
+<span id="cb31-10"><a href="quick-start.html#cb31-10" tabindex="-1"></a>    top.ebicfast <span class="ot">&lt;-</span> <span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>)<span class="sc">$</span>topmodel</span>
+<span id="cb31-11"><a href="quick-start.html#cb31-11" tabindex="-1"></a>    sel.ebicfast[i, ] <span class="ot">&lt;-</span> varnames <span class="sc">%in%</span> top.ebicfast</span>
+<span id="cb31-12"><a href="quick-start.html#cb31-12" tabindex="-1"></a>    <span class="co"># LASSO EBIC</span></span>
+<span id="cb31-13"><a href="quick-start.html#cb31-13" tabindex="-1"></a>    top.lassoebic <span class="ot">&lt;-</span> <span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">fastmethod=</span><span class="st">&#39;L1&#39;</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)<span class="sc">$</span>topmodel</span>
+<span id="cb31-14"><a href="quick-start.html#cb31-14" tabindex="-1"></a>    sel.lassoebic[i, ] <span class="ot">&lt;-</span> varnames <span class="sc">%in%</span> top.lassoebic</span>
+<span id="cb31-15"><a href="quick-start.html#cb31-15" tabindex="-1"></a>    <span class="co"># BMS</span></span>
+<span id="cb31-16"><a href="quick-start.html#cb31-16" tabindex="-1"></a>    ms <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> ., <span class="at">data=</span>df, <span class="at">niter=</span><span class="dv">1000</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb31-17"><a href="quick-start.html#cb31-17" tabindex="-1"></a>    sel.ms[i, <span class="fu">which</span>(ms<span class="sc">$</span>postMode <span class="sc">==</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span> <span class="cn">TRUE</span> </span>
+<span id="cb31-18"><a href="quick-start.html#cb31-18" tabindex="-1"></a>    margpp <span class="ot">&lt;-</span> <span class="fu">coef</span>(ms)[,<span class="st">&#39;margpp&#39;</span>]</span>
+<span id="cb31-19"><a href="quick-start.html#cb31-19" tabindex="-1"></a>    pp[i,] <span class="ot">&lt;-</span> margpp[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="fu">length</span>(margpp))]</span>
+<span id="cb31-20"><a href="quick-start.html#cb31-20" tabindex="-1"></a>  }</span>
+<span id="cb31-21"><a href="quick-start.html#cb31-21" tabindex="-1"></a>  ans <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">n =</span> n,</span>
+<span id="cb31-22"><a href="quick-start.html#cb31-22" tabindex="-1"></a>                    <span class="at">variable =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(beta),</span>
+<span id="cb31-23"><a href="quick-start.html#cb31-23" tabindex="-1"></a>                    <span class="at">beta =</span> beta,</span>
+<span id="cb31-24"><a href="quick-start.html#cb31-24" tabindex="-1"></a>                    <span class="at">ebic=</span> <span class="fu">colMeans</span>(sel.ebicfast),</span>
+<span id="cb31-25"><a href="quick-start.html#cb31-25" tabindex="-1"></a>                    <span class="at">lasso_ebic =</span> <span class="fu">colMeans</span>(sel.lassoebic),</span>
+<span id="cb31-26"><a href="quick-start.html#cb31-26" tabindex="-1"></a>                    <span class="at">bms =</span> <span class="fu">colMeans</span>(sel.ms),</span>
+<span id="cb31-27"><a href="quick-start.html#cb31-27" tabindex="-1"></a>                    <span class="at">pp=</span> <span class="fu">colMeans</span>(pp))</span>
+<span id="cb31-28"><a href="quick-start.html#cb31-28" tabindex="-1"></a>  <span class="fu">return</span>(ans)</span>
+<span id="cb31-29"><a href="quick-start.html#cb31-29" tabindex="-1"></a>}</span></code></pre></div>
 </details>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="quick-start.html#cb40-1" tabindex="-1"></a>myplot</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="quick-start.html#cb32-1" tabindex="-1"></a>sim1 <span class="ot">&lt;-</span> <span class="fu">runsims</span>(<span class="at">n=</span>n, <span class="at">beta=</span>beta, <span class="at">nsims=</span><span class="dv">200</span>)</span>
+<span id="cb32-2"><a href="quick-start.html#cb32-2" tabindex="-1"></a>sim1<span class="sc">$</span>simulation <span class="ot">&lt;-</span> <span class="st">&quot;Large beta&quot;</span></span>
+<span id="cb32-3"><a href="quick-start.html#cb32-3" tabindex="-1"></a>sim2 <span class="ot">&lt;-</span> <span class="fu">runsims</span>(<span class="at">n=</span>n, <span class="at">beta=</span>beta<span class="sc">/</span><span class="dv">3</span>, <span class="at">nsims=</span><span class="dv">200</span>)</span>
+<span id="cb32-4"><a href="quick-start.html#cb32-4" tabindex="-1"></a>sim2<span class="sc">$</span>simulation <span class="ot">&lt;-</span> <span class="st">&quot;Small beta&quot;</span></span>
+<span id="cb32-5"><a href="quick-start.html#cb32-5" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="quick-start.html#cb32-6" tabindex="-1"></a>simall <span class="ot">&lt;-</span> <span class="fu">rbind</span>(sim1, sim2) <span class="sc">|&gt;</span></span>
+<span id="cb32-7"><a href="quick-start.html#cb32-7" tabindex="-1"></a>  <span class="fu">group_by</span>(simulation, beta, n) <span class="sc">|&gt;</span></span>
+<span id="cb32-8"><a href="quick-start.html#cb32-8" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ebic=</span><span class="fu">mean</span>(ebic), <span class="at">lasso_ebic=</span><span class="fu">mean</span>(lasso_ebic), <span class="at">bms=</span><span class="fu">mean</span>(bms), <span class="at">pp=</span><span class="fu">mean</span>(pp))</span>
+<span id="cb32-9"><a href="quick-start.html#cb32-9" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="quick-start.html#cb32-10" tabindex="-1"></a><span class="fu">write.table</span>(simall, <span class="st">&quot;tables/achilles_quick.txt&quot;</span>, <span class="at">row.names=</span><span class="cn">FALSE</span>, <span class="at">col.names=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>)</span></code></pre></div>
+</details>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="quick-start.html#cb33-1" tabindex="-1"></a>simall <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;tables/achilles_quick.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="quick-start.html#cb33-2" tabindex="-1"></a>  <span class="fu">group_by</span>(beta) <span class="sc">|&gt;</span></span>
+<span id="cb33-3"><a href="quick-start.html#cb33-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ebic=</span><span class="fu">mean</span>(ebic), <span class="at">lasso_ebic=</span><span class="fu">mean</span>(lasso_ebic), <span class="at">bms=</span><span class="fu">mean</span>(bms), <span class="at">pp=</span><span class="fu">mean</span>(pp))</span>
+<span id="cb33-4"><a href="quick-start.html#cb33-4" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="quick-start.html#cb33-5" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(simall, <span class="fu">aes</span>(<span class="at">x=</span>beta)) <span class="sc">+</span></span>
+<span id="cb33-6"><a href="quick-start.html#cb33-6" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>ebic, <span class="at">color=</span><span class="st">&#39;EBIC&#39;</span>)) <span class="sc">+</span></span>
+<span id="cb33-7"><a href="quick-start.html#cb33-7" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>lasso_ebic, <span class="at">color=</span><span class="st">&#39;LASSO-EBIC&#39;</span>)) <span class="sc">+</span></span>
+<span id="cb33-8"><a href="quick-start.html#cb33-8" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>bms, <span class="at">color=</span><span class="st">&#39;BMS&#39;</span>)) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="quick-start.html#cb33-9" tabindex="-1"></a>  <span class="co">#facet_wrap(~ simulation) +</span></span>
+<span id="cb33-10"><a href="quick-start.html#cb33-10" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(</span>
+<span id="cb33-11"><a href="quick-start.html#cb33-11" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">&quot;Method&quot;</span>,</span>
+<span id="cb33-12"><a href="quick-start.html#cb33-12" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;EBIC&quot;</span> <span class="ot">=</span> <span class="st">&quot;black&quot;</span>, <span class="st">&quot;LASSO-EBIC&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;BMS&quot;</span> <span class="ot">=</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb33-13"><a href="quick-start.html#cb33-13" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb33-14"><a href="quick-start.html#cb33-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span> <span class="st">&#39;Proportion of simulations in which variable was selected&#39;</span>, <span class="at">x=</span><span class="st">&#39;Data-generating beta&#39;</span>)</span></code></pre></div>
+</details>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="quick-start.html#cb34-1" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(simall, <span class="fu">aes</span>(<span class="at">x=</span>beta, <span class="at">y=</span>pp)) <span class="sc">+</span></span>
+<span id="cb34-2"><a href="quick-start.html#cb34-2" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb34-3"><a href="quick-start.html#cb34-3" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb34-4"><a href="quick-start.html#cb34-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span> <span class="st">&#39;Average posterior inclusion probability&#39;</span>, <span class="at">x=</span><span class="st">&#39;Data-generating beta&#39;</span>)</span></code></pre></div>
 </details>
 </details>
-<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="modelSelection-book_files/figure-html/achilles-1.png" width="50%" /><img src="modelSelection-book_files/figure-html/achilles-2.png" width="50%" /></p>
 </div>
 <div id="quick-gam" class="section level2 hasAnchor" number="1.5">
 <h2><span class="header-section-number">1.5</span> Beyond linear models<a href="quick-start.html#quick-gam" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The ideas discussed so far extend well beyond linear and generalized liner models, they can actually be extended more general model selection questions in a relatively seamless manner.
-For example, one may wish to learn whether covariates have a linear or non-linear effect, or no effect at all. Other common tasks discussed in this book are covariance models, such as learning conditional independences in graphical models or sparse factor models, or choosing the number of components in mixture models.</p>
-<p>For now we provide a brief illustration of Generalize additive models (GAMs), a popular extension of linear and generalized linear models to capture non-linear covariate effects.
+<p>The ideas discussed so far extend well beyond linear and generalized liner models in a relatively seamless manner.
+For example, one may wish to learn whether covariates have a linear or non-linear effect, or no effect at all, which we discuss in Chapter <a href="gam.html#gam">6</a>. Another example is learning sparse covariance models such as graphical or factor models, which we discuss in Chapter <a href="covariance-models.html#covariance-models">9</a>).
+More advanced uses include learning what covariates to include in a deep learning model, or whether non-linear or high-level interactions are needed.</p>
+<p>For now we provide a brief illustration of generalize additive models (GAMs), a popular semi-parametric model to capture non-linear covariate effects.
 For Gaussian outcomes, the canonical GAM assumes that
 <span class="math display">\[
 y_i = \beta_0 + \sum_{j=1}^p \beta_j x_{ij} + \sum_{j=1}^p f_j(x_{ij}) + \epsilon_i
 \]</span>
 where <span class="math inline">\(\epsilon_i \sim N(0,\sigma^2)\)</span> and the <span class="math inline">\(f_j\)</span>’s must satisfy certain add-to-zero constraints for the model to be identifiable. The interpretation is that <span class="math inline">\(f_j\)</span> captures deviations from linearity. Note that one could define <span class="math inline">\(\tilde{f}_j(x_{ij})= \beta_j x_{ij} + f_j(x_{ij})\)</span> and estimate <span class="math inline">\(\tilde{f}_j\)</span> directly, but then testing whether <span class="math inline">\(\tilde{f}_j(z)=0\)</span> for all <span class="math inline">\(z\)</span> just tells us whether covariate <span class="math inline">\(j\)</span> has a effect, rather than whether it is linear or non-linear.
-A popular strategy to parameterize <span class="math inline">\(f_j\)</span> is via B-spline functions, and that’s what we use here.
-See Chapter <a href="gam.html#gam">6</a> and <span class="citation">D. Rossell and Rubio (<a href="#ref-rossell:2021b">2021</a>)</span> for further details.</p>
+A popular strategy to parameterize <span class="math inline">\(f_j\)</span> is via B-spline functions, and that’s what we use here.</p>
+<p>We simulate a dataset with 10 covariates where the first six have a linear effect, the seventh a non-linear effect and the remaining 3 have no effect on the outcome.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="quick-start.html#cb41-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> p <span class="ot">&lt;-</span> <span class="dv">200</span></span>
-<span id="cb41-2"><a href="quick-start.html#cb41-2" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">seq</span>(<span class="fl">0.5</span>,<span class="dv">1</span>,<span class="at">by=</span><span class="fl">0.1</span>), <span class="fu">rep</span>(<span class="dv">0</span>,p<span class="dv">-6</span>)), <span class="at">ncol=</span><span class="dv">1</span>)</span>
-<span id="cb41-3"><a href="quick-start.html#cb41-3" tabindex="-1"></a>mu <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">cos</span>(pi <span class="sc">*</span> x[,<span class="dv">7</span>])</span>
-<span id="cb41-4"><a href="quick-start.html#cb41-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, mu, <span class="at">sd=</span>.<span class="dv">01</span>)</span>
-<span id="cb41-5"><a href="quick-start.html#cb41-5" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y=</span>y, x)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="quick-start.html#cb35-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span>; p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb35-2"><a href="quick-start.html#cb35-2" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">seq</span>(<span class="fl">0.5</span>,<span class="dv">1</span>,<span class="at">by=</span><span class="fl">0.1</span>), <span class="fu">rep</span>(<span class="dv">0</span>,p<span class="dv">-6</span>)), <span class="at">ncol=</span><span class="dv">1</span>)</span>
+<span id="cb35-3"><a href="quick-start.html#cb35-3" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">diag</span>(p)</span>
+<span id="cb35-4"><a href="quick-start.html#cb35-4" tabindex="-1"></a>sigma[<span class="fu">upper.tri</span>(sigma)] <span class="ot">&lt;-</span> sigma[<span class="fu">lower.tri</span>(sigma)] <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb35-5"><a href="quick-start.html#cb35-5" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(n, <span class="at">sigma=</span>sigma)</span>
+<span id="cb35-6"><a href="quick-start.html#cb35-6" tabindex="-1"></a>mu <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">cos</span>(pi <span class="sc">*</span> x[,<span class="dv">7</span>])</span>
+<span id="cb35-7"><a href="quick-start.html#cb35-7" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, mu, <span class="at">sd=</span><span class="dv">1</span>)</span>
+<span id="cb35-8"><a href="quick-start.html#cb35-8" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y=</span>y, x)</span></code></pre></div>
 </details>
+<p>While this is not a very hard exercise, it’s also not completely trivial. For example, a scatter-plot of the outcome versus the seventh covariate (left panel below) doesn’t suggest that it may have a non-linear effect.
+If instead one plots partial residuals obtained after removing the effect of covariates 1-6, that is <span class="math inline">\(e_i= y_i - \sum_{j=1}^6 x_{ij} \beta_j\)</span>, the non-linear effect becomes apparent (right panel).
+That is, in this example the key to discover the non-linear association is to adequately capture the effect of other covariates.</p>
+<details>
+<summary>
+Click to show code
+</summary>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="quick-start.html#cb42-1" tabindex="-1"></a>x1seq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(x[,<span class="dv">7</span>]), <span class="fu">max</span>(x[,<span class="dv">7</span>]), <span class="at">length=</span><span class="dv">200</span>)</span>
-<span id="cb42-2"><a href="quick-start.html#cb42-2" tabindex="-1"></a><span class="fu">plot</span>(x1seq, <span class="fu">cos</span>(pi <span class="sc">*</span> x1seq), <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="quick-start.html#cb36-1" tabindex="-1"></a>df2plot <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x) <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="quick-start.html#cb36-2" tabindex="-1"></a>  <span class="fu">transform</span>(<span class="at">yadj =</span> y <span class="sc">-</span> x <span class="sc">%*%</span> beta, <span class="at">muadj =</span> <span class="fu">cos</span>(pi <span class="sc">*</span> X7))</span>
+<span id="cb36-3"><a href="quick-start.html#cb36-3" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="quick-start.html#cb36-4" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df2plot, <span class="fu">aes</span>(<span class="at">x=</span>X7, <span class="at">y=</span>y)) <span class="sc">+</span></span>
+<span id="cb36-5"><a href="quick-start.html#cb36-5" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb36-6"><a href="quick-start.html#cb36-6" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()</span>
+<span id="cb36-7"><a href="quick-start.html#cb36-7" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="quick-start.html#cb36-8" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df2plot, <span class="fu">aes</span>(<span class="at">x=</span>X7, <span class="at">y=</span>yadj)) <span class="sc">+</span></span>
+<span id="cb36-9"><a href="quick-start.html#cb36-9" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb36-10"><a href="quick-start.html#cb36-10" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()</span></code></pre></div>
 </details>
-<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+</details>
+<pre><code>## `geom_smooth()` using method
+## = &#39;loess&#39; and formula = &#39;y ~
+## x&#39;
+## `geom_smooth()` using method
+## = &#39;loess&#39; and formula = &#39;y ~
+## x&#39;</code></pre>
+<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-26-1.png" width="50%" /><img src="modelSelection-book_files/figure-html/unnamed-chunk-26-2.png" width="50%" /></p>
+<p>Let us perform Bayesian model selection on these data. The table below displays the marginal posterior probability that each covariate has a linear and a non-linear effect. Covariates 1-6 are correctly flagged as only having a linear effect, covariate 7 as having a non-linear effect, and for covariates 8-10 there is no strong evidence for either a linear or non-linear effect.</p>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="quick-start.html#cb43-1" tabindex="-1"></a><span class="fu">plot</span>(x[,<span class="dv">7</span>], mu)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="quick-start.html#cb38-1" tabindex="-1"></a>fit.gam <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df,</span>
+<span id="cb38-2"><a href="quick-start.html#cb38-2" tabindex="-1"></a>                     <span class="at">smooth =</span> <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4 <span class="sc">+</span> X5 <span class="sc">+</span> X6 <span class="sc">+</span> X7 <span class="sc">+</span> X8 <span class="sc">+</span> X9 <span class="sc">+</span> X10,</span>
+<span id="cb38-3"><a href="quick-start.html#cb38-3" tabindex="-1"></a>                     <span class="at">priorCoef=</span>priorCoef,</span>
+<span id="cb38-4"><a href="quick-start.html#cb38-4" tabindex="-1"></a>                     <span class="at">priorModel=</span>priorModel, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb38-5"><a href="quick-start.html#cb38-5" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit.gam)</span></code></pre></div>
 </details>
-<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-28-2.png" width="672" /></p>
+<details>
+<summary>
+Click to show code
+</summary>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="quick-start.html#cb44-1" tabindex="-1"></a><span class="fu">plot</span>(x[,<span class="dv">7</span>], y)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="quick-start.html#cb39-1" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id=</span> <span class="fu">rownames</span>(b), <span class="at">margpp=</span>b[,<span class="st">&#39;margpp&#39;</span>]) <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="quick-start.html#cb39-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(id <span class="sc">!=</span> <span class="st">&quot;(Intercept)&quot;</span>, id <span class="sc">!=</span> <span class="st">&quot;phi&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb39-3"><a href="quick-start.html#cb39-3" tabindex="-1"></a>  <span class="fu">transform</span>(<span class="at">idshort =</span> <span class="fu">gsub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">.s[0-9]+&quot;</span>, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">s&quot;</span>, id)) <span class="sc">|&gt;</span></span>
+<span id="cb39-4"><a href="quick-start.html#cb39-4" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(idshort, margpp) <span class="sc">|&gt;</span></span>
+<span id="cb39-5"><a href="quick-start.html#cb39-5" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
+<span id="cb39-6"><a href="quick-start.html#cb39-6" tabindex="-1"></a>  <span class="fu">transform</span>(<span class="at">idshort=</span> <span class="fu">gsub</span>(<span class="st">&quot;s&quot;</span>, <span class="st">&quot; non-linear&quot;</span>, idshort))</span>
+<span id="cb39-7"><a href="quick-start.html#cb39-7" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="quick-start.html#cb39-8" tabindex="-1"></a>pp.lin <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(pp, <span class="sc">!</span><span class="fu">grepl</span>(<span class="st">&quot;non-linear&quot;</span>, idshort))</span>
+<span id="cb39-9"><a href="quick-start.html#cb39-9" tabindex="-1"></a>pp.nonlin <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(pp, <span class="fu">grepl</span>(<span class="st">&quot;non-linear&quot;</span>, idshort))</span>
+<span id="cb39-10"><a href="quick-start.html#cb39-10" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">variable=</span> <span class="fu">rownames</span>(pp.lin), <span class="at">linear=</span>pp.lin[,<span class="st">&quot;margpp&quot;</span>], <span class="at">nonlinear=</span> pp.nonlin[,<span class="st">&quot;margpp&quot;</span>])</span></code></pre></div>
 </details>
-<p><img src="modelSelection-book_files/figure-html/unnamed-chunk-28-3.png" width="672" /></p>
-<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="quick-start.html#cb45-1" tabindex="-1"></a>dfsel <span class="ot">&lt;-</span> df[,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
-<span id="cb45-2"><a href="quick-start.html#cb45-2" tabindex="-1"></a>fit.gam <span class="ot">&lt;-</span> <span class="fu">modelSelection</span>(y <span class="sc">~</span> ., <span class="at">data=</span>dfsel,</span>
-<span id="cb45-3"><a href="quick-start.html#cb45-3" tabindex="-1"></a>                     <span class="at">smooth =</span> <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4 <span class="sc">+</span> X5 <span class="sc">+</span> X6 <span class="sc">+</span> X7,</span>
-<span id="cb45-4"><a href="quick-start.html#cb45-4" tabindex="-1"></a>                     <span class="at">priorCoef=</span>priorCoef,</span>
-<span id="cb45-5"><a href="quick-start.html#cb45-5" tabindex="-1"></a>                     <span class="at">priorModel=</span>priorModel, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 </details>
-<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="quick-start.html#cb46-1" tabindex="-1"></a><span class="fu">coef</span>(fit.gam)</span></code></pre></div>
-</details>
-<pre><code>##                  estimate         2.5%       97.5%       margpp
-## (Intercept)  4.218995e-02  0.041147293  0.04323280 4.863586e-03
-## X1           4.935645e-01  0.485874943  0.50136329 1.000000e+00
-## X2           6.032090e-01  0.595173147  0.61162122 1.000000e+00
-## X3           6.737139e-01  0.666014025  0.68147665 1.000000e+00
-## X4           8.162398e-01  0.807284328  0.82524347 1.000000e+00
-## X5           9.391399e-01  0.931148497  0.94735679 1.000000e+00
-## X6           9.810963e-01  0.974140834  0.98837618 1.000000e+00
-## X7          -4.196937e-02 -0.046456858 -0.03723822 1.000000e+00
-## X8          -4.605683e-04  0.000000000  0.00000000 2.245863e-02
-## X9          -2.154243e-04 -0.002674511  0.00000000 2.281671e-02
-## X1.s1        2.537976e-04  0.000000000  0.00000000 7.608508e-04
-## X1.s2        2.225181e-04  0.000000000  0.00000000 7.608508e-04
-## X1.s3        2.973298e-04  0.000000000  0.00000000 7.608508e-04
-## X1.s4        2.094751e-04  0.000000000  0.00000000 7.608508e-04
-## X1.s5        7.026222e-04  0.000000000  0.00000000 7.608508e-04
-## X2.s1       -1.330815e-04  0.000000000  0.00000000 3.567906e-04
-## X2.s2        1.256486e-05  0.000000000  0.00000000 3.567906e-04
-## X2.s3       -5.563028e-05  0.000000000  0.00000000 3.567906e-04
-## X2.s4       -3.586180e-05  0.000000000  0.00000000 3.567906e-04
-## X2.s5       -5.448557e-05  0.000000000  0.00000000 3.567906e-04
-## X3.s1       -3.112790e-04  0.000000000  0.00000000 8.050396e-04
-## X3.s2       -2.268919e-04  0.000000000  0.00000000 8.050396e-04
-## X3.s3       -1.660327e-04  0.000000000  0.00000000 8.050396e-04
-## X3.s4       -2.263348e-04  0.000000000  0.00000000 8.050396e-04
-## X3.s5       -2.036687e-04  0.000000000  0.00000000 8.050396e-04
-## X4.s1        1.034962e-03  0.000000000  0.00000000 2.194107e-03
-## X4.s2        1.007062e-03  0.000000000  0.00000000 2.194107e-03
-## X4.s3        7.346949e-04  0.000000000  0.00000000 2.194107e-03
-## X4.s4        5.930163e-04  0.000000000  0.00000000 2.194107e-03
-## X4.s5        8.084088e-04  0.000000000  0.00000000 2.194107e-03
-## X5.s1        6.386062e-04  0.000000000  0.00000000 4.281489e-03
-## X5.s2       -2.716323e-04  0.000000000  0.00000000 4.281489e-03
-## X5.s3       -5.889817e-04  0.000000000  0.00000000 4.281489e-03
-## X5.s4       -9.256913e-04  0.000000000  0.00000000 4.281489e-03
-## X5.s5       -2.386739e-03  0.000000000  0.00000000 4.281489e-03
-## X6.s1        0.000000e+00  0.000000000  0.00000000 9.054641e-05
-## X6.s2        0.000000e+00  0.000000000  0.00000000 9.054641e-05
-## X6.s3        0.000000e+00  0.000000000  0.00000000 9.054641e-05
-## X6.s4        0.000000e+00  0.000000000  0.00000000 9.054641e-05
-## X6.s5        0.000000e+00  0.000000000  0.00000000 9.054641e-05
-## X7.s1       -2.228869e+00 -2.275945562 -2.18178998 1.000000e+00
-## X7.s2       -1.347589e+00 -1.374405292 -1.32017301 1.000000e+00
-## X7.s3        1.281956e+00  1.255525070  1.30965424 1.000000e+00
-## X7.s4       -2.503305e+00 -2.524409433 -2.48149126 1.000000e+00
-## X7.s5       -8.244628e-01 -0.855242540 -0.79333744 1.000000e+00
-## phi          1.161917e-01  0.095001066  0.14117229 1.000000e+00</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+variable
+</th>
+<th style="text-align:center;">
+linear
+</th>
+<th style="text-align:center;">
+nonlinear
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+X1
+</td>
+<td style="text-align:center;">
+0.9999716
+</td>
+<td style="text-align:center;">
+0.0001443
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+X2
+</td>
+<td style="text-align:center;">
+1.0000000
+</td>
+<td style="text-align:center;">
+0.0000374
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+X3
+</td>
+<td style="text-align:center;">
+1.0000000
+</td>
+<td style="text-align:center;">
+0.0004667
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+X4
+</td>
+<td style="text-align:center;">
+1.0000000
+</td>
+<td style="text-align:center;">
+0.0001289
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+X5
+</td>
+<td style="text-align:center;">
+1.0000000
+</td>
+<td style="text-align:center;">
+0.0014218
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+X6
+</td>
+<td style="text-align:center;">
+1.0000000
+</td>
+<td style="text-align:center;">
+0.0003170
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+X7
+</td>
+<td style="text-align:center;">
+1.0000000
+</td>
+<td style="text-align:center;">
+1.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+X8
+</td>
+<td style="text-align:center;">
+0.1905414
+</td>
+<td style="text-align:center;">
+0.0000257
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+X9
+</td>
+<td style="text-align:center;">
+0.0780882
+</td>
+<td style="text-align:center;">
+0.0000183
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+X10
+</td>
+<td style="text-align:center;">
+0.0173677
+</td>
+<td style="text-align:center;">
+0.0000105
+</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 </div>
@@ -861,9 +1001,6 @@ Hazimeh, Hussein, Rahul Mazumder, and Tim Nonet. 2023. <span>“L0learn: A Scala
 </div>
 <div id="ref-natarajan:1995" class="csl-entry">
 Natarajan, B. K. 1995. <span>“Sparse Approximate Solutions to Linear Systems.”</span> <em>SIAM Journal on Computing</em> 24 (2): 227–34.
-</div>
-<div id="ref-rossell:2021b" class="csl-entry">
-———. 2021. <span>“Additive <span>B</span>ayesian Variable Selection Under Censoring and Misspecification.”</span> <em>Statistical Science</em> 38 (1): 13–29.
 </div>
 <div id="ref-schwarz:1978" class="csl-entry">
 Schwarz, G. 1978. <span>“Estimating the Dimension of a Model.”</span> <em>The Annals of Statistics</em> 6: 461–64.
