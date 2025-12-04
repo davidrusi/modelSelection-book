@@ -302,7 +302,7 @@ myplot
 myplot
 ```
 
-## The Achilles heel {#quick-achilles}
+## An Achilles heel {#quick-achilles}
 
 Before we get too excited, let's illustrate the Achilles heel of standard high-dimensional model selection methods: sparsity and betamin assumptions. The philosophy of these methods is to be conservative in terms of adding parameters, that is avoid using unnecessarily complex models. Intuitively, this strategy seems reasonable when:
 
@@ -312,103 +312,192 @@ Before we get too excited, let's illustrate the Achilles heel of standard high-d
 
 If these two assumptions are not met, taking a conservative approach may result in low statistical power to detect parameters that are truly non-zero but small. We discuss these issues and some empirical Bayes strategies to ameliorate them in Chapter \@ref(eBayes).
 
-For now, we repeat the previous example but now the size of the non-zero $\beta_j$'s is divided by two.
-The consequence is that covariates 1 and 3 are no longer selected, neither by EBIC, LASSO-EBIC (which also misses covariate 2) nor BMA. 
-For BMA this is particularly problematic, because the posterior probability assigned to $\beta_1 \neq 0$ and $\beta_2 \neq 0$ is very close to zero, that is there is strong Bayesian evidence that neither covariate has an effect.
-This example illustrates that BMA results should be interpreted as a conservative analysis where small evidence for inclusion may simply be due to low statistical power.
+For now, we repeat the previous example but now the non-zero $\beta_j$'s are divided by three.
+Below we report results averaged across 200 independent simulations, both for the larger and the smaller $\beta$ settings.
 
-```{r}
-beta <- beta/2
-y <- rnorm(n, x %*% beta)
-df <- data.frame(y=y, x)
-bestEBIC_fast(y ~ ., data=df, verbose=FALSE)$topmodel
-```
-
-```{r}
-bestEBIC_fast(y ~ ., data=df, fastmethod='L1', verbose=FALSE)$topmodel
-```
-
-```{r}
-ms <- modelSelection(y ~ -1 + ., data=df, verbose=FALSE)
-postProb(ms)[1,] #top model
-```
-
-```{r}
-b <- coef(ms)
-head(b, n=7)
-```
+The left panel in the figure below shows that for small $\beta_j$ there is low statistical power, that is a probability of selecting the corresponding covariates, and that this is an issue for EBIC, LASSO-EBIC and BMA. 
+For BMA this is particularly problematic: the Bayesian uncertainty quantification is off, from a frequentist standpoint.
+Small $\beta_j$'s are assigned a high $P(\beta_j = 0 \mid y)$, and taking the latter posterior probability at face value would give strong Bayesian evidence that the corresponding covariates have no effect.
+This example illustrates that BMA results should be interpreted as a conservative analysis where small evidence for inclusion may simply be due to low statistical power, rather than conclusive evidence that the effects are zero.
 
 
 <details>
 <summary>Click to show code</summary>
 
 ```{r}
-sel <- !(rownames(b) %in% c('intercept','phi'))
-b <- data.frame(b[sel,]) |>
-  transform(Covariate = 1:p, beta=beta) |>
-  rename(cilow=X2.5., ciup=X97.5.)
-
-myplot <- ggplot(b, aes(x=beta, y=estimate)) +
-  geom_point() +
-  geom_segment(aes(x=beta, y=cilow, yend=ciup)) +
-  labs(y='BMA estimate') +
-  geom_abline(slope=1)
+runsims <- function(n, beta, nsims) {
+  varnames <- paste("X", 1:ncol(pp), sep="")
+  pp <- matrix(0, nrow=nsims, ncol=length(beta))
+  colnames(pp) <- varnames
+  sel.ebicfast <- sel.lassoebic <- sel.ms <- pp 
+  for (i in 1:nsims) {
+    y <- rnorm(n, x %*% beta)
+    df <- data.frame(y=y, x)
+    # EBIC (fast heuristics)
+    top.ebicfast <- bestEBIC_fast(y ~ ., data=df, verbose=FALSE)$topmodel
+    sel.ebicfast[i, ] <- varnames %in% top.ebicfast
+    # LASSO EBIC
+    top.lassoebic <- bestEBIC_fast(y ~ ., data=df, fastmethod='L1', verbose=FALSE)$topmodel
+    sel.lassoebic[i, ] <- varnames %in% top.lassoebic
+    # BMS
+    ms <- modelSelection(y ~ -1 + ., data=df, niter=1000, verbose=FALSE)
+    sel.ms[i, which(ms$postMode == 1)] <- TRUE 
+    margpp <- coef(ms)[,'margpp']
+    pp[i,] <- margpp[-c(1,length(margpp))]
+  }
+  ans <- data.frame(n = n,
+                    variable = 1:length(beta),
+                    beta = beta,
+                    ebic= colMeans(sel.ebicfast),
+                    lasso_ebic = colMeans(sel.lassoebic),
+                    bms = colMeans(sel.ms),
+                    pp= colMeans(pp))
+  return(ans)
+}
 ```
 
 ```{r, eval=FALSE}
-myplot
+sim1 <- runsims(n=n, beta=beta, nsims=200)
+sim1$simulation <- "Large beta"
+sim2 <- runsims(n=n, beta=beta/3, nsims=200)
+sim2$simulation <- "Small beta"
+
+simall <- rbind(sim1, sim2) |>
+  group_by(simulation, beta, n) |>
+  summarize(ebic=mean(ebic), lasso_ebic=mean(lasso_ebic), bms=mean(bms), pp=mean(pp))
+
+write.table(simall, "tables/achilles_quick.txt", row.names=FALSE, col.names=TRUE, sep="\t")
 ```
 
+```{r}
+simall <- read.table("tables/achilles_quick.txt", header=TRUE, sep="\t") |>
+  group_by(beta) |>
+  summarize(ebic=mean(ebic), lasso_ebic=mean(lasso_ebic), bms=mean(bms), pp=mean(pp))
+
+plot1 <- ggplot(simall, aes(x=beta)) +
+  geom_line(aes(y=ebic, color='EBIC')) +
+  geom_line(aes(y=lasso_ebic, color='LASSO-EBIC')) +
+  geom_line(aes(y=bms, color='BMS')) +
+  #facet_wrap(~ simulation) +
+  scale_color_manual(
+    name = "Method",
+    values = c("EBIC" = "black", "LASSO-EBIC" = "red", "BMS" = "blue")
+  ) +
+  labs(y= 'Proportion of simulations in which variable was selected', x='Data-generating beta')
+
+```
+
+```{r}
+plot2 <- ggplot(simall, aes(x=beta, y=pp)) +
+  geom_line() +
+  geom_point() +
+  labs(y= 'Average posterior inclusion probability', x='Data-generating beta')
+```
 </details>
 
-```{r, echo=FALSE}
-myplot
+```{r achilles, fig.show='hold', out.width='50%', echo=FALSE}
+
+plot1
+
+plot2
+
 ```
+
+
 
 
 
 ## Beyond linear models {#quick-gam}
 
-The ideas discussed so far extend well beyond linear and generalized liner models, they can actually be extended more general model selection questions in a relatively seamless manner. 
-For example, one may wish to learn whether covariates have a linear or non-linear effect, or no effect at all. Other common tasks discussed in this book are covariance models, such as learning conditional independences in graphical models or sparse factor models, or choosing the number of components in mixture models.
+The ideas discussed so far extend well beyond linear and generalized liner models in a relatively seamless manner.
+For example, one may wish to learn whether covariates have a linear or non-linear effect, or no effect at all, which we discuss in Chapter \@ref(gam). Another example is learning sparse covariance models such as graphical or factor models, which we discuss in Chapter \@ref(covariance-models)).
+More advanced uses include learning what covariates to include in a deep learning model, or whether non-linear or high-level interactions are needed.
 
-For now we provide a brief illustration of Generalize additive models (GAMs), a popular extension of linear and generalized linear models to capture non-linear covariate effects.
+For now we provide a brief illustration of generalize additive models (GAMs), a popular semi-parametric model to capture non-linear covariate effects.
 For Gaussian outcomes, the canonical GAM assumes that
 $$
 y_i = \beta_0 + \sum_{j=1}^p \beta_j x_{ij} + \sum_{j=1}^p f_j(x_{ij}) + \epsilon_i
 $$
 where $\epsilon_i \sim N(0,\sigma^2)$ and the $f_j$'s must satisfy certain add-to-zero constraints for the model to be identifiable. The interpretation is that $f_j$ captures deviations from linearity. Note that one could define $\tilde{f}_j(x_{ij})= \beta_j x_{ij} + f_j(x_{ij})$ and estimate $\tilde{f}_j$ directly, but then testing whether $\tilde{f}_j(z)=0$ for all $z$ just tells us whether covariate $j$ has a effect, rather than whether it is linear or non-linear.
 A popular strategy to parameterize $f_j$ is via B-spline functions, and that's what we use here.
-See Chapter \@ref(gam) and @rossell:2021b for further details. 
 
+We simulate a dataset with 10 covariates where the first six have a linear effect, the seventh a non-linear effect and the remaining 3 have no effect on the outcome.
 
 ```{r}
-n <- p <- 200
+n <- 200; p <- 10
 beta <- matrix(c(seq(0.5,1,by=0.1), rep(0,p-6)), ncol=1)
+sigma <- diag(p)
+sigma[upper.tri(sigma)] <- sigma[lower.tri(sigma)] <- 0.5
+x <- rmvnorm(n, sigma=sigma)
 mu <- x %*% beta + cos(pi * x[,7])
-y <- rnorm(n, mu, sd=.01)
+y <- rnorm(n, mu, sd=1)
 df <- data.frame(y=y, x)
 ```
 
-```{r}
-x1seq <- seq(min(x[,7]), max(x[,7]), length=200)
-plot(x1seq, cos(pi * x1seq), type='l')
-plot(x[,7], mu)
-plot(x[,7], y)
-```
+While this is not a very hard exercise, it's also not completely trivial. For example, a scatter-plot of the outcome versus the seventh covariate (left panel below) doesn't suggest that it may have a non-linear effect.
+If instead one plots partial residuals obtained after removing the effect of covariates 1-6, that is $e_i= y_i - \sum_{j=1}^6 x_{ij} \beta_j$, the non-linear effect becomes apparent (right panel).
+That is, in this example the key to discover the non-linear association is to adequately capture the effect of other covariates.
 
-
-
-```{r quickstart-gam}
-dfsel <- df[,1:10]
-fit.gam <- modelSelection(y ~ ., data=dfsel,
-                     smooth = ~ X1 + X2 + X3 + X4 + X5 + X6 + X7,
-                     priorCoef=priorCoef,
-                     priorModel=priorModel, verbose=FALSE)
-```
-
+<details>
+<summary>Click to show code</summary>
 
 ```{r, warning=FALSE}
-coef(fit.gam)
+df2plot <- data.frame(y, x) |>
+  transform(yadj = y - x %*% beta, muadj = cos(pi * X7))
+
+p1 <- ggplot(df2plot, aes(x=X7, y=y)) +
+  geom_point() +
+  geom_smooth()
+
+p2 <- ggplot(df2plot, aes(x=X7, y=yadj)) +
+  geom_point() +
+  geom_smooth()
+```
+
+</details>
+
+
+```{r, fig.show='hold', out.width='50%', echo=FALSE, warning=FALSE}
+p1
+
+p2
+```
+
+Let us perform Bayesian model selection on these data. The table below displays the marginal posterior probability that each covariate has a linear and a non-linear effect. Covariates 1-6 are correctly flagged as only having a linear effect, covariate 7 as having a non-linear effect, and for covariates 8-10 there is no strong evidence for either a linear or non-linear effect.
+
+```{r, warning=FALSE}
+fit.gam <- modelSelection(y ~ ., data=df,
+                     smooth = ~ X1 + X2 + X3 + X4 + X5 + X6 + X7 + X8 + X9 + X10,
+                     priorCoef=priorCoef,
+                     priorModel=priorModel, verbose=FALSE)
+b <- coef(fit.gam)
+```
+
+
+<details>
+<summary>Click to show code</summary>
+
+```{r, warning=FALSE}
+pp <- data.frame(id= rownames(b), margpp=b[,'margpp']) |>
+  dplyr::filter(id != "(Intercept)", id != "phi") |>
+  transform(idshort = gsub("\\.s[0-9]+", "\\s", id)) |>
+  dplyr::select(idshort, margpp) |>
+  unique() |>
+  transform(idshort= gsub("s", " non-linear", idshort))
+
+pp.lin <- dplyr::filter(pp, !grepl("non-linear", idshort))
+pp.nonlin <- dplyr::filter(pp, grepl("non-linear", idshort))
+pp <- data.frame(variable= rownames(pp.lin), linear=pp.lin[,"margpp"], nonlinear= pp.nonlin[,"margpp"])
+```
+
+</details>
+
+
+
+```{r, echo=FALSE}
+kableExtra::kable(pp, 
+      align = "c",
+      escape = FALSE) |>
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 

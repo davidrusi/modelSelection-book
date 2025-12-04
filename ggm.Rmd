@@ -1,4 +1,10 @@
-# Gaussian graphical models {#ggm}
+# Covariance models {#covariance-models}
+
+## Gaussian graphical models {#ggm}
+
+To be added.
+
+## Factor models {#factor-models}
 
 To be added.
 
