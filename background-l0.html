@@ -23,7 +23,7 @@
 <meta name="author" content="David Rossell" />
 
 
-<meta name="date" content="2025-12-04" />
+<meta name="date" content="2025-12-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -430,7 +430,7 @@ Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.<
 <div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="background-l0.html#cb86-1" tabindex="-1"></a><span class="fu">system.time</span>(msfast <span class="ot">&lt;-</span> <span class="fu">bestEBIC_fast</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 </details>
 <pre><code>##    user  system elapsed 
-##   0.626   0.956   0.113</code></pre>
+##   0.570   0.913   0.111</code></pre>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="background-l0.html#cb88-1" tabindex="-1"></a>msfast</span></code></pre></div>
 </details>
@@ -444,7 +444,7 @@ Both algorithms run in a matter of seconds on my Ubuntu laptop, as shown below.<
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="background-l0.html#cb90-1" tabindex="-1"></a><span class="fu">system.time</span>(ms <span class="ot">&lt;-</span> <span class="fu">bestEBIC</span>(y <span class="sc">~</span> ., <span class="at">data=</span>df, <span class="at">verbose=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 </details>
 <pre><code>##    user  system elapsed 
-##   2.119   0.991   1.566</code></pre>
+##   2.079   0.948   1.592</code></pre>
 <details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
 <div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="background-l0.html#cb92-1" tabindex="-1"></a>ms</span></code></pre></div>
 </details>
