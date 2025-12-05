@@ -187,9 +187,9 @@ Admittedly computation is harder, but given the potential improvements in variab
 ## Model uncertainty {#quick-bms}
 
 A limitation of L0 criteria is that they ignore the uncertainty in the selected model, i.e. we're not completely sure that it's the correct one.
-We use Bayesian model selection (BMS) to assess that uncertainty, in a Bayesian sense.
+Bayesian model selection (BMS) is a strategy to portray model choice uncertainty, and we discuss it in some detail in Chapter \@ref(background-bms).
 BMS requires setting a prior distribution on the models and on the parameters for each model.
-For now, we run `modelSelection` with default priors (Beta-Binomial prior on the models, product MOM prior with default prior precision on the coefficients).
+For now, we illustrate the use of BMS by setting default priors (Beta-Binomial prior on the models, product MOM prior with default prior precision on the coefficients).
 
 
 ```{r quickstart-bma}
@@ -230,7 +230,9 @@ head(ypred)
 
 A common objection to Bayesian model selection and $L_0$ criteria is that they're computationally unfeasible as the number of covariates $p$ grows.
 It is true that the problem is worst-case NP-hard even in canonical linear regression (see for example @natarajan:1995, @cover:2007, @foster:2015), in the sense that one can always design a dataset such that finding the best model according to these criteria has an exponential cost in $p$.
-However this is in a worst-case scenario, in practice one may be able to solve the problem quickly, in particular as $n$ grows and under so-called sparsity constraints. These issues are discussed in Chapters \@ref(background-l0) and \ref(background-bms), for now we provide an example where $p=200$ and $n=200$.
+However this is in a worst-case scenario, in practice one may be able to solve the problem quickly.
+In particular as $n$ grows and under so-called sparsity constraints, $L_0$ criteria and Bayesian posterior probabilities concentrate on a small subset of models with high probability, which often facilitates model search. These issues are discussed in Chapters \@ref(bms-computation) and \@ref(background-l0), and Chapter \@ref(glm) discusses important implementation details and further nuances (for example, larger $n$ makes model-specific calculations harder).
+For now we provide an example where $p=200$ and $n=200$.
 The first six covariates have non-zero effects $\beta_1=0.5$, $\beta_2=0.6$, ..., $\beta_{6}=1$, whereas $\beta_7=\ldots = \beta_p=0$.
 The covariates are generated from a multivariate Gaussian with unit variances and 0.7 pairwise correlations, which is a moderately strong correlation structure.
 
@@ -378,7 +380,6 @@ plot1 <- ggplot(simall, aes(x=beta)) +
   geom_line(aes(y=ebic, color='EBIC')) +
   geom_line(aes(y=lasso_ebic, color='LASSO-EBIC')) +
   geom_line(aes(y=bms, color='BMS')) +
-  #facet_wrap(~ simulation) +
   scale_color_manual(
     name = "Method",
     values = c("EBIC" = "black", "LASSO-EBIC" = "red", "BMS" = "blue")
